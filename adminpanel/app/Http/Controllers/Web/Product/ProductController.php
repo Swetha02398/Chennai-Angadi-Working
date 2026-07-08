@@ -93,12 +93,21 @@ class ProductController extends Controller
                 }
 
                 if (in_array($order->payment_method, ['cash_on_delivery', 'cod'])) {
-                    $paymentBadge = '<span class="badge badge-pill badge-soft-warning">COD</span>';
+                    $paymentBadge = '<button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center" style="background-color:#ffc107;color:#000;border-radius:50px;width:80px;height:24px;font-size:12px;border:none;padding:0;">COD</button>';
                 } elseif ($order->payment_status === 'paid') {
-                    $paymentBadge = '<span class="badge badge-pill badge-soft-success">Paid</span>';
+                    $paymentBadge = '<button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center" style="background-color:#28a745;color:#fff;border-radius:50px;width:80px;height:24px;font-size:12px;border:none;padding:0;">Paid</button>';
                 } else {
-                    $paymentBadge = '<span class="badge badge-pill badge-soft-danger">Not Paid</span>';
+                    $paymentBadge = '<button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center" style="background-color:#dc3545;color:#fff;border-radius:50px;width:80px;height:24px;font-size:12px;border:none;padding:0;">Not Paid</button>';
                 }
+
+                // Determine method label
+                $method = $order->payment_method ?? 'cash';
+                $methodLabel = match(strtolower($method)) {
+                    'online_gateway', 'online', 'razorpay', 'stripe', 'paytm' => 'Online',
+                    'cash_on_delivery', 'cod' => 'Cash',
+                    'cash' => 'Cash',
+                    default => ucwords(str_replace('_', ' ', $method))
+                };
 
                 // Determine view URL based on order type
                 $viewUrl = ($order->order_type === 'billing') 
@@ -111,8 +120,8 @@ class ProductController extends Controller
                     <td>' . $billingName . '</td>
                     <td>' . $order->created_at->format('d M, Y') . '</td>
                     <td>₹' . number_format($order->final_amount, 2) . '</td>
-                    <td>' . $paymentBadge . '</td>
-                    <td><i class="material-icons md-payment font-xxl text-muted mr-5"></i> ' . ucfirst($order->payment_method ?? 'Cash') . '</td>
+                    <td class="text-center">' . $paymentBadge . '</td>
+                    <td><div class="d-flex align-items-center"><i class="material-icons md-payment font-xxl text-muted me-2"></i> <span>' . $methodLabel . '</span></div></td>
                     <td><button type="button" class="btn btn-xs btn-primary view-invoice-btn" data-order-id="' . $order->id . '"> View details</button></td>
                 </tr>';
             }

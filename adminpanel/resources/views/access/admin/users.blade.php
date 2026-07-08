@@ -53,7 +53,7 @@
                             <th>Role Type</th>
                             <th>Assigned Role</th>
                             <th>Status</th>
-                            <th class="text-end">Actions</th>
+                            <th class="text-start">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -104,10 +104,10 @@
                                     @endif
                                 @endif
                             </td>
-                            <td class="text-end">
+                            <td class="text-start">
                                 @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('users-edit'))
                                 <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-warning">
-                                    <i class="bi bi-pencil-square"></i>
+                                    <i class="bi bi-pencil-square"></i> Edit
                                 </a>
                                 @endif
                                 @if($user->id !== auth()->id() && $user->role_type !== 'superadmin')

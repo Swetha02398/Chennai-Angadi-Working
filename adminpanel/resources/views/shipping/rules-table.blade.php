@@ -48,7 +48,7 @@
                         <tr>
                             <th>No.</th>
                             <th>Zone</th>
-                            <th>States</th>
+                            <th style="width: 250px;">States</th>
                             <th>Condition Type</th>
                             <th>Shipping Amount</th>
                             <th>Status</th>
@@ -60,7 +60,7 @@
                             <tr>
                                 <td>{{ ($rules->currentPage() - 1) * $rules->perPage() + $loop->iteration }}</td>
                                 <td>{{ $rule->zone->name ?? '-' }}</td>
-                                <td>{{ implode(', ', $rule->states ?? []) }}</td>
+                                <td><div style="max-width: 250px; white-space: normal; line-height: 1.4;">{{ implode(', ', $rule->states ?? []) }}</div></td>
                                 <td>{{ $rule->condition_type }}</td>
                                 <td>₹ {{ $rule->slabs->first()?->shipping_amount ?? '-' }}</td>
                                 <td>
@@ -93,21 +93,20 @@
                                 </td>
 
                                 <td>
-                                    @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-edit'))
-                                    <a href="{{ route('shipping.rules.edit', $rule->id) }}" class="btn btn-sm btn-warning"><i
-                                            class="bi bi-pencil-square me-1"></i></a>
-                                    @endif
+                                    <div class="d-inline-flex gap-1 align-items-center">
+                                        @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-edit'))
+                                        <a href="{{ route('shipping.rules.edit', $rule->id) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i> Edit</a>
+                                        @endif
 
-                                    @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-delete'))
-                                    <form action="{{ route('shipping.rules.delete', $rule->id) }}" method="POST"
-                                        style="display:inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger btn-action-col d-inline-flex align-items-center justify-content-center " onclick="return confirm('Delete?')"><i class="bi bi-trash me-1"></i> Delete</button>
-                                    </form>
-                                    @endif
-                                    <a href="{{ route('shipping.rules.view', $rule->id) }}" class="btn btn-sm btn-info"><i
-                                            class="bi bi-eye-fill me-1"></i></a>
+                                        @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-delete'))
+                                        <form action="{{ route('shipping.rules.delete', $rule->id) }}" method="POST" style="margin: 0;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger btn-action-col d-inline-flex align-items-center justify-content-center" onclick="return confirm('Delete?')"><i class="bi bi-trash me-1"></i> Delete</button>
+                                        </form>
+                                        @endif
+                                        <a href="{{ route('shipping.rules.view', $rule->id) }}" class="btn btn-sm btn-info"><i class="bi bi-eye-fill me-1"></i> View</a>
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach

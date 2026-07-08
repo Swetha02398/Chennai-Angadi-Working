@@ -93,12 +93,16 @@
             width: 18px;
             height: 18px;
             cursor: pointer;
+            margin: 0 !important;
         }
 
         .status-radio-group .form-check-label {
             cursor: pointer;
             font-size: 14px;
             font-weight: 400;
+            margin: 0 !important;
+            line-height: 1;
+            padding-top: 2px;
         }
 
         .btn-group-actions {

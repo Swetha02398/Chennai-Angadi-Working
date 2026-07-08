@@ -1,10 +1,10 @@
-@extends('layouts.app')
 
-@section('seo_title', (isset($subcategory) ? $subcategory->name : $category->name) . ' - ' . config('app.name'))
-@section('seo_description', (isset($subcategory) ? $subcategory->description : $category->description) ?? '')
-@section('og_title', (isset($subcategory) ? $subcategory->name : $category->name) . ' - ' . config('app.name'))
-@section('og_description', (isset($subcategory) ? $subcategory->description : $category->description) ?? '')
-@section('content')
+
+<?php $__env->startSection('seo_title', (isset($subcategory) ? $subcategory->name : $category->name) . ' - ' . config('app.name')); ?>
+<?php $__env->startSection('seo_description', (isset($subcategory) ? $subcategory->description : $category->description) ?? ''); ?>
+<?php $__env->startSection('og_title', (isset($subcategory) ? $subcategory->name : $category->name) . ' - ' . config('app.name')); ?>
+<?php $__env->startSection('og_description', (isset($subcategory) ? $subcategory->description : $category->description) ?? ''); ?>
+<?php $__env->startSection('content'); ?>
 
     <main class="main">
         <div class="page-header my-3">
@@ -12,24 +12,26 @@
                 <div class="archive-header">
                     <div class="row align-items-center">
                         <div class="col-xl-12">
-                            <h4 class="mb-2">{{ $category->name }}</h4>
+                            <h4 class="mb-2"><?php echo e($category->name); ?></h4>
                             <div class="breadcrumb">
-                                <a href="{{ route('index') }}"><i class="fi-rs-home mr-5"></i>Home</a>
+                                <a href="<?php echo e(route('index')); ?>"><i class="fi-rs-home mr-5"></i>Home</a>
                                 <span></span>
-                                <a href="{{ route('shop') }}">Shop</a> <span></span> {{ $category->name }}
+                                <a href="<?php echo e(route('shop')); ?>">Shop</a> <span></span> <?php echo e($category->name); ?>
+
                             </div>
                         </div>
 
                         <!-- <div class="col-xl-9 text-end d-none d-xl-block">
                             <ul class="tags-list">
 
-                                @foreach ($category->subcategories as $sub)
+                                <?php $__currentLoopData = $category->subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <li class="hover-up">
-                                        <a href="{{ route('subcategory.products', $sub->id) }}">
-                                            <i class="fi-rs-cross mr-10"></i>{{ $sub->name }}
+                                        <a href="<?php echo e(route('subcategory.products', $sub->id)); ?>">
+                                            <i class="fi-rs-cross mr-10"></i><?php echo e($sub->name); ?>
+
                                         </a>
                                     </li>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
                             </ul>
                         </div> -->
@@ -56,13 +58,13 @@
                                         </div>
                                         <div class="sort-by-dropdown-wrap">
                                             <span>
-                                                @if(request('sort') == 'low')
+                                                <?php if(request('sort') == 'low'): ?>
                                                     Price: Low to High
-                                                @elseif(request('sort') == 'high')
+                                                <?php elseif(request('sort') == 'high'): ?>
                                                     Price: High to Low
-                                                @else
+                                                <?php else: ?>
                                                     Featured
-                                                @endif
+                                                <?php endif; ?>
                                                 <i class="fi-rs-angle-small-down"></i>
                                             </span>
                                         </div>
@@ -81,13 +83,13 @@
                             </div>
                         </div>
                     </div>
-                    @if(isset($subcategory))
-                        <!-- <h4 class="mb-15">{{ $subcategory->name }}</h4> -->
-                    @else
-                        <!-- <h4 class="mb-15">{{ $category->name }}</h4> -->
-                    @endif
+                    <?php if(isset($subcategory)): ?>
+                        <!-- <h4 class="mb-15"><?php echo e($subcategory->name); ?></h4> -->
+                    <?php else: ?>
+                        <!-- <h4 class="mb-15"><?php echo e($category->name); ?></h4> -->
+                    <?php endif; ?>
                     <div class="row product-grid" id="infinite-scroll-grid">
-                        @include('section.product-cards', ['products' => $products])
+                        <?php echo $__env->make('section.product-cards', ['products' => $products], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
                     
                     <!-- Loading Spinner & End Message -->
@@ -111,16 +113,17 @@
                         <h5 class="section-title style-1 mb-30">Category</h5>
                         <div class="category-scroll">
                             <ul>
-                                @foreach($categories as $cat)
+                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <li>
-                                        <a href="{{ route('category.products', $cat->id) }}">
-                                            <img src="{{ env('ADMIN_ASSET_URL') }}/maincategory/{{ basename($cat->image) }}"
-                                                alt="{{ $cat->name }}" style="width: 30px; height: 30px; object-fit: cover;" />
-                                            {{ $cat->name }}
+                                        <a href="<?php echo e(route('category.products', $cat->id)); ?>">
+                                            <img src="<?php echo e(env('ADMIN_ASSET_URL')); ?>/maincategory/<?php echo e(basename($cat->image)); ?>"
+                                                alt="<?php echo e($cat->name); ?>" style="width: 30px; height: 30px; object-fit: cover;" />
+                                            <?php echo e($cat->name); ?>
+
                                         </a>
                                         
                                     </li>
-                                @endforeach
+                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </ul>
                         </div>
 
@@ -262,7 +265,7 @@
                         unitPrice = selectedOption.data('price');
                     }
 
-                    const csrfToken = "{{ csrf_token() }}";
+                    const csrfToken = "<?php echo e(csrf_token()); ?>";
 
                     // Get selected_weight (gram value) from variant dropdown
                     let selectedWeight = null;
@@ -286,7 +289,7 @@
                     }
 
                     $.ajax({
-                        url: '{{ route("add-to-cart") }}',
+                        url: '<?php echo e(route("add-to-cart")); ?>',
                         type: 'POST',
                         data: requestData,
                         success: function (response) {
@@ -626,4 +629,5 @@
         });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\chennais\frontend\resources\views/category/category-show.blade.php ENDPATH**/ ?>

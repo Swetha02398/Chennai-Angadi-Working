@@ -54,7 +54,7 @@
                                 <th>Parent Category</th>
                                 <th>Order By</th>
                                 <th>Status</th>
-                                <th class="text-end">Action</th>
+                                <th class="text-start">Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -101,10 +101,9 @@
                                     </td>
 
                                     {{-- Actions --}}
-                                    <td class="text-end">
+                                    <td class="text-start">
                                         @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('categories-edit'))
-                                        <a href="{{ route('subcategory.edit', $sub->id) }}" class="btn btn-sm btn-warning"><i
-                                                class="bi bi-pencil-square me-1"></i></a>
+                                        <a href="{{ route('subcategory.edit', $sub->id) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i> Edit</a>
                                         @endif
                                         @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('categories-delete'))
                                         <form action="{{ route('subcategory.destroy', $sub->id) }}" method="POST"

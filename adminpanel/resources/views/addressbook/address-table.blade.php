@@ -85,10 +85,10 @@
                                     </td>
                                     <td>
                                         <a href="{{ route('addressbook.edit', $address->id) }}"
-                                            class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i></a>
+                                            class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i> Edit</a>
                                         <a href="{{ route('addressbook.destroy', $address->id) }}"
                                             onclick="return confirm('Are you sure want to delete?')"
-                                            class="btn btn-sm btn-danger"><i class="bi bi-trash me-1"></i></a>
+                                            class="btn btn-sm btn-danger"><i class="bi bi-trash me-1"></i> Delete</a>
                                     </td>
                                 </tr>
                             @endforeach

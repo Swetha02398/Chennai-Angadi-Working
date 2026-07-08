@@ -81,7 +81,14 @@ class CategoryController extends Controller
         if (!request('sort') || request('sort') === 'featured') {
             $query->orderByRaw('(SELECT MAX(stock) FROM product_variants WHERE product_variants.product_id = products.id) > 0 DESC');
         }
-        $products = $query->paginate(12)->appends(request()->query());
+        $products = $query->paginate(20)->appends(request()->query());
+
+        if (request()->ajax()) {
+            return response()->json([
+                'html' => view('section.product-cards', compact('products'))->render(),
+                'hasMore' => $products->hasMorePages()
+            ]);
+        }
 
         $wishlistProductIds = [];
         if (Auth::guard('customer')->check()) {
@@ -149,9 +156,16 @@ class CategoryController extends Controller
 
         // 4) Pagination or all
         if ($perPage == 'all') {
-            $products = $query->get();
+            $products = $query->paginate(20)->appends(request()->query());
         } else {
-            $products = $query->paginate($perPage)->appends(request()->query());
+            $products = $query->paginate(20)->appends(request()->query());
+        }
+
+        if (request()->ajax()) {
+            return response()->json([
+                'html' => view('section.product-cards', compact('products'))->render(),
+                'hasMore' => $products->hasMorePages()
+            ]);
         }
 
         return view('category.category-show', compact('category', 'products'));
@@ -207,7 +221,14 @@ class CategoryController extends Controller
         if (!request('sort')) {
             $query->orderByRaw('(SELECT MAX(stock) FROM product_variants WHERE product_variants.product_id = products.id) > 0 DESC');
         }
-        $products = ($perPage == 'all') ? $query->get() : $query->paginate($perPage)->appends(request()->query());
+        $products = $query->paginate(20)->appends(request()->query());
+
+        if (request()->ajax()) {
+            return response()->json([
+                'html' => view('section.product-cards', compact('products'))->render(),
+                'hasMore' => $products->hasMorePages()
+            ]);
+        }
 
         $wishlistProductIds = [];
         if (Auth::guard('customer')->check()) {
@@ -271,7 +292,14 @@ class CategoryController extends Controller
         if (!request('sort')) {
             $query->orderByRaw('(SELECT MAX(stock) FROM product_variants WHERE product_variants.product_id = products.id) > 0 DESC');
         }
-        $products = ($perPage == 'all') ? $query->get() : $query->paginate($perPage)->appends(request()->query());
+        $products = $query->paginate(20)->appends(request()->query());
+        
+        if (request()->ajax()) {
+            return response()->json([
+                'html' => view('section.product-cards', compact('products'))->render(),
+                'hasMore' => $products->hasMorePages()
+            ]);
+        }
 
         $wishlistProductIds = [];
         if (Auth::guard('customer')->check()) {

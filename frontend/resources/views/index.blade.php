@@ -8,19 +8,6 @@
     @include('includes.alert')
     <main class="main">
         <style>
-            .top-rating-scroll {
-                max-height: 350px;
-                overflow-y: auto;
-                overflow-x: hidden;
-                /* <-- IMPORTANT */
-                padding-right: 5px;
-                direction: rtl;
-            }
-
-            .top-rating-scroll>* {
-                direction: ltr;
-            }
-
             /* Category Tabs Scrollable Styles */
             .category-tabs-wrapper {
                 display: flex;
@@ -93,6 +80,19 @@
                 .category-nav-arrow i {
                     font-size: 12px;
                 }
+            }
+
+            /* 4-Column Product List Scroll Constraints (All columns, Left-Aligned Scroll) */
+            .product-list-small {
+                max-height: 345px !important; /* Fits exactly 3 items without scroll. Triggers scroll ONLY on 4+ items. */
+                overflow-y: auto;
+                overflow-x: hidden;
+                padding-left: 10px; /* Space for left scrollbar */
+                direction: rtl; /* Forces scrollbar to the left side */
+            }
+            .product-list-small > * {
+                direction: ltr; /* Restores normal left-to-right reading direction */
+                text-align: left;
             }
 
         </style>
@@ -310,7 +310,7 @@
                     <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0 wow animate__animated animate__fadeInUp"
                         data-wow-delay="0">
                         <h4 class="section-title style-1 mb-10 animated animated">Top Selling</h4>
-                        <div class="product-list-small animated animated">
+                        <div class="product-list-small">
                             @foreach($topSellingProducts as $product)
                                 @include('section.product-list-item', ['product' => $product])
                             @endforeach
@@ -321,7 +321,7 @@
                     <div class="col-xl-3 col-lg-4 col-md-6 mb-md-0 wow animate__animated animate__fadeInUp"
                         data-wow-delay=".1s">
                         <h4 class="section-title style-1 mb-10 animated animated">Trending Products</h4>
-                        <div class="product-list-small animated animated">
+                        <div class="product-list-small">
                             @foreach($trendingProducts as $product)
                                 @include('section.product-list-item', ['product' => $product])
                             @endforeach
@@ -332,7 +332,7 @@
                     <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0 d-none d-lg-block wow animate__animated animate__fadeInUp"
                         data-wow-delay=".2s">
                         <h4 class="section-title style-1 mb-10 animated animated">Recently added</h4>
-                        <div class="product-list-small animated animated">
+                        <div class="product-list-small">
                             @foreach($recentlyAddedProducts as $product)
                                 @include('section.product-list-item', ['product' => $product])
                             @endforeach
@@ -343,12 +343,10 @@
                     <div class="col-xl-3 col-lg-4 col-md-6 mb-sm-5 mb-md-0 d-none d-xl-block wow animate__animated animate__fadeInUp"
                         data-wow-delay=".3s">
                         <h4 class="section-title style-1 mb-10">Hot Deals</h4>
-                        <div class="top-rating-scroll">
-                            <div class="product-list-small">
-                                @foreach($hotDealProducts as $product)
-                                    @include('section.product-list-item', ['product' => $product])
-                                @endforeach
-                            </div>
+                        <div class="product-list-small">
+                            @foreach($hotDealProducts as $product)
+                                @include('section.product-list-item', ['product' => $product])
+                            @endforeach
                         </div>
                     </div>
                 </div>

@@ -1,10 +1,10 @@
-@extends('layouts.app')
 
-@section('seo_title', 'Shop - Authentic Chennai Groceries Online - ' . config('app.name'))
-@section('seo_description', 'Browse our full range of authentic Chennai groceries, snacks, and traditional sweets. Quality products delivered to your doorstep.')
-@section('og_title', 'Shop - ' . config('app.name'))
-@section('og_description', 'Authentic Chennai groceries and snacks online.')
-@section('content')
+
+<?php $__env->startSection('seo_title', 'Shop - Authentic Chennai Groceries Online - ' . config('app.name')); ?>
+<?php $__env->startSection('seo_description', 'Browse our full range of authentic Chennai groceries, snacks, and traditional sweets. Quality products delivered to your doorstep.'); ?>
+<?php $__env->startSection('og_title', 'Shop - ' . config('app.name')); ?>
+<?php $__env->startSection('og_description', 'Authentic Chennai groceries and snacks online.'); ?>
+<?php $__env->startSection('content'); ?>
     <!-- Main -->
     <style>
         /* Center product price on all screen sizes */
@@ -180,7 +180,7 @@
                         <div class="col-xl-12">
                             <h4 class="mb-2">Shop</h4>
                             <div class="breadcrumb">
-                                <a href="{{ route('index') }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                                <a href="<?php echo e(route('index')); ?>" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                                 <span></span> Shop <span></span>
                             </div>
                         </div>
@@ -194,7 +194,7 @@
                 <div class="col-12">
                     <div class="shop-product-fillter pb-1">
                         <div class="totall-product">
-                            <p>We found <strong class="text-brand">{{ $totalProducts }}</strong> items for you!</p>
+                            <p>We found <strong class="text-brand"><?php echo e($totalProducts); ?></strong> items for you!</p>
                         </div>
                         <div class="sort-by-product-area">
                             <div class="sort-by-cover">
@@ -204,13 +204,13 @@
                                     </div>
                                     <div class="sort-by-dropdown-wrap">
                                         <span>
-                                            @if(request('sort') == 'low')
+                                            <?php if(request('sort') == 'low'): ?>
                                                 Price: Low to High
-                                            @elseif(request('sort') == 'high')
+                                            <?php elseif(request('sort') == 'high'): ?>
                                                 Price: High to Low
-                                            @else
+                                            <?php else: ?>
                                                 Featured
-                                            @endif
+                                            <?php endif; ?>
                                             <i class="fi-rs-angle-small-down"></i>
                                         </span>
                                     </div>
@@ -228,7 +228,7 @@
                         </div>
                     </div>
                     <div class="row product-grid" id="infinite-scroll-grid">
-                        @include('section.product-cards', ['products' => $products])
+                        <?php echo $__env->make('section.product-cards', ['products' => $products], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                     </div>
 
                     <!-- Loading Spinner & End Message -->
@@ -246,7 +246,7 @@
         </div>
     </main>
     <!-- End Main -->
-@endsection
+<?php $__env->stopSection(); ?>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
@@ -375,7 +375,7 @@
      * ADD TO CART FUNCTION
      */
     function shopAddToCart(productId, displayPrice, variantId, quantity) {
-        const csrfToken = $('meta[name="csrf-token"]').attr('content') || '{{ csrf_token() }}';
+        const csrfToken = $('meta[name="csrf-token"]').attr('content') || '<?php echo e(csrf_token()); ?>';
 
         // Get selected_weight (gram value) from variant dropdown
         let selectedWeight = null;
@@ -399,7 +399,7 @@
         }
 
         $.ajax({
-            url: '{{ route("add-to-cart") }}',
+            url: '<?php echo e(route("add-to-cart")); ?>',
             type: 'POST',
             data: requestData,
             success: function (response) {
@@ -512,3 +512,4 @@
     window.addEventListener('scroll', handleScroll);
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\chennais\frontend\resources\views/section/shop.blade.php ENDPATH**/ ?>

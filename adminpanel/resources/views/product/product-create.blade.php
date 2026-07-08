@@ -282,7 +282,7 @@
                                     <tr>
                                         <td><input type="text" name="specifications[0][key]" class="form-control" placeholder="e.g. Height"></td>
                                         <td><input type="text" name="specifications[0][value]" class="form-control" placeholder="e.g. 10cm"></td>
-                                        <td><button type="button" class="btn btn-success addSpecRow">+</button></td>
+                                        <td><button type="button" class="btn btn-success addSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -331,9 +331,9 @@
                                                 </td>
                                                 <td>
                                                     @if($index == 0)
-                                                        <button type="button" class="btn btn-success addRow">+</button>
+                                                        <button type="button" class="btn btn-success addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
                                                     @else
-                                                        <button type="button" class="btn btn-danger removeRow">-</button>
+                                                        <button type="button" class="btn btn-danger removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -353,7 +353,7 @@
                                             <td><input type="number" step="0.01" name="variants[0][sell_price]"
                                                     class="form-control"></td>
                                             <td><input type="number" name="variants[0][stock]" class="form-control"></td>
-                                            <td><button type="button" class="btn btn-success addRow">+</button></td>
+                                            <td><button type="button" class="btn btn-success addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button></td>
                                         </tr>
                                     @endif
                                 </tbody>
@@ -429,7 +429,8 @@
                     let btn = clone.querySelector('.addRow') || clone.querySelector('.removeRow');
                     if(btn){
                          btn.className = 'btn btn-danger removeRow';
-                         btn.innerText = '-';
+                         btn.style.cssText = 'width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;';
+                         btn.innerText = '- Remove';
                     }
 
                     document.querySelector('#variantTable tbody').appendChild(clone);
@@ -452,7 +453,8 @@
                     let btn = clone.querySelector('.addSpecRow');
                     if(btn){
                          btn.className = 'btn btn-danger removeSpecRow';
-                         btn.innerText = '-';
+                         btn.style.cssText = 'width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;';
+                         btn.innerText = '- Remove';
                     }
 
                     document.querySelector('#specTable tbody').appendChild(clone);

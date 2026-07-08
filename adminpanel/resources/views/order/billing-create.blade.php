@@ -199,12 +199,12 @@
             }
 
             .btn-checkout {
-                flex: 2;
+                flex: 1;
                 background: #28a745;
                 color: #fff;
                 border: none;
-                padding: 12px;
-                border-radius: 4px;
+                height: 40px;
+                border-radius: 6px;
                 font-weight: 600;
                 cursor: pointer
             }
@@ -214,8 +214,8 @@
                 background: #dc3545;
                 color: #fff;
                 border: none;
-                padding: 12px;
-                border-radius: 4px;
+                height: 40px;
+                border-radius: 6px;
                 font-weight: 600;
                 cursor: pointer
             }

@@ -116,8 +116,7 @@
 
                 <td>
                   @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-edit'))
-                  <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-warning"> <i
-                      class="bi bi-pencil-square me-1"></i></a>
+                  <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-warning"> <i class="bi bi-pencil-square me-1"></i> Edit</a>
                   @endif
                   @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-delete'))
                   <form action="{{ route('product.destroy', $product->id) }}" method="POST" style="display:inline-block;"
@@ -128,7 +127,7 @@
                   </form>
                   @endif
                   <button class="btn btn-sm btn-info view-units" data-product-id="{{ $product->id }}"><i
-                      class="bi bi-speedometer2 me-1"></i></button>
+                      class="bi bi-speedometer2 me-1"> Units</i></button>
 
                 </td>
               </tr>
@@ -366,8 +365,8 @@
                   </td>
                   <td class="text-center">
                     <div class="d-flex justify-content-center align-items-center gap-2">
-                      <button class="btn btn-sm btn-success btn-add-variant-row" data-product-id="${productId}">+</button>
-                      <button class="btn btn-sm btn-danger btn-delete-variant" data-variant-id="${row.id}" data-product-id="${productId}">−</button>
+                      <button class="btn btn-sm btn-success btn-add-variant-row" data-product-id="${productId}" style="width: 95px !important; height: 34px !important; font-size: 14px !important; padding: 0 10px !important; font-weight: 500; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><span>+</span> Add</button>
+                      <button class="btn btn-sm btn-danger btn-delete-variant" data-variant-id="${row.id}" data-product-id="${productId}" style="width: 95px !important; height: 34px !important; font-size: 14px !important; padding: 0 10px !important; font-weight: 500; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><span>−</span> Remove</button>
                     </div>
                   </td>
                 </tr>
@@ -403,8 +402,8 @@
           <td><input type="number" step="1" min="0" class="form-control form-control-sm variant-stock" placeholder="Stock"></td>
           <td class="text-center">
             <div class="d-flex justify-content-center align-items-center gap-2">
-              <button class="btn btn-sm btn-success btn-save-variant" data-product-id="${productId}">+</button>
-              <button class="btn btn-sm btn-danger btn-cancel-variant">−</button>
+              <button class="btn btn-sm btn-success btn-save-variant" data-product-id="${productId}" style="width: 95px !important; height: 34px !important; font-size: 14px !important; padding: 0 10px !important; font-weight: 500; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><span>+</span> Add</button>
+              <button class="btn btn-sm btn-danger btn-cancel-variant" style="width: 95px !important; height: 34px !important; font-size: 14px !important; padding: 0 10px !important; font-weight: 500; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><span>−</span> Remove</button>
             </div>
           </td>
         `;
@@ -533,8 +532,8 @@
             </td>
             <td class="text-center">
               <div class="d-flex justify-content-center align-items-center gap-2">
-                <button class="btn btn-sm btn-success btn-add-variant-row" data-product-id="${productId}">+</button>
-                <button class="btn btn-sm btn-danger btn-delete-variant" data-variant-id="${variant.id}" data-product-id="${productId}">−</button>
+                <button class="btn btn-sm btn-success btn-add-variant-row" data-product-id="${productId}" style="width: 95px !important; height: 34px !important; font-size: 14px !important; padding: 0 10px !important; font-weight: 500; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><span>+</span> Add</button>
+                <button class="btn btn-sm btn-danger btn-delete-variant" data-variant-id="${variant.id}" data-product-id="${productId}" style="width: 95px !important; height: 34px !important; font-size: 14px !important; padding: 0 10px !important; font-weight: 500; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><span>−</span> Remove</button>
               </div>
             </td>
           `;

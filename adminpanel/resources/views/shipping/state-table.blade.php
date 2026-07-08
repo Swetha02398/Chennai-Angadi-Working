@@ -88,8 +88,7 @@
 
                                 <td>
                                     @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-edit'))
-                                    <a href="{{ route('shipping.state.edit', $states->id) }}" class="btn btn-sm btn-warning"><i
-                                            class="bi bi-pencil-square me-1"></i></a>
+                                    <a href="{{ route('shipping.state.edit', $states->id) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i> Edit</a>
                                     @endif
 
                                     @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-delete'))

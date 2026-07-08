@@ -612,11 +612,11 @@ class OrderApiController extends Controller
             ->orderBy('id', 'desc')
             ->first();
 
-        $nextId = 1;
+        $nextId = 60001;
         
         if ($latestOrder) {
             $lastNumber = (int) substr($latestOrder->order_number, 2);
-            $nextId = $lastNumber + 1;
+            $nextId = max(60001, $lastNumber + 1);
         }
 
         return 'CA' . str_pad($nextId, 5, '0', STR_PAD_LEFT);

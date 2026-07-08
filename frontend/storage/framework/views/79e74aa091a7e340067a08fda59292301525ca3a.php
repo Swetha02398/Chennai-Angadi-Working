@@ -1,14 +1,14 @@
-@extends('layouts.app')
 
-@section('title', $query ? 'Search: ' . $query : 'Search Products')
 
-@section('content')
+<?php $__env->startSection('title', $query ? 'Search: ' . $query : 'Search Products'); ?>
+
+<?php $__env->startSection('content'); ?>
     <main class="main">
         <!-- Breadcrumb -->
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="{{ route('index') }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <a href="<?php echo e(route('index')); ?>" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                     <span></span> Search Results
                 </div>
             </div>
@@ -21,35 +21,36 @@
                     <!-- Search Header -->
                     <div class="search-header mb-30">
                         <h1 class="heading-1 mb-15">
-                            @if($query)
-                                Search Results for "{{ $query }}"
-                            @else
+                            <?php if($query): ?>
+                                Search Results for "<?php echo e($query); ?>"
+                            <?php else: ?>
                                 All Products
-                            @endif
+                            <?php endif; ?>
                         </h1>
                         <p class="text-muted">
-                            Found <strong>{{ $products->total() }}</strong> product(s)
-                            @if($categoryId && $categories->where('id', $categoryId)->first())
-                                in <strong>{{ $categories->where('id', $categoryId)->first()->name }}</strong>
-                            @endif
+                            Found <strong><?php echo e($products->total()); ?></strong> product(s)
+                            <?php if($categoryId && $categories->where('id', $categoryId)->first()): ?>
+                                in <strong><?php echo e($categories->where('id', $categoryId)->first()->name); ?></strong>
+                            <?php endif; ?>
                         </p>
                     </div>
 
                     <hr class="mb-30">
 
                     <!-- Product Grid -->
-                    @if($products->count() > 0)
+                    <?php if($products->count() > 0): ?>
                         <div class="row product-grid">
-                            @include('section.product-cards', ['products' => $products])
+                            <?php echo $__env->make('section.product-cards', ['products' => $products], \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
                         </div>
 
                         <!-- Pagination -->
                         <div class="pagination-area mt-20 mb-20">
                             <nav aria-label="Page navigation">
-                                {{ $products->links() }}
+                                <?php echo e($products->links()); ?>
+
                             </nav>
                         </div>
-                    @else
+                    <?php else: ?>
                         <!-- No Results -->
                         <div class="no-results-wrapper text-center py-5">
                             <div class="no-results-icon mb-4">
@@ -57,26 +58,26 @@
                             </div>
                             <h3 class="mb-3">No products found</h3>
                             <p class="text-muted mb-4">
-                                @if($query)
-                                    We couldn't find any products matching "<strong>{{ $query }}</strong>"
-                                @else
+                                <?php if($query): ?>
+                                    We couldn't find any products matching "<strong><?php echo e($query); ?></strong>"
+                                <?php else: ?>
                                     Please enter a search term to find products.
-                                @endif
+                                <?php endif; ?>
                             </p>
                             <div class="search-suggestions-box">
                                 <p class="mb-2"><strong>Try:</strong></p>
                                 <ul class="list-unstyled">
                                     <li><i class="fi-rs-check mr-2"></i> Using different or more general keywords</li>
                                     <li><i class="fi-rs-check mr-2"></i> Checking your spelling</li>
-                                    <li><i class="fi-rs-check mr-2"></i> Browsing our <a href="{{ route('shop') }}">shop
+                                    <li><i class="fi-rs-check mr-2"></i> Browsing our <a href="<?php echo e(route('shop')); ?>">shop
                                             page</a></li>
                                 </ul>
                             </div>
-                            <a href="{{ route('shop') }}" class="btn btn-primary mt-4">
+                            <a href="<?php echo e(route('shop')); ?>" class="btn btn-primary mt-4">
                                 <i class="fi-rs-shopping-bag mr-10"></i> Browse All Products
                             </a>
                         </div>
-                    @endif
+                    <?php endif; ?>
                 </div>
             </div>
         </div>
@@ -99,8 +100,8 @@
     </style>
 
 
-    @push('scripts')
-    <script src="{{ asset('assets/js/plugins/lazysizes.min.js') }}" async=""></script>
+    <?php $__env->startPush('scripts'); ?>
+    <script src="<?php echo e(asset('assets/js/plugins/lazysizes.min.js')); ?>" async=""></script>
     <script>
         $(document).ready(function () {
             // Handle variant dropdown changes
@@ -186,7 +187,7 @@
                 if (selectedWeight) requestData.selected_weight = selectedWeight;
 
                 $.ajax({
-                    url: '{{ route("add-to-cart") }}',
+                    url: '<?php echo e(route("add-to-cart")); ?>',
                     type: 'POST',
                     data: requestData,
                     success: function (response) {
@@ -208,5 +209,6 @@
             });
         });
     </script>
-    @endpush
-@endsection
+    <?php $__env->stopPush(); ?>
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\chennais\frontend\resources\views/section/search-results.blade.php ENDPATH**/ ?>

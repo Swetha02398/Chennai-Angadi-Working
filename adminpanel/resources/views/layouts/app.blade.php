@@ -48,6 +48,136 @@ main.main-wrap {
     background-color: transparent !important;
     border-color: transparent !important;
 }
+
+/* Fix for Active/Inactive badge buttons black outline and enforce Pill radius */
+table.table .badge,
+table.table .btn-action-col, 
+table.table form button.btn {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Enforce Pill radius ONLY for status badges, not action buttons */
+table.table .badge {
+    border-radius: 50px !important;
+    min-width: 85px !important;
+    height: 28px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    padding: 0 10px !important;
+    line-height: 1 !important;
+}
+
+/* Enforce identical size, radius, and alignment for Action Buttons (Edit / Delete / View) */
+table.table td .btn-sm {
+    border-radius: 6px !important;
+    min-width: 80px !important;
+    height: 30px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 10px !important;
+    line-height: 1 !important;
+    font-size: 13px !important;
+    white-space: nowrap !important;
+}
+
+/* Enforce exactly identical physical size for all Filter/Search and Clear buttons in table headers globally */
+.card-header .btn,
+.card-header form .btn {
+    width: 145px !important;
+    height: 36px !important;
+    border-radius: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0 !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    margin: 0 auto !important; /* Centers within w-100 grid columns */
+    vertical-align: top !important;
+    white-space: nowrap !important;
+}
+
+/* Enforce the identical aesthetic for top "Add" buttons, but use min-width to accommodate slightly longer names like "Add Main Category" */
+.content-header .btn,
+.content-header a.btn {
+    min-width: 145px !important;
+    height: 36px !important;
+    border-radius: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    padding: 0 15px !important;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    vertical-align: top !important;
+    white-space: nowrap !important;
+}
+
+table.table td .btn-sm i {
+    display: inline-block;
+    font-style: normal;
+    margin-right: 4px !important;
+}
+
+table.table .badge:focus, table.table .badge:active,
+table.table form button.btn:focus, table.table form button.btn:active,
+table.table .btn-action-col:focus, table.table .btn-action-col:active {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Standardize All Form Action Buttons (Save/Cancel/Update/Add/Edit/Back) across Create/Edit/View pages globally */
+.content-main form .btn:not(.btn-sm):not(.search-btn):not([name="search"]), 
+.content-main .btn-group-actions .btn,
+.order-view-header .action-buttons .btn,
+.btn-save,
+.btn-cancel,
+.btn-update,
+button[type="submit"]:not(.btn-sm):not(.btn-action-col):not(.search-btn):not(.btn-primary:has(.bi-search)):not(.badge),
+.content-main form a.btn-secondary:not(.btn-sm),
+.content-main form a.btn-light:not(.btn-sm),
+.content-main form a.btn-dark:not(.btn-sm) {
+    min-width: 145px !important;
+    height: 40px !important;
+    border-radius: 6px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
+    padding: 0 15px !important;
+    letter-spacing: 0.3px !important;
+    white-space: nowrap !important;
+    gap: 6px !important;
+    margin: 0 !important;
+}
+
+/* Assure consistency on secondary/light links acting as form buttons */
+.content-main form a.btn-secondary:not(.btn-sm),
+.content-main form a.btn-light:not(.btn-sm),
+.content-main form a.btn-dark:not(.btn-sm) {
+    min-width: 145px !important;
+    height: 40px !important;
+    border-radius: 6px !important;
+}
+
+.content-main form .btn:not(.btn-sm) i,
+.btn-save i,
+.btn-cancel i,
+.action-buttons .btn i {
+    flex-shrink: 0;
+    margin-right: 0 !important; /* using flex gap instead */
+}
+
 </style>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
@@ -157,6 +287,76 @@ main.main-wrap {
                     $('.table').attr("data-badges-unified", null);
                     unifyTableBadges();
                 }, 100);
+            });
+        });
+    </script>
+    <script>
+        // Global Robust Real-time Auto-Search Implementation
+        document.addEventListener("DOMContentLoaded", function() {
+            // Find all inputs that function as search boxes across all modules
+            const searchSelectors = 'input[name="search"], input[id*="Search"], input[id*="search"], input[placeholder*="Search"], input[placeholder*="search"]';
+            const searchInputs = document.querySelectorAll(searchSelectors);
+            let searchTimeout = null;
+            
+            searchInputs.forEach(function(input) {
+                // Prevent targeting random non-text inputs (like checkboxes if wrongly named)
+                if (input.type === 'checkbox' || input.type === 'radio' || input.type === 'hidden') return;
+
+                // Auto-focus the search input if it has a populated value (indicating an active search state)
+                // This ensures that when the page reloads after filtering, user focus is preserved 
+                if (input.value && input.value.trim() !== '') {
+                    // Slight timeout to ensure layout is fully rendered before focusing
+                    setTimeout(() => {
+                        input.focus();
+                        // Move cursor to the end cleanly
+                        const val = input.value;
+                        input.value = '';
+                        input.value = val;
+                    }, 50);
+                }
+
+                input.addEventListener('keyup', function(e) {
+                    // Ignore navigational & control keys
+                    const ignoredKeys = [
+                        'Tab', 'Enter', 'Escape', 
+                        'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 
+                        'Shift', 'Control', 'Alt', 'Meta', 'CapsLock',
+                        'PageUp', 'PageDown', 'Home', 'End'
+                    ];
+                    
+                    // Crucial: we ignore 'Enter' because we artificially trigger it later, 
+                    // prevent infinite loop!
+                    if (ignoredKeys.includes(e.key)) return;
+
+                    clearTimeout(searchTimeout);
+                    
+                    // Trigger after 500ms debounce
+                    searchTimeout = setTimeout(function() {
+                        const form = input.closest('form');
+                        if (form) {
+                            form.submit();
+                        } else {
+                            // If no form, try known global filter functions
+                            if (typeof filterTable === 'function') {
+                                filterTable();
+                            } else if (typeof filterOrders === 'function') {
+                                filterOrders();
+                            } else {
+                                // Fallback: simulate an 'Enter' keypress on the input
+                                // This natively triggers independent scripts waiting for Enter
+                                const enterEvent = new KeyboardEvent('keyup', {
+                                    key: 'Enter',
+                                    code: 'Enter',
+                                    keyCode: 13,
+                                    which: 13,
+                                    bubbles: true,
+                                    cancelable: true
+                                });
+                                input.dispatchEvent(enterEvent);
+                            }
+                        }
+                    }, 500);
+                });
             });
         });
     </script>

@@ -81,17 +81,16 @@
                                     <option value="billing">Billing</option>
                                 </select>
                             </div>
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <label class="form-label mb-0 small">&nbsp;</label>
-                                <button type="button" id="reportApplyFilter" class="btn btn-primary btn-sm w-100">
-                                    <i class="material-icons md-filter_alt"></i> Filter
-                                </button>
-                            </div>
-                            <div class="col-md-2">
-                                <label class="form-label mb-0 small">&nbsp;</label>
-                                <button type="button" id="reportClearFilter" class="btn btn-secondary btn-sm w-100">
-                                    Clear
-                                </button>
+                                <div class="d-flex" style="gap: 15px;">
+                                    <button type="button" id="reportApplyFilter" class="btn btn-primary btn-sm">
+                                        <i class="material-icons md-filter_alt"></i> Filter
+                                    </button>
+                                    <button type="button" id="reportClearFilter" class="btn btn-secondary btn-sm">
+                                        Clear
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -175,10 +174,15 @@
         .nav-tabs-custom .nav-link {
             border: 2px solid transparent;
             border-radius: 8px 8px 0 0;
-            padding: 10px 20px;
             font-weight: 500;
             color: #6c757d;
             transition: all 0.3s ease;
+            min-width: 170px;
+            height: 45px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
         }
 
         .nav-tabs-custom .nav-link:hover {
@@ -245,6 +249,21 @@
             opacity: 0.6;
         }
 
+        /* Enforce exactly identical physical size for Download Excel, Filter, and Clear buttons */
+        #downloadExcelBtn, #reportClearFilter, #reportApplyFilter {
+            width: 145px !important;
+            height: 36px !important;
+            border-radius: 6px !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            text-align: center !important;
+            padding: 0 !important;
+            font-size: 13px !important;
+            font-weight: 500 !important;
+            margin: 0 !important;
+            vertical-align: top !important;
+        }
 
     </style>
 
@@ -313,15 +332,19 @@
                                     <td>${order.customer}</td>
                                     <td>
                                         <span class="badge ${order.order_source === 'app' ? 'bg-success' : (order.order_source === 'web' ? 'bg-primary' : 'bg-warning')}">
-                                            ${order.order_source ? order.order_source.replace('_', ' ').toUpperCase() : 'N/A'}
+                                            ${order.order_source ? order.order_source.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A'}
                                         </span>
                                     </td>
                                     <td>${order.items_count}</td>
                                     <td><strong>₹${order.amount}</strong></td>
                                     <td>${order.payment_method}</td>
                                     <td>
-                                        <span class="badge ${order.payment_status === 'Paid' ? 'bg-success' : (order.payment_status === 'Pending' ? 'bg-warning' : 'bg-danger')}">
-                                            ${order.payment_status}
+                                        <span class="badge ${
+                                            (order.payment_status === 'Paid' || (order.payment_status && order.payment_status.toLowerCase() === 'cod')) 
+                                                ? 'bg-success' 
+                                                : (order.payment_status === 'Pending' ? 'bg-warning' : 'bg-danger')
+                                        }">
+                                            ${order.payment_status ? order.payment_status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A'}
                                         </span>
                                     </td>
                                     <td>
@@ -331,7 +354,7 @@
                                     </td>
                                     <td>
                                         <a href="${invoiceUrl}" target="_blank" class="btn btn-sm btn-info" onclick="event.stopPropagation();" title="View Invoice">
-                                            <i class="bi bi-printer-fill"></i>
+                                            <i class="bi bi-printer-fill"> Print</i>
                                         </a>
                                     </td>
                                 </tr>

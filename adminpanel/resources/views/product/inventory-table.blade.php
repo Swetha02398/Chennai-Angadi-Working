@@ -87,8 +87,9 @@
     <td>
         @if($variant->stock_updated_at)
             <div class="small">
-                <span class="text-muted"><i class="material-icons md-person small"></i> {{ $variant->stockUpdater->username ?? $variant->stockUpdater->name ?? 'Admin' }}</span><br>
-                <span class="text-muted"><i class="material-icons md-access_time small"></i> {{ \Carbon\Carbon::parse($variant->stock_updated_at)->format('d M, h:i A') }}</span>
+                <span class="text-muted d-inline-flex align-items-center gap-1" style="line-height:1;"><i class="material-icons md-person" style="font-size: 16px;"></i> {{ $variant->stockUpdater->username ?? $variant->stockUpdater->name ?? 'Admin' }}</span><br>
+                <div style="height: 4px;"></div>
+                <span class="text-muted d-inline-flex align-items-center gap-1" style="line-height:1;"><i class="material-icons md-access_time" style="font-size: 16px;"></i> {{ \Carbon\Carbon::parse($variant->stock_updated_at)->format('d M, h:i A') }}</span>
             </div>
         @else
             <span class="text-muted small">N/A</span>
@@ -98,8 +99,8 @@
     {{-- ACTION --}}
     <td>
         @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-edit'))
-        <button type="button" class="btn btn-success btn-sm plus" title="Increase Stock">+</button>
-        <button type="button" class="btn btn-danger btn-sm minus" title="Decrease Stock">-</button>
+        <button type="button" class="btn btn-success btn-sm plus" title="Increase Stock" style="width: 95px !important; height: 34px !important; font-size: 14px !important; padding: 0 10px !important; font-weight: 500; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><span>+</span> Add</button>
+        <button type="button" class="btn btn-danger btn-sm minus" title="Decrease Stock" style="width: 95px !important; height: 34px !important; font-size: 14px !important; padding: 0 10px !important; font-weight: 500; border-radius: 6px; margin-left: 5px; display: inline-flex; align-items: center; justify-content: center; gap: 4px;"><span>−</span> Remove</button>
         @endif
     </td>
 </tr>

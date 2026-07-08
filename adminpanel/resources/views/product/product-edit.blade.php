@@ -445,9 +445,9 @@
                                             <td><input type="text" name="specifications[{{ $sIndex }}][value]" class="form-control" value="{{ $spec->spec_value }}"></td>
                                             <td>
                                                 @if($loop->first)
-                                                    <button type="button" class="btn btn-success addSpecRow">+</button>
+                                                    <button type="button" class="btn btn-success addSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
                                                 @else
-                                                    <button type="button" class="btn btn-danger removeSpecRow">-</button>
+                                                    <button type="button" class="btn btn-danger removeSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>
                                                 @endif
                                             </td>
                                         </tr>
@@ -456,7 +456,7 @@
                                     <tr>
                                         <td><input type="text" name="specifications[0][key]" class="form-control" placeholder="e.g. Height"></td>
                                         <td><input type="text" name="specifications[0][value]" class="form-control" placeholder="e.g. 10cm"></td>
-                                        <td><button type="button" class="btn btn-success addSpecRow">+</button></td>
+                                        <td><button type="button" class="btn btn-success addSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button></td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -513,10 +513,10 @@
                                                     <td>
                                                         @if($index == 0)
                                                             <button type="button"
-                                                                class="btn btn-success btn-sm-custom addRow">+</button>
+                                                                class="btn btn-success btn-sm-custom addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
                                                         @else
                                                             <button type="button"
-                                                                class="btn btn-danger btn-sm-custom removeRow">-</button>
+                                                                class="btn btn-danger btn-sm-custom removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -551,10 +551,10 @@
                                                     <td>
                                                         @if($index == 0)
                                                             <button type="button"
-                                                                class="btn btn-success btn-sm-custom addRow">+</button>
+                                                                class="btn btn-success btn-sm-custom addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
                                                         @else
                                                             <button type="button"
-                                                                class="btn btn-danger btn-sm-custom removeRow">-</button>
+                                                                class="btn btn-danger btn-sm-custom removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -632,7 +632,7 @@
                     el.value = '';
                 });
 
-                clone.querySelector('.addRow').outerHTML = '<button type="button" class="btn btn-danger btn-sm-custom removeRow">-</button>';
+                clone.querySelector('.addRow').outerHTML = '<button type="button" class="btn btn-danger btn-sm-custom removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>';
 
                 document.querySelector('#variantTable tbody').appendChild(clone);
                 rowIndex++;
@@ -656,7 +656,8 @@
                 let btn = clone.querySelector('.addSpecRow');
                 if(btn){
                      btn.className = 'btn btn-danger btn-sm-custom removeSpecRow';
-                     btn.innerText = '-';
+                     btn.style.cssText = 'width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;';
+                     btn.innerText = '- Remove';
                 }
 
                 document.querySelector('#specTable tbody').appendChild(clone);

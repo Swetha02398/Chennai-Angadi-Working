@@ -50,11 +50,11 @@
             position: relative;
         }
         body {
-            overflow-x: hidden !important;
+            overflow-x: clip !important;
         }
-        .main-wrap, .main, .container {
+        .main-wrap, .main {
             max-width: 100% !important;
-            overflow-x: hidden !important;
+            overflow-x: clip !important;
         }
 
         /* Prevent slider horizontal layout shifts before Slick initializes */
@@ -109,9 +109,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css">
+    <!-- Lazysizes for image lazy loading -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>
 
     <!-- Wishlist Active State CSS - Only when active, NOT on hover -->
     <style>
+        /* Center product titles globally */
+        .product-content-wrap h2 {
+            text-align: center !important;
+        }
+
         .add-to-wishlist.active i,
         .add-to-wishlist.active {
             color: #ff0000 !important;
@@ -411,11 +418,11 @@
 
             /* Prevent horizontal page scroll from any overflow */
             body {
-                overflow-x: hidden !important;
+                overflow-x: clip !important;
             }
 
-            .container, .main, .main-wrap {
-                overflow-x: hidden !important;
+            .main, .main-wrap {
+                overflow-x: clip !important;
             }
 
             /* Force show wishlist and quickview action icons on mobile always, styled exactly like Image 2 */

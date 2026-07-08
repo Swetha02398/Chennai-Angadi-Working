@@ -86,8 +86,7 @@
                                     </td>
                                     <td>
                                         @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('quantity-edit'))
-                                        <a href="{{ route('quantity.edit', $q->id) }}" class="btn btn-sm btn-warning"> <i
-                                                class="bi bi-pencil-square me-1"></i></a>
+                                        <a href="{{ route('quantity.edit', $q->id) }}" class="btn btn-sm btn-warning"> <i class="bi bi-pencil-square me-1"></i> Edit</a>
                                         @endif
                                         @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('quantity-delete'))
                                         <form action="{{ route('quantity.destroy', $q->id) }}" method="POST" class="d-inline">

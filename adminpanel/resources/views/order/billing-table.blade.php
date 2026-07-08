@@ -117,7 +117,10 @@
                                     <td>{{ ($orders->currentPage() - 1) * $orders->perPage() + $loop->iteration }}</td>
                                     <td><strong>{{ $order->order_number }}</strong></td>
 
-                                    <td>{{ $order->created_at->format('d M Y H:i') }}</td>
+                                    <td>
+                                        {{ $order->created_at->format('d-m-Y') }}<br>
+                                        <small class="text-muted">{{ $order->created_at->format('h:i A') }}</small>
+                                    </td>
 
                                     <td>
                                         @if($order->customer_type === 'registered')
@@ -171,7 +174,7 @@
                                                 data-order-id="{{ $order->id }}"
                                                 data-order-number="{{ $order->order_number }}"
                                                 title="View Invoice">
-                                                <i class="bi bi-printer-fill"></i>
+                                                <i class="bi bi-printer-fill"> Print</i>
                                             </button>
 
                                             @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('billing-delete'))

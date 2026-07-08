@@ -40,7 +40,7 @@
                                 <th>Email</th>
                                 <th>Status</th>
                                 <th>Date</th>
-                                <th class="text-end">Actions</th>
+                                <th class="text-start">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -63,11 +63,11 @@
                                     </span>
                                 </td>
                                 <td>{{ $enquiry->created_at->format('d-m-Y') }}</td>
-                                <td class="text-end">
+                                <td class="text-start">
                                     <a href="{{ route('admin.contact.show', $enquiry->id) }}" class="btn btn-sm"
                                         style="background-color: #0099ffff; color: #000; padding: 3px 7px; font-size: 11px;"
                                         title="View Enquiry">
-                                        <i class="bi bi-eye-fill"></i>
+                                        <i class="bi bi-eye-fill"></i> View
                                     </a>
                                     <form action="{{ route('admin.contact.destroy', $enquiry->id) }}" method="POST" style="display:inline;">
                                         @csrf
@@ -75,7 +75,7 @@
                                         <button type="submit" class="btn btn-sm btn-danger px-2" 
                                             style="padding: 3px 7px; font-size: 11px;"
                                             onclick="return confirm('Are you sure you want to delete this enquiry?')">
-                                            <i class="bi bi-trash-fill"></i>
+                                            <i class="bi bi-trash-fill"></i> Delete
                                         </button>
                                     </form>
                                 </td>

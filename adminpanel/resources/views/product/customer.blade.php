@@ -51,7 +51,7 @@
                             <th>Mobile Number</th>
                             <th>Address</th>
                             <th>Status</th>
-                            <th class="text-end">Action</th>
+                            <th class="text-start">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -88,12 +88,12 @@
                                     @endif
                                 @endif
                              </td>
-                            <td class="text-end">
+                            <td class="text-start">
                                @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('customer-delete'))
                                 <a href="{{ route('customer.delete', $customer->id) }}" 
                                    onclick="return confirm('Are you sure you want to delete this customer?')" 
                                    class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash me-1"></i> 
+                                    <i class="bi bi-trash me-1"></i> Delete 
                                 </a>
                                 @endif
                             </td>

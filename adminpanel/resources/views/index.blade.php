@@ -247,7 +247,7 @@
                                             <th class="align-middle" scope="col">Billing Name</th>
                                             <th class="align-middle" scope="col">Date</th>
                                             <th class="align-middle" scope="col">Total</th>
-                                            <th class="align-middle" scope="col">Payment Status</th>
+                                            <th class="align-middle text-center" scope="col">Payment Status</th>
                                             <th class="align-middle" scope="col">Payment Method</th>
                                             <th class="align-middle" scope="col">View Details</th>
                                         </tr>
@@ -268,18 +268,29 @@
                                             </td>
                                             <td>{{ $order->created_at->format('d M, Y') }}</td>
                                             <td>₹{{ number_format($order->final_amount, 2) }}</td>
-                                            <td>
+                                            <td class="text-center">
                                                 @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
-                                                    <span class="badge badge-pill badge-soft-warning">COD</span>
+                                                    <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center" style="background-color:#ffc107;color:#000;border-radius:50px;width:80px;height:24px;font-size:12px;border:none;padding:0;">COD</button>
                                                 @elseif($order->payment_status === 'paid')
-                                                    <span class="badge badge-pill badge-soft-success">Paid</span>
+                                                    <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center" style="background-color:#28a745;color:#fff;border-radius:50px;width:80px;height:24px;font-size:12px;border:none;padding:0;">Paid</button>
                                                 @else
-                                                    <span class="badge badge-pill badge-soft-danger">Not Paid</span>
+                                                    <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center" style="background-color:#dc3545;color:#fff;border-radius:50px;width:80px;height:24px;font-size:12px;border:none;padding:0;">Not Paid</button>
                                                 @endif
                                             </td>
                                             <td>
-                                                <i class="material-icons md-payment font-xxl text-muted mr-5"></i> 
-                                                {{ ucfirst($order->payment_method ?? 'Cash') }}
+                                                <div class="d-flex align-items-center">
+                                                    <i class="material-icons md-payment font-xxl text-muted me-2"></i>
+                                                    @php
+                                                        $method = $order->payment_method ?? 'cash';
+                                                        $methodLabel = match(strtolower($method)) {
+                                                            'online_gateway', 'online', 'razorpay', 'stripe', 'paytm' => 'Online',
+                                                            'cash_on_delivery', 'cod' => 'Cash',
+                                                            'cash' => 'Cash',
+                                                            default => ucwords(str_replace('_', ' ', $method))
+                                                        };
+                                                    @endphp
+                                                    <span>{{ $methodLabel }}</span>
+                                                </div>
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-xs btn-primary view-invoice-btn" data-order-id="{{ $order->id }}">View details</button>

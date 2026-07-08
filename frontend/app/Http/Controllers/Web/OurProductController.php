@@ -291,6 +291,13 @@ class OurProductController extends Controller
             ->orderByRaw('(SELECT MAX(stock) FROM product_variants WHERE product_variants.product_id = products.id) > 0 DESC')
             ->paginate(50)->withQueryString();
 
+        if ($request->ajax()) {
+            return response()->json([
+                'html' => view('section.product-cards', compact('products'))->render(),
+                'hasMore' => $products->hasMorePages()
+            ]);
+        }
+
         // Count total
         $totalProducts = Product::where('status', 1)->count();
 

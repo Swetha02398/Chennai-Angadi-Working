@@ -99,7 +99,7 @@
 
                                 @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('notifications-edit'))
                                 <a href="{{ route('notifications.edit', $item->id) }}" class="btn btn-warning btn-sm">
-                                    <i class='bi bi-pencil-square me-1'></i>
+                                    <i class='bi bi-pencil-square me-1'></i> Edit
                                 </a>
                                 @endif
 

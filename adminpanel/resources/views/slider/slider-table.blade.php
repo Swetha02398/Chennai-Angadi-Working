@@ -106,17 +106,17 @@
                         @endif
                     </td>
 
-                                <td class="d-flex gap-2">
+                                <td class="text-start">
                                     @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('slider-edit'))
                                     <a href="{{ route('slider.edit', $slider->id) }}"
                                        class="btn btn-sm btn-warning">
-                                        <i class="bi bi-pencil-square me-1"></i>
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
                                     </a>
                                     @endif
 
                                     @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('slider-delete'))
                                     <form action="{{ route('slider.destroy', $slider->id) }}"
-                                          method="POST"
+                                          method="POST" class="d-inline"
                                           onsubmit="return confirm('Delete this slider?')">
                                         @csrf
                                         @method('DELETE')

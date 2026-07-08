@@ -88,7 +88,7 @@
                                                 default => 'bg-secondary'
                                             };
                                         @endphp
-                                        <span class="badge {{ $typeClass }}">{{ $email->email_type_label }}</span>
+                                        <span class="badge {{ $typeClass }} email-type-badge">{{ $email->email_type_label }}</span>
                                     </td>
                                     <td>
                                         <div>{{ $email->recipient_name ?? '-' }}</div>
@@ -311,6 +311,12 @@
             }
             #orderDetailsModal .modal-dialog {
                 z-index: 10000 !important;
+            }
+            /* Uniform Email Type Badges */
+            .email-type-badge {
+                width: 145px !important;
+                height: 28px !important;
+                border-radius: 50px !important;
             }
         </style>
     @endpush

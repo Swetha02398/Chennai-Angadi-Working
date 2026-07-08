@@ -78,7 +78,7 @@
                                     <th>Amount</th>
                                     <th>Payment Status</th>
                                     <th>Delivery Status</th>
-                                    <th class="text-end">Actions</th>
+                                    <th class="text-start">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -125,9 +125,9 @@
                                             <strong>{{ $order->order_number }}</strong>
                                         </td>
                                         <td>
-                                            {{ $order->created_at->format('d-m-Y') }}
+                                            {{ $order->created_at->format('d-m-Y') }}<br>
+                                            <small class="text-muted">{{ $order->created_at->format('h:i A') }}</small>
                                         </td>
-                                        
                                         <td>
                                             <strong>{{ $billingName }}</strong><br>
                                             @if($address)
@@ -209,12 +209,12 @@
                                                 {{ $statusLabel }}
                                             </span>
                                         </td>
-                                        <td class="text-end">
+                                        <td class="text-start">
                                             <div class="d-flex gap-1 justify-content-end">
                                                 <a href="{{ route('orders.view', $order->id) }}" class="btn btn-sm"
                                                     style="background-color: #00ccffff; color: #000; padding: 3px 7px; font-size: 11px;"
                                                     title="View Order">
-                                                    <i class="bi bi-eye-fill"></i>
+                                                    <i class="bi bi-eye-fill"></i> View
                                                 </a>
                                                 @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('orders-delete'))
                                                 <form action="{{ route('orders.delete', $order->id) }}" method="POST" style="display:inline-block;"
@@ -310,7 +310,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-warning text-dark">
                     <h5 class="modal-title" id="editNotesModalLabel">
-                        <i class="bi bi-pencil-square me-1"></i><span id="modalOrderNumber"></span>
+                        <i class="bi bi-pencil-square me-1"></i> Edit<span id="modalOrderNumber"></span>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>

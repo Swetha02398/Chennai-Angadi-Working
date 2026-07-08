@@ -141,6 +141,24 @@
                             .header-account-menu ul li:last-child a {
                                 border-top: 1px solid #f0f0f0;
                             }
+                            
+                            /* Ensure Header Middle has higher Z-index than carousels/banners below it */
+                            .header-middle {
+                                position: relative;
+                                z-index: 1050 !important;
+                            }
+                            .header-middle .container,
+                            .header-middle .header-wrap,
+                            .header-middle .header-right {
+                                overflow: visible !important;
+                            }
+                            .search-style-2 {
+                                position: relative;
+                                z-index: 1050; /* Base context for the absolute dropdown */
+                            }
+                            .search-style-2 form, #mobile-header-search-form {
+                                overflow: visible !important;
+                            }
                         </style>
                     </div>
                 </div>
@@ -646,24 +664,27 @@
         position: relative;
     }
 
-    /* 🔍 SEARCH SUGGESTIONS DROPDOWN */
+    /* 🔍 SEARCH SUGGESTIONS DROPDOWN FIXES */
     .search-style-2 {
         position: relative;
+        z-index: 10000;
     }
 
     .search-suggestions-dropdown {
-        position: absolute;
-        top: 100%;
-        left: 0;
-        right: 0;
-        background: #fff;
-        border: 1px solid #ddd;
-        border-top: none;
-        border-radius: 0 0 10px 10px;
-        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
-        z-index: 9999;
-        max-height: 400px;
-        overflow-y: auto;
+        position: absolute !important;
+        top: 100% !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        background: #fff !important;
+        border: 1px solid #ddd !important;
+        border-top: none !important;
+        border-radius: 0 0 10px 10px !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+        z-index: 2147483647 !important; /* Maximum possible z-index */
+        max-height: 400px !important;
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
     }
 
     .suggestion-item {
@@ -1145,63 +1166,58 @@
             });
         }
 
-        if (!searchInput || !searchSuggestions) return;
+        // Initialize LIVE SEARCH on all search inputs by finding dropdowns
+        const dropdowns = document.querySelectorAll('.search-suggestions-dropdown');
+        
+        dropdowns.forEach(dropdown => {
+            const form = dropdown.closest('form');
+            if (!form) return;
+            
+            const input = form.querySelector('input[name="q"]');
+            if (!input) return;
 
-        let debounceTimer;
-        let currentQuery = '';
+            let debounceTimer;
+            let currentQuery = '';
 
-        // Handle input typing
-        searchInput.addEventListener('input', function () {
-            const query = this.value.trim();
-            currentQuery = query;
-
-            // Clear previous timer
-            clearTimeout(debounceTimer);
-
-            // Hide suggestions if query is too short
-            if (query.length < 2) {
-                hideSuggestions();
-                return;
-            }
-
-            // Debounce the search (wait 300ms after user stops typing)
-            debounceTimer = setTimeout(function () {
-                fetchSuggestions(query);
-            }, 300);
-        });
-
-        // Handle focus
-        searchInput.addEventListener('focus', function () {
-            if (currentQuery.length >= 2) {
-                fetchSuggestions(currentQuery);
-            }
-        });
-
-        // Handle click outside to close dropdown
-        document.addEventListener('click', function (e) {
-            if (!searchInput.contains(e.target) && !searchSuggestions.contains(e.target)) {
-                hideSuggestions();
-            }
-        });
-
-        // Handle Enter key - redirect to full search results page
-        searchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                const query = this.value.trim();
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const query = input.value.trim();
                 if (query.length >= 2) {
-                    hideSuggestions();
-                    // Allow form to submit naturally to search results page
-                } else {
-                    e.preventDefault(); // Prevent submission if query too short
+                    fetchSuggestions(query, dropdown, input);
                 }
-            }
-        });
+            });
 
-        // Form submission - redirect to search results page
-        // (Let the form submit naturally via action="<?php echo e(route('search')); ?>")
+            input.addEventListener('input', function () {
+                const query = this.value.trim();
+                currentQuery = query;
+
+                clearTimeout(debounceTimer);
+
+                if (query.length < 2) {
+                    hideSuggestions(dropdown);
+                    return;
+                }
+
+                debounceTimer = setTimeout(function () {
+                    fetchSuggestions(query, dropdown, input);
+                }, 300);
+            });
+
+            input.addEventListener('focus', function () {
+                if (currentQuery.length >= 2) {
+                    fetchSuggestions(currentQuery, dropdown, input);
+                }
+            });
+            
+            document.addEventListener('click', function (e) {
+                if (!input.contains(e.target) && !dropdown.contains(e.target)) {
+                    hideSuggestions(dropdown);
+                }
+            });
+        });
 
         // Fetch suggestions via AJAX
-        function fetchSuggestions(query) {
+        function fetchSuggestions(query, dropdown, input) {
             const categoryId = categorySelect ? categorySelect.value : '';
             const url = '<?php echo e(route("search.suggestions")); ?>?q=' + encodeURIComponent(query);
 
@@ -1209,19 +1225,19 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.length > 0) {
-                        showSuggestions(data, query);
+                        showSuggestions(data, query, dropdown);
                     } else {
-                        showNoResults(query);
+                        hideSuggestions(dropdown);
                     }
                 })
                 .catch(error => {
                     console.error('Search error:', error);
-                    hideSuggestions();
+                    hideSuggestions(dropdown);
                 });
         }
 
         // Show suggestions dropdown
-        function showSuggestions(products, query) {
+        function showSuggestions(products, query, dropdown) {
             let html = '';
 
             products.forEach(product => {
@@ -1249,24 +1265,25 @@
             </a>
         `;
 
-            searchSuggestions.innerHTML = html;
-            searchSuggestions.style.display = 'block';
-        }
+            dropdown.innerHTML = html;
+            dropdown.style.display = 'block';
 
-        // Show no results message
-        function showNoResults(query) {
-            searchSuggestions.innerHTML = `
-            <div class="search-no-results">
-                <p>No products found for "<strong>${query}</strong>"</p>
-                <small>Try different keywords or browse categories</small>
-            </div>
-        `;
-            searchSuggestions.style.display = 'block';
+            // Dynamically align dropdown exactly under the text input part
+            const form = dropdown.closest('form');
+            if (form) {
+                const inputElement = form.querySelector('input[name="q"]');
+                if (inputElement) {
+                    const formRect = form.getBoundingClientRect();
+                    const inputRect = inputElement.getBoundingClientRect();
+                    dropdown.style.left = (inputRect.left - formRect.left) + 'px';
+                    dropdown.style.width = inputRect.width + 'px';
+                }
+            }
         }
 
         // Hide suggestions dropdown
-        function hideSuggestions() {
-            searchSuggestions.style.display = 'none';
+        function hideSuggestions(dropdown) {
+            dropdown.style.display = 'none';
         }
 
         // Highlight matching text in product name
@@ -1337,84 +1354,5 @@
             }
         });
 
-        mobileSearchInput.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') {
-                const query = this.value.trim();
-                if (query.length >= 2) {
-                    mobileHideSuggestions();
-                } else {
-                    e.preventDefault();
-                }
-            }
-        });
-
-        function mobileFetchSuggestions(query) {
-            const url = '<?php echo e(route("search.suggestions")); ?>?q=' + encodeURIComponent(query);
-
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.length > 0) {
-                        mobileShowSuggestions(data, query);
-                    } else {
-                        mobileShowNoResults(query);
-                    }
-                })
-                .catch(error => {
-                    console.error('Mobile search error:', error);
-                    mobileHideSuggestions();
-                });
-        }
-
-        function mobileShowSuggestions(products, query) {
-            let html = '';
-            products.forEach(product => {
-                const highlightedName = mobileHighlightMatch(product.name, query);
-                html += `
-                <a href="${product.url}" class="suggestion-item">
-                    <img src="${product.image}" alt="${product.name}"
-                         onerror="this.src='<?php echo e(asset('assets/imgs/images/default-product.png')); ?>'" />
-                    <div class="suggestion-info">
-                        <span class="suggestion-name">${highlightedName}</span>
-                        <span class="suggestion-category">${product.category}</span>
-                    </div>
-                    <span class="suggestion-arrow"><i class="fi-rs-angle-right"></i></span>
-                </a>
-                `;
-            });
-
-            const searchUrl = '<?php echo e(route("search")); ?>?q=' + encodeURIComponent(query);
-            html += `
-            <a href="${searchUrl}" class="search-view-all" style="display: block; padding: 12px 15px; text-align: center; background: #f8f9fa; color: #3BB77E; font-weight: 600; text-decoration: none; border-radius: 0 0 10px 10px; transition: background 0.2s;">
-                View all ${products.length} result${products.length > 1 ? 's' : ''} for "${query}" →
-            </a>
-            `;
-
-            mobileSearchSuggestions.innerHTML = html;
-            mobileSearchSuggestions.style.display = 'block';
-        }
-
-        function mobileShowNoResults(query) {
-            mobileSearchSuggestions.innerHTML = `
-            <div class="search-no-results">
-                <p>No products found for "<strong>${query}</strong>"</p>
-                <small>Try different keywords or browse categories</small>
-            </div>
-            `;
-            mobileSearchSuggestions.style.display = 'block';
-        }
-
-        function mobileHideSuggestions() {
-            if (mobileSearchSuggestions) mobileSearchSuggestions.style.display = 'none';
-        }
-
-        function mobileHighlightMatch(text, query) {
-            const regex = new RegExp('(' + mobileEscapeRegex(query) + ')', 'gi');
-            return text.replace(regex, '<mark style="background:#fff3cd;padding:0 2px;border-radius:2px;">$1</mark>');
-        }
-
-        function mobileEscapeRegex(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        }
     });
 </script><?php /**PATH C:\xampp\htdocs\chennais\frontend\resources\views/partials/header.blade.php ENDPATH**/ ?>
