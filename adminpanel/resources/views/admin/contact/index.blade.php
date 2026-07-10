@@ -15,7 +15,7 @@
                         <input type="text" name="search" class="form-control" placeholder="Search by Name, Email or Phone..." value="{{ $search }}">
                     </div>
                     <div class="col-md-3">
-                        <select name="status" class="form-select">
+                        <select name="status" class="form-select" onchange="this.form.submit()">
                             <option value="">All Status</option>
                             <option value="unread" {{ $status == 'unread' ? 'selected' : '' }}>Unread</option>
                             <option value="read" {{ $status == 'read' ? 'selected' : '' }}>Read</option>

@@ -1,5 +1,5 @@
-@extends('layouts.app')
-@section('content')
+
+<?php $__env->startSection('content'); ?>
    
     <main class="main pages">
         <div class="page-header breadcrumb-wrap">
@@ -36,4 +36,5 @@
             </div>
         </div>
     </main>
-   @endsection
+   <?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\chennais\frontend\resources\views/pages/about.blade.php ENDPATH**/ ?>

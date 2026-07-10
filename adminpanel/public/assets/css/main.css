@@ -3806,7 +3806,7 @@ body.aside-mini .menu-aside .menu-item.has-submenu .menu-link:after {
 
 footer.main-footer {
   bottom: 0;
-  padding: 30px 3%;
+  padding: 10px 3%;
   position: absolute;
   right: 0;
   width: 100%;
@@ -4507,16 +4507,20 @@ select {
 /*# sourceMappingURL=main.css.map */
 
 /* Custom Validation Styles */
-.form-control.is-invalid, .form-select.is-invalid {
-    border-color: #dc3545 !important;
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: #dc3545 !important;
 }
-.form-control.is-valid, .form-select.is-valid {
-    border-color: #3BB77E !important;
+
+.form-control.is-valid,
+.form-select.is-valid {
+  border-color: #3BB77E !important;
 }
+
 .text-danger {
-    font-size: 13px;
-    margin-top: 5px;
-    display: block;
+  font-size: 13px;
+  margin-top: 5px;
+  display: block;
 }
 
 /* =============================================
@@ -4526,7 +4530,7 @@ select {
 
 /* All text elements get white/light color */
 html.dark *:not(i):not(.material-icons):not(svg):not(path) {
-    color: #e0e4f0;
+  color: #e0e4f0;
 }
 
 /* Headings - bright white */
@@ -4536,7 +4540,7 @@ html.dark h3,
 html.dark h4,
 html.dark h5,
 html.dark h6 {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 /* Labels */
@@ -4544,7 +4548,7 @@ html.dark label,
 html.dark .form-label,
 html.dark .form-check-label,
 html.dark .col-form-label {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 /* Paragraphs, spans, li */
@@ -4553,198 +4557,312 @@ html.dark span,
 html.dark li,
 html.dark td,
 html.dark th {
-    color: #d8dce8 !important;
+  color: #d8dce8 !important;
 }
 
 /* Strong/Bold */
 html.dark strong,
 html.dark b {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 /* Small text */
 html.dark small {
-    color: #a0a8c0 !important;
+  color: #a0a8c0 !important;
 }
 
 /* Override for colored badges - keep their colors */
 html.dark .badge.bg-success,
-html.dark .badge.text-success { color: #fff !important; }
+html.dark .badge.text-success {
+  color: #fff !important;
+}
+
 html.dark .badge.bg-danger,
-html.dark .badge.text-danger { color: #fff !important; }
+html.dark .badge.text-danger {
+  color: #fff !important;
+}
+
 html.dark .badge.bg-warning,
-html.dark .badge.text-warning { color: #212529 !important; }
-html.dark .badge.bg-primary { color: #fff !important; }
-html.dark .badge.bg-secondary { color: #fff !important; }
+html.dark .badge.text-warning {
+  color: #212529 !important;
+}
+
+html.dark .badge.bg-primary {
+  color: #fff !important;
+}
+
+html.dark .badge.bg-secondary {
+  color: #fff !important;
+}
 
 /* Keep status-specific text colors */
-html.dark .text-success { color: #56d18c !important; }
-html.dark .text-danger { color: #ff6b6b !important; }
-html.dark .text-warning { color: #ffc14d !important; }
-html.dark .text-primary { color: #5fa8ff !important; }
-html.dark .text-muted { color: #7b82a0 !important; }
+html.dark .text-success {
+  color: #56d18c !important;
+}
+
+html.dark .text-danger {
+  color: #ff6b6b !important;
+}
+
+html.dark .text-warning {
+  color: #ffc14d !important;
+}
+
+html.dark .text-primary {
+  color: #5fa8ff !important;
+}
+
+html.dark .text-muted {
+  color: #7b82a0 !important;
+}
 
 /* Form controls */
 html.dark .form-control,
 html.dark .form-select,
 html.dark .form-control:focus,
 html.dark .form-select:focus {
-    background-color: #1e2536 !important;
-    color: #e0e4f0 !important;
-    border-color: #3d445a !important;
+  background-color: #1e2536 !important;
+  color: #e0e4f0 !important;
+  border-color: #3d445a !important;
 }
 
 /* Input placeholder */
 html.dark input::placeholder,
 html.dark textarea::placeholder {
-    color: #6b7392 !important;
-    opacity: 1 !important;
+  color: #6b7392 !important;
+  opacity: 1 !important;
 }
 
 /* Buttons - keep their colors */
-html.dark .btn-primary { background-color: #3BB77E !important; color: #fff !important; }
-html.dark .btn-secondary { background-color: #6c757d !important; color: #fff !important; }
-html.dark .btn-danger { background-color: #dc3545 !important; color: #fff !important; }
-html.dark .btn-success { background-color: #198754 !important; color: #fff !important; }
-html.dark .btn-warning { background-color: #ffc107 !important; color: #212529 !important; }
+html.dark .btn-primary {
+  background-color: #3BB77E !important;
+  color: #fff !important;
+}
+
+html.dark .btn-secondary {
+  background-color: #6c757d !important;
+  color: #fff !important;
+}
+
+html.dark .btn-danger {
+  background-color: #dc3545 !important;
+  color: #fff !important;
+}
+
+html.dark .btn-success {
+  background-color: #198754 !important;
+  color: #fff !important;
+}
+
+html.dark .btn-warning {
+  background-color: #ffc107 !important;
+  color: #212529 !important;
+}
 
 /* Card */
-html.dark .card { background-color: #2a3042 !important; border-color: #303547 !important; }
-html.dark .card-header { background-color: #2a3042 !important; border-color: #3d445a !important; }
+html.dark .card {
+  background-color: #2a3042 !important;
+  border-color: #303547 !important;
+}
+
+html.dark .card-header {
+  background-color: #2a3042 !important;
+  border-color: #3d445a !important;
+}
 
 /* Table */
-html.dark table { color: #d0d4e0 !important; }
-html.dark thead { background-color: #32394e !important; }
-html.dark thead th { color: #e0e4f0 !important; }
-html.dark tbody tr td { color: #c8cdd8 !important; }
+html.dark table {
+  color: #d0d4e0 !important;
+}
+
+html.dark thead {
+  background-color: #32394e !important;
+}
+
+html.dark thead th {
+  color: #e0e4f0 !important;
+}
+
+html.dark tbody tr td {
+  color: #c8cdd8 !important;
+}
 
 /* Links */
-html.dark a { color: #5fa8ff; }
-html.dark a:hover { color: #88c4ff; }
+html.dark a {
+  color: #5fa8ff;
+}
+
+html.dark a:hover {
+  color: #88c4ff;
+}
 
 /* Dropdown */
-html.dark .dropdown-menu { background-color: #2a3042; border-color: #32394e; }
-html.dark .dropdown-item { color: #d0d4e0 !important; }
-html.dark .dropdown-item:hover { background-color: #32394e !important; color: #fff !important; }
+html.dark .dropdown-menu {
+  background-color: #2a3042;
+  border-color: #32394e;
+}
+
+html.dark .dropdown-item {
+  color: #d0d4e0 !important;
+}
+
+html.dark .dropdown-item:hover {
+  background-color: #32394e !important;
+  color: #fff !important;
+}
 
 /* Dark mode select and dropdown improvements */
 html.dark .form-select option {
-    background-color: #1e2536 !important;
-    color: #e0e4f0 !important;
+  background-color: #1e2536 !important;
+  color: #e0e4f0 !important;
 }
 
 html.dark .select2-container--default .select2-selection--single,
 html.dark .select2-container--default .select2-selection--multiple {
-    background-color: #1e2536 !important;
-    border-color: #3d445a !important;
-    color: #e0e4f0 !important;
+  background-color: #1e2536 !important;
+  border-color: #3d445a !important;
+  color: #e0e4f0 !important;
 }
 
 html.dark .select2-container--default .select2-selection--single .select2-selection__rendered {
-    color: #e0e4f0 !important;
+  color: #e0e4f0 !important;
 }
 
 html.dark .select2-dropdown {
-    background-color: #1e2536 !important;
-    border-color: #3d445a !important;
-    color: #e0e4f0 !important;
+  background-color: #1e2536 !important;
+  border-color: #3d445a !important;
+  color: #e0e4f0 !important;
 }
 
 html.dark .select2-results__option {
-    background-color: #1e2536 !important;
-    color: #e0e4f0 !important;
+  background-color: #1e2536 !important;
+  color: #e0e4f0 !important;
 }
 
 html.dark .select2-results__option--highlighted[aria-selected],
 html.dark .select2-results__option[aria-selected="true"] {
-    background-color: #3d445a !important;
-    color: #ffffff !important;
+  background-color: #3d445a !important;
+  color: #ffffff !important;
 }
 
 html.dark .select2-search__field {
-    background-color: #2a3042 !important;
-    border-color: #3d445a !important;
-    color: #e0e4f0 !important;
+  background-color: #2a3042 !important;
+  border-color: #3d445a !important;
+  color: #e0e4f0 !important;
 }
 
 /* Modal */
-html.dark .modal-content { background-color: #2a3042; color: #d0d4e0; }
-html.dark .modal-header, html.dark .modal-footer { border-color: #3d445a; }
-html.dark .modal-title { color: #ffffff !important; }
+html.dark .modal-content {
+  background-color: #2a3042;
+  color: #d0d4e0;
+}
+
+html.dark .modal-header,
+html.dark .modal-footer {
+  border-color: #3d445a;
+}
+
+html.dark .modal-title {
+  color: #ffffff !important;
+}
 
 /* Alert */
-html.dark .alert { color: #d0d4e0; }
+html.dark .alert {
+  color: #d0d4e0;
+}
 
 /* Select2 */
-html.dark .select2-container--default .select2-selection--single .select2-selection__rendered { color: #d0d4e0 !important; }
+html.dark .select2-container--default .select2-selection--single .select2-selection__rendered {
+  color: #d0d4e0 !important;
+}
 
 /* User list in notifications */
-html.dark #usersList .form-check-label { color: #ffffff !important; }
+html.dark #usersList .form-check-label {
+  color: #ffffff !important;
+}
 
 /* Borders */
-html.dark .border { border-color: #3d445a !important; }
-html.dark .border-bottom { border-bottom-color: #3d445a !important; }
-html.dark .border-top { border-top-color: #3d445a !important; }
+html.dark .border {
+  border-color: #3d445a !important;
+}
+
+html.dark .border-bottom {
+  border-bottom-color: #3d445a !important;
+}
+
+html.dark .border-top {
+  border-top-color: #3d445a !important;
+}
 
 /* Content header */
 html.dark .content-header h1,
 html.dark .content-header h2,
 html.dark .content-header h3,
-html.dark .content-title { color: #ffffff !important; }
+html.dark .content-title {
+  color: #ffffff !important;
+}
 
 /* Nav/Tab links */
-html.dark .nav-link { color: #d0d4e0 !important; }
-html.dark .nav-link:hover { color: #ffffff !important; }
-html.dark .nav-link.active { color: #ffffff !important; }
+html.dark .nav-link {
+  color: #d0d4e0 !important;
+}
+
+html.dark .nav-link:hover {
+  color: #ffffff !important;
+}
+
+html.dark .nav-link.active {
+  color: #ffffff !important;
+}
 
 html.dark .modal-title {
-    color: #ffffff;
+  color: #ffffff;
 }
 
 /* Dark Mode Dropdown & Select Improvements */
 html.dark .dropdown-menu {
-    background-color: #242b3d !important;
-    border: 1px solid #3d445a !important;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.5) !important;
+  background-color: #242b3d !important;
+  border: 1px solid #3d445a !important;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5) !important;
 }
 
 html.dark .dropdown-item {
-    color: #d1d5e0 !important;
-    padding: 10px 20px !important;
+  color: #d1d5e0 !important;
+  padding: 10px 20px !important;
 }
 
 html.dark .dropdown-item:hover {
-    background-color: #323a4f !important;
-    color: #ffffff !important;
+  background-color: #323a4f !important;
+  color: #ffffff !important;
 }
 
 html.dark .dropdown-divider {
-    border-top: 1px solid #3d445a !important;
+  border-top: 1px solid #3d445a !important;
 }
 
 /* Select/Option fixes */
 html.dark select option,
 html.dark .form-select option {
-    background-color: #1e2536 !important;
-    color: #e0e4f0 !important;
+  background-color: #1e2536 !important;
+  color: #e0e4f0 !important;
 }
 
 /* Sidebar Submenu */
 html.dark .submenu {
-    background-color: #1a1f2c !important;
+  background-color: #1a1f2c !important;
 }
 
 html.dark .submenu a {
-    color: #adb5bd !important;
+  color: #adb5bd !important;
 }
 
 html.dark .submenu a:hover {
-    color: #3BB77E !important;
+  color: #3BB77E !important;
 }
 
 /* Specific fix for white backgrounds in some dropdowns */
-html.dark .select2-container--default .select2-results > .select2-results__options {
-    background-color: #1e2536 !important;
+html.dark .select2-container--default .select2-results>.select2-results__options {
+  background-color: #1e2536 !important;
 }
 
 /* Dark mode icon visibility improvements */
@@ -4754,14 +4872,14 @@ html.dark .btn i.material-icons,
 html.dark .btn i.bi,
 html.dark .text-muted i.material-icons,
 html.dark .text-muted i.bi {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 
 /* Specific button text/icon colors in dark mode */
 html.dark .btn-warning i,
 html.dark .btn-warning i.text-muted {
-    color: #212529 !important;
+  color: #212529 !important;
 }
 
 /* Ensure white text on colored backgrounds in dark mode */
@@ -4772,130 +4890,138 @@ html.dark .bg-success,
 html.dark .bg-primary,
 html.dark .bg-info,
 html.dark .bg-danger {
-    color: #ffffff !important;
+  color: #ffffff !important;
 }
 
 /* Dark mode date picker icon fix */
 html.dark input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    cursor: pointer;
+  filter: invert(1);
+  cursor: pointer;
 }
 
 /* Global dark mode icon color fix */
 html.dark .material-icons:not(.text-success):not(.text-danger):not(.text-warning):not(.text-primary):not(.text-info),
 html.dark .bi:not(.text-success):not(.text-danger):not(.text-warning):not(.text-primary):not(.text-info) {
-    color: #e0e4f0 !important;
+  color: #e0e4f0 !important;
 }
 
 /* Sidebar / Header Fixes */
 .main-header {
-    margin-left: 300px;
-    transition: margin-left 0.3s ease;
-    position: sticky !important;
-    top: 0;
-    z-index: 1000;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  margin-left: 300px;
+  transition: margin-left 0.3s ease;
+  position: sticky !important;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 body.aside-mini .main-header {
-    margin-left: 80px;
+  margin-left: 80px;
 }
 
 /* Force Dark Sidebar Header */
 .navbar-aside .aside-top {
-    background-color: #ffffff; /* Default light */
+  background-color: #ffffff;
+  /* Default light */
 }
 
 html.dark .navbar-aside .aside-top,
 html.dark .navbar-aside,
 html.dark .brand-wrap {
-    background-color: #2f3446 !important;
-    background: #2f3446 !important;
+  background-color: #2f3446 !important;
+  background: #2f3446 !important;
 }
 
 /* White box overflow fix for mini mode */
 body.aside-mini .navbar-aside .aside-top {
-    width: 80px !important;
-    max-width: 80px !important;
-    overflow: hidden !important;
-    padding: 10px 0 !important;
+  width: 80px !important;
+  max-width: 80px !important;
+  overflow: hidden !important;
+  padding: 10px 0 !important;
 }
 
 /* Sidebar Logo Logic */
-.navbar-aside .logo { 
-    display: block !important; 
-    max-height: 45px !important;
-    width: auto !important;
+.navbar-aside .logo {
+  display: block !important;
+  max-height: 45px !important;
+  width: auto !important;
 }
-.navbar-aside .logo-mini { display: none !important; }
 
-body.aside-mini .navbar-aside .logo { display: none !important; }
+.navbar-aside .logo-mini {
+  display: none !important;
+}
+
+body.aside-mini .navbar-aside .logo {
+  display: none !important;
+}
+
 body.aside-mini .navbar-aside .logo-mini {
-    display: block !important;
-    width: 45px !important;
-    height: auto !important;
-    margin: 0 auto !important;
+  display: block !important;
+  width: 45px !important;
+  height: auto !important;
+  margin: 0 auto !important;
 }
 
 /* Ensure Logo Visibility */
 html.dark .logo,
 html.dark .logo-mini {
-    filter: brightness(1.2) contrast(1.1) !important;
-    background: transparent !important;
+  filter: brightness(1.2) contrast(1.1) !important;
+  background: transparent !important;
 }
+
 /* Column-specific badge sizing based on largest text element */
 
 .badge-customer-type {
-    width: 85px !important;
-    border-radius: 4px !important;
-    height: 26px;
-    line-height: 14px;
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px !important;
+  width: 85px !important;
+  border-radius: 4px !important;
+  height: 26px;
+  line-height: 14px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px !important;
 }
 
 .badge-payment-status {
-    width: 75px !important;
-    border-radius: 4px !important;
-    height: 26px;
-    line-height: 14px;
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px !important;
+  width: 75px !important;
+  border-radius: 4px !important;
+  height: 26px;
+  line-height: 14px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px !important;
 }
 
 .badge-order-status {
-    width: 85px !important;
-    border-radius: 4px !important;
-    height: 26px;
-    line-height: 14px;
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px !important;
+  width: 85px !important;
+  border-radius: 4px !important;
+  height: 26px;
+  line-height: 14px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px !important;
 }
 
 .btn-action-col {
-    width: 85px !important;
-    border-radius: 4px !important;
-    height: 30px;
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px !important;
-    padding: 0 !important;
+  width: 85px !important;
+  border-radius: 4px !important;
+  height: 30px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px !important;
+  padding: 0 !important;
 }
 
 .badge-order-source {
-    width: 85px !important;
-    border-radius: 4px !important;
-    height: 26px;
-    line-height: 14px;
-    display: inline-flex !important;
-    align-items: center;
-    justify-content: center;
-    font-size: 12px !important;
+  width: 85px !important;
+  border-radius: 4px !important;
+  height: 26px;
+  line-height: 14px;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px !important;
 }

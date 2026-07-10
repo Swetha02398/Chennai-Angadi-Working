@@ -3,6 +3,7 @@
 
 {{-- ---------- FORM SECTION ---------- --}}
 <section class="content-main">
+    @include('includes.alert')
 <div class="content-header">
     <h2 class="shipping-title">
         {{ isset($rule) ? 'Edit Shipping Rule' : 'Add Shipping Rule' }}
@@ -61,10 +62,6 @@
         {{ old('condition_type',$rule->condition_type ?? '')=='final_amount'?'selected':'' }}>
         Final Amount
     </option>
-    <option value="price"
-        {{ old('condition_type',$rule->condition_type ?? '')=='price'?'selected':'' }}>
-        Price
-    </option>
 </select>
 <small class="text-danger d-none" id="conditionError">Condition type cannot be empty.</small>
 </div>
@@ -109,8 +106,11 @@ $slabs = old('slabs', isset($rule)?$rule->slabs:[]);
         </div>
     </td>
     <td class="text-center">
-        <button type="button" class="btn btn-sm btn-success add">+</button>
-        <button type="button" class="btn btn-sm btn-danger remove">−</button>
+        @if($i == 0)
+            <button type="button" class="btn btn-success add" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
+        @else
+            <button type="button" class="btn btn-danger remove" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>
+        @endif
     </td>
 </tr>
 @empty
@@ -124,8 +124,7 @@ $slabs = old('slabs', isset($rule)?$rule->slabs:[]);
         </div>
     </td>
     <td class="text-center">
-        <button type="button" class="btn btn-sm btn-success add">+</button>
-        <button type="button" class="btn btn-sm btn-danger remove">−</button>
+        <button type="button" class="btn btn-success add" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
     </td>
 </tr>
 @endforelse
@@ -259,6 +258,13 @@ document.addEventListener('click', function(e){
             inp.name = inp.name.replace(/\d+/, index);
             inp.value = '';
         });
+
+        let btn = clone.querySelector('.add') || clone.querySelector('.remove');
+        if(btn) {
+            btn.className = 'btn btn-danger remove';
+            btn.style.cssText = 'width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;';
+            btn.innerText = '- Remove';
+        }
 
         index++;
         document.querySelector('#slabsTable tbody').appendChild(clone);

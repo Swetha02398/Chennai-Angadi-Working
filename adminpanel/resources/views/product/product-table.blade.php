@@ -21,7 +21,7 @@
               <input type="text" name="search" placeholder="Search..." class="form-control" value="{{ $search ?? '' }}" />
             </div>
             <div class="col-md-2 col-6">
-              <select name="status" class="form-select">
+              <select name="status" class="form-select" onchange="this.form.submit()">
                 <option value="">Status - All</option>
                 <option value="1" {{ (isset($status) && $status == '1') ? 'selected' : '' }}>Active</option>
                 <option value="0" {{ (isset($status) && $status == '0') ? 'selected' : '' }}>Inactive</option>
@@ -115,20 +115,22 @@
                 </td>
 
                 <td>
-                  @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-edit'))
-                  <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-warning"> <i class="bi bi-pencil-square me-1"></i> Edit</a>
-                  @endif
-                  @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-delete'))
-                  <form action="{{ route('product.destroy', $product->id) }}" method="POST" style="display:inline-block;"
-                    onsubmit="return confirm('Are you sure you want to delete this product? This action cannot be undone.');">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger btn-action-col d-inline-flex align-items-center justify-content-center "><i class="bi bi-trash me-1"></i> Delete</button>
-                  </form>
-                  @endif
-                  <button class="btn btn-sm btn-info view-units" data-product-id="{{ $product->id }}"><i
-                      class="bi bi-speedometer2 me-1"> Units</i></button>
-
+                  <div class="d-inline-flex gap-1 align-items-center flex-wrap">
+                    @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-edit'))
+                    <a href="{{ route('product.edit', $product->id) }}" class="btn btn-sm btn-warning"> <i class="bi bi-pencil-square me-1"></i> Edit</a>
+                    @endif
+                    @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-delete'))
+                    <form action="{{ route('product.destroy', $product->id) }}" method="POST" style="margin: 0;"
+                      onsubmit="return confirm('Are you sure you want to delete this product? This action cannot be undone.');">
+                      @csrf
+                      @method('DELETE')
+                      <button type="submit" class="btn btn-sm btn-danger btn-action-col d-inline-flex align-items-center justify-content-center "><i class="bi bi-trash me-1"></i> Delete</button>
+                    </form>
+                    @endif
+                    <button class="btn btn-sm btn-info view-units" data-product-id="{{ $product->id }}">
+                      <i class="bi bi-speedometer2 me-1"></i> Units
+                    </button>
+                  </div>
                 </td>
               </tr>
             @endforeach

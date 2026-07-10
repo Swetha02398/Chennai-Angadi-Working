@@ -484,6 +484,33 @@
 
 </header>
 
+<script>
+    // PREVENT STICKY MENU LAYOUT THRASHING (VIBRATION BUG)
+    // When the sticky bar becomes position:fixed, it is removed from the DOM flow, causing the page height to shrink.
+    // On short pages, this causes a rapid flicker/vibration because the page height drops below the sticky threshold.
+    // This wrapper maintains the physical space of the menu.
+    document.addEventListener('DOMContentLoaded', function() {
+        const stickyBar = document.querySelector('.sticky-bar');
+        if (stickyBar) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'sticky-bar-wrapper';
+            stickyBar.parentNode.insertBefore(wrapper, stickyBar);
+            wrapper.appendChild(stickyBar);
+            
+            const updateHeight = () => {
+                // Only update the wrapper height when the bar is in normal flow
+                if (!stickyBar.classList.contains('stick')) {
+                    wrapper.style.minHeight = stickyBar.offsetHeight + 'px';
+                }
+            };
+            
+            // Initial height calculation must wait for layout
+            setTimeout(updateHeight, 100);
+            window.addEventListener('resize', updateHeight);
+        }
+    });
+</script>
+
 <style>
 
 

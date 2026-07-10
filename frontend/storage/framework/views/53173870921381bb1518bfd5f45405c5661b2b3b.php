@@ -1,11 +1,11 @@
-@extends('layouts.app')
-@section('content')
-    @include('includes.alert')
+
+<?php $__env->startSection('content'); ?>
+    <?php echo $__env->make('includes.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <main class="main pages">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="{{ route('index') }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <a href="<?php echo e(route('index')); ?>" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                     <span></span> My Account
                 </div>
             </div>
@@ -35,22 +35,22 @@
                                                                                                             role="tab" aria-controls="address" aria-selected="true"><i
                                                                                                                 class="fi-rs-marker mr-10"></i>My Address</a>
                                                                                                     </li> -->
-                                        @if($customer)
+                                        <?php if($customer): ?>
                                             <li class="nav-item">
                                                 <a class="nav-link" id="account-detail-tab" data-bs-toggle="tab"
                                                     href="#account-detail" role="tab" aria-controls="account-detail"
                                                     aria-selected="true"><i class="fi-rs-user mr-10"></i>Account details</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" href="{{ route('logout') }}"><i
+                                                <a class="nav-link" href="<?php echo e(route('logout')); ?>"><i
                                                         class="fi-rs-sign-out mr-10"></i>Logout</a>
                                             </li>
-                                        @else
+                                        <?php else: ?>
                                             <li class="nav-item">
                                                 <a class="nav-link" href="javascript:void(0);" onclick="openLoginModal()"><i
                                                         class="fi-rs-sign-in mr-10"></i>Login</a>
                                             </li>
-                                        @endif
+                                        <?php endif; ?>
                                     </ul>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                                 <div class="tab-content account dashboard-content">
                                     <div class="tab-pane fade active show" id="dashboard" role="tabpanel"
                                         aria-labelledby="dashboard-tab">
-                                        <h4 class="mb-0">Hello {{ $customer->username ?? 'Guest' }}!</h4>
+                                        <h4 class="mb-0">Hello <?php echo e($customer->username ?? 'Guest'); ?>!</h4>
                                         <p>From your account dashboard. you can easily check &amp; view your <a
                                                         href="#">recent orders</a>,<br />
                                                     manage your <a href="#">shipping and billing addresses</a> and <a
@@ -69,14 +69,14 @@
                                         <div class="card">
                                                 <h4 class="mb-0">Your Orders</h4>
                                             <div class="card-body p-0 pt-3">
-                                                @if($orders->isEmpty())
+                                                <?php if($orders->isEmpty()): ?>
                                                     <div class="text-center py-5">
                                                         <i class="fi-rs-shopping-bag" style="font-size: 48px; color: #ccc;"></i>
                                                         <p class="mt-3 text-muted">You haven't placed any orders yet.</p>
-                                                        <a href="{{ route('shop') }}" class="btn btn-fill-out">Start
+                                                        <a href="<?php echo e(route('shop')); ?>" class="btn btn-fill-out">Start
                                                             Shopping</a>
                                                     </div>
-                                                @else
+                                                <?php else: ?>
                                                     <div class="table-responsive">
                                                         <table class="table tableStyles">
                                                             <thead>
@@ -90,55 +90,58 @@
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
-                                                                @foreach($orders as $index => $order)
+                                                                <?php $__currentLoopData = $orders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $order): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                     <tr>
-                                                                        <td>#{{ $order->order_number }}</td>
-                                                                        <td>{{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y') }}
+                                                                        <td>#<?php echo e($order->order_number); ?></td>
+                                                                        <td><?php echo e(\Carbon\Carbon::parse($order->created_at)->format('M d, Y')); ?>
+
                                                                         </td>
                                                                         <td>
                                                                             <span
                                                                                 class="badge order-status-badge
-                                                                                    @if($order->status == 'pending') bg-warning
-                                                                                    @elseif($order->status == 'placed') bg-info
-                                                                                    @elseif($order->status == 'processing') bg-primary
-                                                                                    @elseif($order->status == 'shipped') bg-secondary
-                                                                                    @elseif($order->status == 'delivered') bg-success
-                                                                                    @elseif($order->status == 'cancelled') bg-danger
-                                                                                    @else bg-secondary
-                                                                                    @endif">
-                                                                                {{ ucfirst($order->status) }}
+                                                                                    <?php if($order->status == 'pending'): ?> bg-warning
+                                                                                    <?php elseif($order->status == 'placed'): ?> bg-info
+                                                                                    <?php elseif($order->status == 'processing'): ?> bg-primary
+                                                                                    <?php elseif($order->status == 'shipped'): ?> bg-secondary
+                                                                                    <?php elseif($order->status == 'delivered'): ?> bg-success
+                                                                                    <?php elseif($order->status == 'cancelled'): ?> bg-danger
+                                                                                    <?php else: ?> bg-secondary
+                                                                                    <?php endif; ?>">
+                                                                                <?php echo e(ucfirst($order->status)); ?>
+
                                                                             </span>
                                                                         </td>
                                                                         <td>
                                                                             <span class="badge order-status-badge
-                                                                                    @if($order->payment_status == 'paid') bg-success
-                                                                                    @elseif($order->payment_status == 'cod') bg-warning
-                                                                                    @elseif($order->payment_status == 'pending') bg-warning
-                                                                                    @elseif($order->payment_status == 'not_paid') bg-danger
-                                                                                    @elseif($order->payment_status == 'failed') bg-danger
-                                                                                    @elseif($order->payment_status == 'refunded') bg-info
-                                                                                    @else bg-secondary
-                                                                                    @endif">
-                                                                                {{ $order->payment_status === 'cod' ? 'COD' : ($order->payment_status === 'not_paid' ? 'Not Paid' : ucfirst($order->payment_status ?? 'Pending')) }}
+                                                                                    <?php if($order->payment_status == 'paid'): ?> bg-success
+                                                                                    <?php elseif($order->payment_status == 'cod'): ?> bg-warning
+                                                                                    <?php elseif($order->payment_status == 'pending'): ?> bg-warning
+                                                                                    <?php elseif($order->payment_status == 'not_paid'): ?> bg-danger
+                                                                                    <?php elseif($order->payment_status == 'failed'): ?> bg-danger
+                                                                                    <?php elseif($order->payment_status == 'refunded'): ?> bg-info
+                                                                                    <?php else: ?> bg-secondary
+                                                                                    <?php endif; ?>">
+                                                                                <?php echo e($order->payment_status === 'cod' ? 'COD' : ($order->payment_status === 'not_paid' ? 'Not Paid' : ucfirst($order->payment_status ?? 'Pending'))); ?>
+
                                                                             </span>
                                                                         </td>
-                                                                        <td>₹{{ number_format($order->final_amount, 2) }} for
-                                                                            {{ $order->items->sum('qty') }} item(s)
+                                                                        <td>₹<?php echo e(number_format($order->final_amount, 2)); ?> for
+                                                                            <?php echo e($order->items->sum('qty')); ?> item(s)
                                                                         </td>
                                                                         <td>
                                                                             <button class="btn me-1 order-action-btn"
-                                                                                onclick="viewOrder({{ $order->id }})">View</button>
+                                                                                onclick="viewOrder(<?php echo e($order->id); ?>)">View</button>
                                                                             <button class="btn order-action-btn"
-                                                                                onclick="downloadInvoice({{ $order->id }})">
+                                                                                onclick="downloadInvoice(<?php echo e($order->id); ?>)">
                                                                                 <i class="fi-rs-download me-1"></i>Invoice
                                                                             </button>
                                                                         </td>
                                                                     </tr>
-                                                                @endforeach
+                                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                             </tbody>
                                                         </table>
                                                     </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -157,7 +160,7 @@
                                                     <div class="col-lg-8">
                                                         <form class="contact-form-style mt-30 mb-30" id="track_order_form"
                                                             onsubmit="return trackOrder(event)">
-                                                            @csrf
+                                                            <?php echo csrf_field(); ?>
                                                             <div class="input-style mb-20">
                                                                 <label>Order Id</label>
                                                                 <input name="order_number" id="track_order_number"
@@ -171,7 +174,7 @@
                                                     </div>
                                                 </div>
 
-                                                {{-- Track Order Result --}}
+                                                
                                                 <div id="track_order_result" style="display: none;">
                                                     <div class="track-order-card">
                                                         <div class="order-header-track">
@@ -255,7 +258,7 @@
                                                 <h5>Account Details</h5>
                                             </div>
                                             <div class="card-body">
-                                                @if($customer)
+                                                <?php if($customer): ?>
                                                     <!-- 1️⃣ Display profile details -->
                                                     <div class="profile-box">
                                                         <style>
@@ -286,43 +289,43 @@
                                                             }
                                                         </style>
 
-                                                        @if(!empty($customer->profile_image) && file_exists(public_path('uploads/profile/' . $customer->profile_image)))
-                                                            <img src="{{ asset('uploads/profile/' . $customer->profile_image) }}" class="profile-avatar" alt="Profile">
-                                                        @else
+                                                        <?php if(!empty($customer->profile_image) && file_exists(public_path('uploads/profile/' . $customer->profile_image))): ?>
+                                                            <img src="<?php echo e(asset('uploads/profile/' . $customer->profile_image)); ?>" class="profile-avatar" alt="Profile">
+                                                        <?php else: ?>
                                                             <div class="profile-avatar-default">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
                                                             </div>
-                                                        @endif
+                                                        <?php endif; ?>
 
-                                                        <p><strong>Username:</strong> {{ $customer->username }}</p>
-                                                        <p><strong>Email:</strong> {{ $customer->email }}</p>
-                                                        @if(!empty($customer->mobilenumber))
-                                                            <p><strong>Mobile:</strong> {{ $customer->mobilenumber }}</p>
-                                                        @endif
-                                                        @if(!empty($customer->address))
-                                                            <p><strong>Address:</strong> {{ $customer->address }}</p>
-                                                        @endif
-                                                        @if(!empty($customer->pin))
-                                                            <p><strong>Pin:</strong> {{ $customer->pin }}</p>
-                                                        @endif
-                                                        @if(!empty($customer->gender))
-                                                            <p><strong>Gender:</strong> {{ $customer->gender }}</p>
-                                                        @endif
-                                                        @if(!empty($customer->dob))
-                                                            <p><strong>DOB:</strong> {{ $customer->dob }}</p>
-                                                        @endif
-                                                        @if(!empty($customer->city))
-                                                            <p><strong>City:</strong> {{ $customer->city }}</p>
-                                                        @endif
-                                                        @if(!empty($customer->state))
-                                                            <p><strong>State:</strong> {{ $customer->state }}</p>
-                                                        @endif
-                                                        @if(!empty($customer->country))
-                                                            <p><strong>Country:</strong> {{ $customer->country }}</p>
-                                                        @endif
+                                                        <p><strong>Username:</strong> <?php echo e($customer->username); ?></p>
+                                                        <p><strong>Email:</strong> <?php echo e($customer->email); ?></p>
+                                                        <?php if(!empty($customer->mobilenumber)): ?>
+                                                            <p><strong>Mobile:</strong> <?php echo e($customer->mobilenumber); ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if(!empty($customer->address)): ?>
+                                                            <p><strong>Address:</strong> <?php echo e($customer->address); ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if(!empty($customer->pin)): ?>
+                                                            <p><strong>Pin:</strong> <?php echo e($customer->pin); ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if(!empty($customer->gender)): ?>
+                                                            <p><strong>Gender:</strong> <?php echo e($customer->gender); ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if(!empty($customer->dob)): ?>
+                                                            <p><strong>DOB:</strong> <?php echo e($customer->dob); ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if(!empty($customer->city)): ?>
+                                                            <p><strong>City:</strong> <?php echo e($customer->city); ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if(!empty($customer->state)): ?>
+                                                            <p><strong>State:</strong> <?php echo e($customer->state); ?></p>
+                                                        <?php endif; ?>
+                                                        <?php if(!empty($customer->country)): ?>
+                                                            <p><strong>Country:</strong> <?php echo e($customer->country); ?></p>
+                                                        <?php endif; ?>
 
                                                         <!-- Edit button -->
-                                                        @php
+                                                        <?php
                                                             $isEmpty =
                                                                 empty($customer->gender) &&
                                                                 empty($customer->dob) &&
@@ -330,62 +333,63 @@
                                                                 empty($customer->city) &&
                                                                 empty($customer->state) &&
                                                                 empty($customer->country);
-                                                        @endphp
+                                                        ?>
 
                                                         <button class="btn btn-fill-out btn-block hover-up font-weight-bold"
                                                             onclick="showEditForm()">
-                                                            {{ $isEmpty ? 'Add Your Details' : 'Edit Your Details' }}
+                                                            <?php echo e($isEmpty ? 'Add Your Details' : 'Edit Your Details'); ?>
+
                                                         </button>
 
                                                     </div>
 
                                                     <!-- 2️⃣ Profile edit form (hidden initially) -->
                                                     <div id="editForm" style="display:none;">
-                                                        <form method="POST" action="{{ route('update') }}"
+                                                        <form method="POST" action="<?php echo e(route('update')); ?>"
                                                             enctype="multipart/form-data">
-                                                            @csrf
+                                                            <?php echo csrf_field(); ?>
                                                             
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label font-weight-bold">Username</label>
-                                                                    <input type="text" class="form-control" placeholder="Username" name="username" value="{{ $customer->username }}">                                                            
+                                                                    <input type="text" class="form-control" placeholder="Username" name="username" value="<?php echo e($customer->username); ?>">                                                            
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label font-weight-bold">Email</label>
-                                                                    <input type="email" class="form-control" placeholder="Email" name="email" value="{{ $customer->email }}">                                                            
+                                                                    <input type="email" class="form-control" placeholder="Email" name="email" value="<?php echo e($customer->email); ?>">                                                            
                                                                 </div>
                                                             </div>
 
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label font-weight-bold">Mobile Number</label>
-                                                                    <input type="text" class="form-control" placeholder="Mobile Number" name="mobilenumber" value="{{ $customer->mobilenumber }}">
+                                                                    <input type="text" class="form-control" placeholder="Mobile Number" name="mobilenumber" value="<?php echo e($customer->mobilenumber); ?>">
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label font-weight-bold">Address</label>
-                                                                    <input type="text" class="form-control" placeholder="Address" name="address" value="{{ $customer->address }}">
+                                                                    <input type="text" class="form-control" placeholder="Address" name="address" value="<?php echo e($customer->address); ?>">
                                                                 </div>
                                                             </div>
 
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label font-weight-bold">City</label>
-                                                                    <input type="text" class="form-control" placeholder="City" name="city" value="{{ $customer->city }}">
+                                                                    <input type="text" class="form-control" placeholder="City" name="city" value="<?php echo e($customer->city); ?>">
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">                                                                    
                                                                     <label class="form-label font-weight-bold">State</label>
-                                                                    <input type="text" class="form-control" placeholder="State" name="state" value="{{ $customer->state }}">
+                                                                    <input type="text" class="form-control" placeholder="State" name="state" value="<?php echo e($customer->state); ?>">
                                                                 </div>
                                                             </div>
 
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label font-weight-bold">Country</label>
-                                                                    <input type="text" class="form-control" placeholder="Country" name="country" value="{{ $customer->country }}">
+                                                                    <input type="text" class="form-control" placeholder="Country" name="country" value="<?php echo e($customer->country); ?>">
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
                                                                     <label class="form-label font-weight-bold">Pincode</label>
-                                                                    <input type="text" class="form-control" placeholder="Pincode" name="pin" value="{{ $customer->pin }}">
+                                                                    <input type="text" class="form-control" placeholder="Pincode" name="pin" value="<?php echo e($customer->pin); ?>">
                                                                 </div>
                                                             </div>
 
@@ -394,14 +398,14 @@
                                                                     <label class="form-label font-weight-bold">Gender</label>
                                                                     <select class="form-control" name="gender">
                                                                         <option value="">Select Gender</option>
-                                                                        <option value="Male" {{ $customer->gender == 'Male' ? 'selected' : '' }}>Male</option>
-                                                                        <option value="Female" {{ $customer->gender == 'Female' ? 'selected' : '' }}>Female</option>
-                                                                        <option value="Other" {{ $customer->gender == 'Other' ? 'selected' : '' }}>Other</option>
+                                                                        <option value="Male" <?php echo e($customer->gender == 'Male' ? 'selected' : ''); ?>>Male</option>
+                                                                        <option value="Female" <?php echo e($customer->gender == 'Female' ? 'selected' : ''); ?>>Female</option>
+                                                                        <option value="Other" <?php echo e($customer->gender == 'Other' ? 'selected' : ''); ?>>Other</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
                                                                      <label class="form-label font-weight-bold">Date of Birth</label>
-                                                                     <input type="date" class="form-control" name="dob" value="{{ $customer->dob }}">
+                                                                     <input type="date" class="form-control" name="dob" value="<?php echo e($customer->dob); ?>">
                                                                 </div>
                                                             </div>
 
@@ -428,17 +432,17 @@
 
                                                         // Auto-activate Account Details tab when redirected back after save
                                                         document.addEventListener('DOMContentLoaded', function() {
-                                                            @if(session('success'))
+                                                            <?php if(session('success')): ?>
                                                                 // Activate the account-detail tab
                                                                 var accountTab = document.getElementById('account-detail-tab');
                                                                 if (accountTab) {
                                                                     var tab = new bootstrap.Tab(accountTab);
                                                                     tab.show();
                                                                 }
-                                                            @endif
+                                                            <?php endif; ?>
                                                         });
                                                     </script>
-                                                @else
+                                                <?php else: ?>
                                                     <div class="text-center py-4">
                                                         <i class="fi-rs-user" style="font-size: 48px; color: #ccc;"></i>
                                                         <p class="mt-3 text-muted">Please login to view your account details.
@@ -446,7 +450,7 @@
                                                         <a href="javascript:void(0);" onclick="openLoginModal()"
                                                             class="btn btn-fill-out">Login</a>
                                                     </div>
-                                                @endif
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>
@@ -821,7 +825,7 @@
             modal.show();
 
             // Fetch order details
-            fetch(`{{ url('/order') }}/${orderId}`)
+            fetch(`<?php echo e(url('/order')); ?>/${orderId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -831,7 +835,7 @@
                         let itemsHtml = '';
                         if (order.items && order.items.length > 0) {
                             order.items.forEach((item, index) => {
-                                const productImage = item.product_image || '{{ asset("assets/imgs/shop/product-1-1.jpg") }}';
+                                const productImage = item.product_image || '<?php echo e(asset("assets/imgs/shop/product-1-1.jpg")); ?>';
                                 itemsHtml += `
                                                                                                                                     <tr>
                                                                                                                                         <td style="width: 80px;">
@@ -943,7 +947,7 @@
                 toastr.info('Generating invoice PDF...');
             }
 
-            fetch(`{{ url('/order') }}/${orderId}`)
+            fetch(`<?php echo e(url('/order')); ?>/${orderId}`)
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
@@ -1020,7 +1024,7 @@
                                                                                                 <!-- Header: Logo + Title + Company Details -->
                                                                                                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
                                                                                                     <div style="width:200px;">
-                                                                                                        <img src="{{ asset('assets/imgs/images/ChennaiAngadiLogo.png') }}" alt="Chennai Angadi" style="height:60px;width:auto;" crossorigin="anonymous">
+                                                                                                        <img src="<?php echo e(asset('assets/imgs/images/ChennaiAngadiLogo.png')); ?>" alt="Chennai Angadi" style="height:60px;width:auto;" crossorigin="anonymous">
                                                                                                     </div>
                                                                                                     <div style="text-align:center;flex:1;">
                                                                                                         <span style="font-size:18px;font-weight:bold;color:#333;">Estimate Invoice</span>
@@ -1180,10 +1184,10 @@
             $('#track_order_result').hide();
 
             $.ajax({
-                url: '{{ route("checkout.track-order") }}',
+                url: '<?php echo e(route("checkout.track-order")); ?>',
                 type: 'POST',
                 data: {
-                    _token: '{{ csrf_token() }}',
+                    _token: '<?php echo e(csrf_token()); ?>',
                     order_number: orderNumber
                 },
                 success: function (response) {
@@ -1260,4 +1264,5 @@
         });
     </script>
 
-@endsection
+<?php $__env->stopSection(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\chennais\frontend\resources\views/customer/myAccount.blade.php ENDPATH**/ ?>

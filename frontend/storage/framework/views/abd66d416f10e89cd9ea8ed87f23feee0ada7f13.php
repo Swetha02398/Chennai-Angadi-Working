@@ -1,11 +1,11 @@
-@extends('layouts.app')
-@section('content')
+
+<?php $__env->startSection('content'); ?>
     <main class="main">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="{{ route('index') }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
-                    <span></span> <a href="{{ route('shop') }}">Shop</a>
+                    <a href="<?php echo e(route('index')); ?>" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <span></span> <a href="<?php echo e(route('shop')); ?>">Shop</a>
                     <span></span> Checkout
                 </div>
             </div>
@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h4 class="heading-2 mb-2">Checkout</h4>
-                    <h6 class="text-body">There are <span class="text-brand">{{ $cartItems->count() }}</span> products
+                    <h6 class="text-body">There are <span class="text-brand"><?php echo e($cartItems->count()); ?></span> products
                             in your cart</h6>
                 </div>
             </div>
@@ -22,8 +22,8 @@
                 <div class="col-lg-7">
                     <div class="row">
                         <div class="col-lg-12">
-                            @if(!auth('customer')->check())
-                                <div class="toggle_info my-3 {{ session('guest_checkout_email') ? 'checkout-auth-hidden' : '' }}" id="registered_login_section">
+                            <?php if(!auth('customer')->check()): ?>
+                                <div class="toggle_info my-3 <?php echo e(session('guest_checkout_email') ? 'checkout-auth-hidden' : ''); ?>" id="registered_login_section">
                                     <span><i class="fi-rs-user mr-10"></i><span class="text-muted font-lg">Already have an
                                             account?</span> <a href="#loginform" data-bs-toggle="collapse"
                                             class="collapsed font-lg" aria-expanded="false">Click here to login</a></span>
@@ -32,7 +32,7 @@
                                     <div class="row pt-3">
 
                                         <form method="post" id="checkout_login_form" novalidate>
-                                            @csrf
+                                            <?php echo csrf_field(); ?>
                                             <div class="row">
                                                 <div class="form-group col-6">
                                                 <input type="text" name="login_id" id="login_id"
@@ -61,10 +61,10 @@
                                 </div>
                                 </div>
                                 
-                            @endif
+                            <?php endif; ?>
                         </div>
                         <div class="col-lg-12">
-                            @if(!auth('customer')->check())
+                            <?php if(!auth('customer')->check()): ?>
                                 <!-- <div class="toggle_info">
                                     <span><i class="fi-rs-shopping-bag mr-10"></i><span class="text-muted font-lg">Checkout as a
                                             guest?</span> <a href="#guestform" data-bs-toggle="collapse"
@@ -75,12 +75,12 @@
                                 </div>
                                 </div> -->
                                 
-                                <div id="guest_checkout_container" class="{{ ($guestEmail || auth('customer')->check()) ? 'checkout-auth-hidden' : '' }}">
+                                <div id="guest_checkout_container" class="<?php echo e(($guestEmail || auth('customer')->check()) ? 'checkout-auth-hidden' : ''); ?>">
                                     <form method="post" id="guest_checkout_form" class="row" novalidate>
-                                        @csrf
+                                        <?php echo csrf_field(); ?>
                                         <div class="form-group col-8 mb-0" id="guest_email_container">
                                             <input type="email" name="guest_email" id="guest_email"
-                                                placeholder="Email address *" value="{{ $guestEmail ?? '' }}" style="height:45px;">
+                                                placeholder="Email address *" value="<?php echo e($guestEmail ?? ''); ?>" style="height:45px;">
                                             <span class="error_msg" id="err-guest_email" style="color: red; font-size: 13px; display: none;">Please enter a valid email address</span>
                                         </div>
                                         <div class="form-group col-4 d-flex mb-0 ps-0" id="guest_continue_container">
@@ -90,18 +90,18 @@
                                     </form>
                                 </div>
                                 <div id="guest_message" class="my-2">
-                                    @if($guestEmail && !auth('customer')->check())
+                                    <?php if($guestEmail && !auth('customer')->check()): ?>
                                         <span class="text-success">Guest Login Successfully!</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
-                            @endif
+                            <?php endif; ?>
                         </div>
 
                     </div>
                     <div class="row">
                         <h5 class="mb-3">Billing Details</h5>
                         <form method="post" id="checkout_form" novalidate>
-                            @csrf
+                            <?php echo csrf_field(); ?>
                             <div class="row">
                                 <!-- <label>First name <span class="text-danger">*</span></label>
                                 <label>Last name <span class="text-danger">*</span></label>
@@ -114,20 +114,20 @@
                                 <div class="form-group col-lg-6">                                    
                                     <input type="text" required name="billing_fname" id="billing_fname"
                                         placeholder="First Name *"
-                                        value="{{ explode(' ', $customer->username ?? '')[0] ?? '' }}">
+                                        value="<?php echo e(explode(' ', $customer->username ?? '')[0] ?? ''); ?>">
                                     <span id="billing_fname_error" class="error_msg" style="color: red; font-size: 13px; display: none;">First Name is required</span>
                                 </div>
                                 <div class="form-group col-lg-6">                                    
                                     <input type="text" required name="billing_lname" id="billing_lname"
                                         placeholder="Last Name *"
-                                        value="{{ implode(' ', array_slice(explode(' ', $customer->username ?? ''), 1)) }}">
+                                        value="<?php echo e(implode(' ', array_slice(explode(' ', $customer->username ?? ''), 1))); ?>">
                                     <span id="billing_lname_error" class="error_msg" style="color: red; font-size: 13px; display: none;">Last Name is required</span>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-lg-6">                                    
                                     <input type="text" name="billing_address" id="billing_address" required
-                                        placeholder="Address Line1*" value="{{ $customer->address ?? '' }}">
+                                        placeholder="Address Line1*" value="<?php echo e($customer->address ?? ''); ?>">
                                     <span id="billing_address_error" class="error_msg" style="color: red; font-size: 13px; display: none;">Address is required</span>
                                 </div>
                                 <div class="form-group col-lg-6">                                    
@@ -139,7 +139,7 @@
                              <div class="row">
                                 <div class="form-group col-lg-6">                                    
                                     <input required type="text" name="city" id="billing_city" placeholder="City / Town *"
-                                        value="{{ $customer->city ?? '' }}">
+                                        value="<?php echo e($customer->city ?? ''); ?>">
                                     <span id="billing_city_error" class="error_msg" style="color: red; font-size: 13px; display: none;">City is required</span>
                                 </div>
                             
@@ -148,9 +148,9 @@
                                         onchange="clearStateError(); calculateShippingOnBillingChange();"
                                         style="width:100%; height:45px; border:1px solid #ececec; border-radius:5px; padding-left:10px; padding-right:25px; font-size:16px; color:#7E7E7E; appearance:auto;">
                                         <option value="">Select State</option>
-                                        @foreach($shippingStates as $state)
-                                            <option value="{{ $state }}" {{ ($customer->state ?? '') == $state ? 'selected' : '' }}>{{ $state }}</option>
-                                        @endforeach
+                                        <?php $__currentLoopData = $shippingStates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                            <option value="<?php echo e($state); ?>" <?php echo e(($customer->state ?? '') == $state ? 'selected' : ''); ?>><?php echo e($state); ?></option>
+                                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                     </select>
                                     <span id="billing_state_error" class="error_msg"
                                         >Please select your state</span>
@@ -160,7 +160,7 @@
                             <div class="row">
                                 <div class="form-group col-lg-6">                                    
                                     <input required type="text" name="zipcode" id="billing_zipcode"
-                                        placeholder="Postcode / ZIP *" value="{{ $customer->pin ?? '' }}" maxlength="6"
+                                        placeholder="Postcode / ZIP *" value="<?php echo e($customer->pin ?? ''); ?>" maxlength="6"
                                         oninput="validatePostcode(this, 'billing_zipcode_error')">
                                     <span id="billing_zipcode_error" class="error_msg"
                                         >Please enter exactly 6 digits (numbers
@@ -168,7 +168,7 @@
                                 </div>
                                 <div class="form-group col-lg-6">
                                     <input type="text" required name="phone" id="billing_phone" placeholder="Mobile # *"
-                                        value="{{ $customer->mobilenumber ?? '' }}" maxlength="10"
+                                        value="<?php echo e($customer->mobilenumber ?? ''); ?>" maxlength="10"
                                         oninput="validateMobileNumber(this, 'billing_phone_error')">
                                     <span id="billing_phone_error" class="error_msg"
                                         >Please enter 10 digits (numbers
@@ -176,7 +176,7 @@
                                 </div>
                             </div>
 
-                            {{-- Shipping Details Section --}}
+                            
                             <div class="ship_detail">
                                 <div class="form-group">
                                     <div class="chek-form">
@@ -231,9 +231,9 @@
                                             <select name="shipping_state" id="shipping_state" onchange="calculateShipping()"
                                                 style="width:100%; height:45px; border:1px solid #ececec; border-radius:5px; padding-left:10px; padding-right:25px; font-size:16px; color:#7E7E7E; appearance:auto;">
                                                 <option value="">Select State</option>
-                                                @foreach($shippingStates as $state)
-                                                    <option value="{{ $state }}">{{ $state }}</option>
-                                                @endforeach
+                                                <?php $__currentLoopData = $shippingStates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $state): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                                    <option value="<?php echo e($state); ?>"><?php echo e($state); ?></option>
+                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
                                         </div>
                                         
@@ -273,12 +273,12 @@
                         <div class="table-responsive order_table checkout">
                             <table class="table no-border">
                                 <tbody>
-                                    @forelse($cartItems as $item)
-                                        @if($item->product)
+                                    <?php $__empty_1 = true; $__currentLoopData = $cartItems; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $item): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                                        <?php if($item->product): ?>
                                             <tr
-                                                data-cart-id="{{ auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id) }}">
+                                                data-cart-id="<?php echo e(auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id)); ?>">
                                                 <td class="image product-thumbnail">
-                                                    @php
+                                                    <?php
                                                         $images = $item->product->productimage;
                                                         if (is_array($images) && count($images) > 0) {
                                                             $primaryImage = $images[0];
@@ -289,18 +289,18 @@
                                                             $primaryImage = str_replace('\\', '/', $primaryImage);
                                                             $primaryImage = basename($primaryImage);
                                                         }
-                                                    @endphp
-                                                    <a href="{{ route('product.details', $item->product->id) }}">
-                                                        <img src="{{ env('ADMIN_ASSET_URL') }}/products/{{ $primaryImage }}"
-                                                            alt="{{ $item->product->productname }}"
-                                                            onerror="this.src='{{ asset('assets/imgs/theme/icons/category-1.svg') }}'">
+                                                    ?>
+                                                    <a href="<?php echo e(route('product.details', $item->product->id)); ?>">
+                                                        <img src="<?php echo e(env('ADMIN_ASSET_URL')); ?>/products/<?php echo e($primaryImage); ?>"
+                                                            alt="<?php echo e($item->product->productname); ?>"
+                                                            onerror="this.src='<?php echo e(asset('assets/imgs/theme/icons/category-1.svg')); ?>'">
                                                     </a>
                                                 </td>
                                                 <td>
                                                     <h6 class="w-160 mb-5"><a
-                                                            href="{{ route('product.details', $item->product->id) }}"
-                                                            class="text-heading">{{ $item->product->productname }}</a></h6>
-                                                    @php
+                                                            href="<?php echo e(route('product.details', $item->product->id)); ?>"
+                                                            class="text-heading"><?php echo e($item->product->productname); ?></a></h6>
+                                                    <?php
                                                         $weightName = null;
                                                         if (isset($item->selected_weight) && $item->selected_weight) {
                                                             $weightName = $item->selected_weight;
@@ -308,53 +308,54 @@
                                                             $cartVariant = $item->product->variants()->with('quantity')->where('id', $item->variant_id)->first();
                                                             $weightName = $cartVariant && $cartVariant->quantity ? ($cartVariant->quantity->name ?? $cartVariant->quantity->label) : null;
                                                         }
-                                                    @endphp
-                                                    @if($weightName)
+                                                    ?>
+                                                    <?php if($weightName): ?>
                                                         <span
-                                                            style="color: #3BB77E; font-size: 13px; font-weight: 700;">{{ $weightName }}
-                                                            - ₹{{ number_format($item->price_at_add_time, 0) }}</span>
-                                                    @endif
+                                                            style="color: #3BB77E; font-size: 13px; font-weight: 700;"><?php echo e($weightName); ?>
+
+                                                            - ₹<?php echo e(number_format($item->price_at_add_time, 0)); ?></span>
+                                                    <?php endif; ?>
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center justify-content-center">
                                                         <button type="button" class="btn-qty-decrease"
-                                                            onclick="updateCartQty('{{ auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id) }}', 'decrease')">
+                                                            onclick="updateCartQty('<?php echo e(auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id)); ?>', 'decrease')">
                                                             <i class="fi-rs-minus-small"></i>
                                                         </button>
                                                         <span class="qty-display mx-2"
-                                                            id="qty-{{ auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id) }}">{{ $item->quantity }}</span>
+                                                            id="qty-<?php echo e(auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id)); ?>"><?php echo e($item->quantity); ?></span>
                                                         <button type="button" class="btn-qty-increase"
-                                                            onclick="updateCartQty('{{ auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id) }}', 'increase')">
+                                                            onclick="updateCartQty('<?php echo e(auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id)); ?>', 'increase')">
                                                             <i class="fi-rs-plus-small"></i>
                                                         </button>
                                                     </div>
                                                 </td>
                                                 <td>
                                                     <h4 class="text-brand"
-                                                        id="row-total-{{ auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id) }}">
-                                                        ₹ {{ number_format($item->price_at_add_time * $item->quantity, 0) }}</h4>
+                                                        id="row-total-<?php echo e(auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id)); ?>">
+                                                        ₹ <?php echo e(number_format($item->price_at_add_time * $item->quantity, 0)); ?></h4>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn-delete-item"
-                                                        onclick="deleteCartItem('{{ auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id) }}')"
+                                                        onclick="deleteCartItem('<?php echo e(auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id)); ?>')"
                                                         title="Remove item">
                                                         <i class="fi-rs-trash"></i>
                                                     </button>
                                                 </td>
                                             </tr>
-                                        @endif
-                                    @empty
+                                        <?php endif; ?>
+                                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                         <tr>
                                             <td colspan="5" class="text-center py-5">
                                                 <h5 class="text-muted">Your cart is empty</h5>
-                                                <a href="{{ route('index') }}" class="btn btn-sm mt-3">Continue Shopping</a>
+                                                <a href="<?php echo e(route('index')); ?>" class="btn btn-sm mt-3">Continue Shopping</a>
                                             </td>
                                         </tr>
-                                    @endforelse
+                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
-                        {{-- Order Totals --}}
+                        
                         <!-- <div class="divider-2 mb-10 mt-10"></div> -->
                         <table class="table no-border">
                             <tbody>
@@ -364,11 +365,11 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end" id="subtotal_display">
-                                            ₹{{ number_format($subtotal, 0) }}</h4>
+                                            ₹<?php echo e(number_format($subtotal, 0)); ?></h4>
                                     </td>
                                 </tr>
                                 <tr id="coupon_discount_row"
-                                    style="{{ ($sessionCouponDiscount > 0) ? '' : 'display: none;' }}">
+                                    style="<?php echo e(($sessionCouponDiscount > 0) ? '' : 'display: none;'); ?>">
                                     <td class="cart_total_label">
                                         <h6 class="text-black">Coupon Discount
                                             <a href="javascript:void(0)" onclick="removeCoupon()" class="text-danger"
@@ -377,7 +378,7 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-success text-end" id="coupon_discount_display">
-                                            -₹ {{ number_format($sessionCouponDiscount, 0) }}</h4>
+                                            -₹ <?php echo e(number_format($sessionCouponDiscount, 0)); ?></h4>
                                     </td>
                                 </tr>
                                 <tr>
@@ -385,11 +386,11 @@
                                         <h6 class="text-black">Shipping Charges</h6>
                                     </td>
                                     <td class="cart_total_amount text-end" id="shipping_display">
-                                        @if($shipping > 0)
-                                            <h4 class="text-brand">₹ {{ number_format($shipping, 0) }}</h4>
-                                        @else
+                                        <?php if($shipping > 0): ?>
+                                            <h4 class="text-brand">₹ <?php echo e(number_format($shipping, 0)); ?></h4>
+                                        <?php else: ?>
                                             <h4 class="text-brand fw-bold">Free</h4>
-                                        @endif
+                                        <?php endif; ?>
                                     </td>
                                 </tr>
                                 <tr id="cod_charge_row" style="display: none;">
@@ -411,7 +412,7 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end" id="total_display">
-                                            ₹{{ number_format($total - $sessionCouponDiscount, 0) }}</h4>
+                                            ₹<?php echo e(number_format($total - $sessionCouponDiscount, 0)); ?></h4>
                                     </td>
                                 </tr>
                             </tbody>
@@ -420,9 +421,9 @@
                     <div class="row">
                         <form method="post" class="apply-coupon">
                             <input type="text" id="coupon_code" placeholder="Enter Coupon Code..."
-                                value="{{ $sessionCouponCode ?? '' }}" {{ $sessionCouponCode ? 'readonly' : '' }}>
-                            <button type="button" class="btn m-0 p-0 {{ $sessionCouponCode ? 'btn-success' : '' }}"
-                                id="apply_coupon_btn" onclick="applyCoupon()" {{ $sessionCouponCode ? 'disabled' : '' }}>{{ $sessionCouponCode ? 'Applied' : 'Apply Coupon' }}</button>
+                                value="<?php echo e($sessionCouponCode ?? ''); ?>" <?php echo e($sessionCouponCode ? 'readonly' : ''); ?>>
+                            <button type="button" class="btn m-0 p-0 <?php echo e($sessionCouponCode ? 'btn-success' : ''); ?>"
+                                id="apply_coupon_btn" onclick="applyCoupon()" <?php echo e($sessionCouponCode ? 'disabled' : ''); ?>><?php echo e($sessionCouponCode ? 'Applied' : 'Apply Coupon'); ?></button>
                         </form>
                         <div id="coupon_message" class="mt-10"></div>
                     </div>
@@ -1065,20 +1066,20 @@
             }
         }
     </style>
-@endsection
+<?php $__env->stopSection(); ?>
 
-@push('scripts')
+<?php $__env->startPush('scripts'); ?>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script>
-        var csrfToken = '{{ csrf_token() }}';
-        var cartSubtotal = Math.round({{ $subtotal }});
-        var currentShipping = {{ $shipping }};
-        var currentCouponDiscount = {{ $sessionCouponDiscount ?? 0 }};
-        var appliedCouponCode = {!! $sessionCouponCode ? "'" . $sessionCouponCode . "'" : 'null' !!};
+        var csrfToken = '<?php echo e(csrf_token()); ?>';
+        var cartSubtotal = Math.round(<?php echo e($subtotal); ?>);
+        var currentShipping = <?php echo e($shipping); ?>;
+        var currentCouponDiscount = <?php echo e($sessionCouponDiscount ?? 0); ?>;
+        var appliedCouponCode = <?php echo $sessionCouponCode ? "'" . $sessionCouponCode . "'" : 'null'; ?>;
         var currentCodCharge = 0;
         var COD_CHARGE_AMOUNT = 50;
         var COD_CHARGE_THRESHOLD = 600;
-        var customerEmail = '{{ auth("customer")->check() ? auth("customer")->user()->email : session("guest_checkout_email", "") }}';
+        var customerEmail = '<?php echo e(auth("customer")->check() ? auth("customer")->user()->email : session("guest_checkout_email", "")); ?>';
 
         // Real-time validation for checkout
         function setupRealTimeValidationCheckout(formId) {
@@ -1154,7 +1155,7 @@
 
         function executeSaveDraft(isSync = false) {
             // Determine email: auth user email (if logged in) or guest input
-            var email = '{{ auth("customer")->check() ? auth("customer")->user()->email : "" }}' || $('#guest_email').val();
+            var email = '<?php echo e(auth("customer")->check() ? auth("customer")->user()->email : ""); ?>' || $('#guest_email').val();
             var fname = $('#billing_fname').val();
             
             // At least email is required to save a draft
@@ -1183,7 +1184,7 @@
             };
 
             $.ajax({
-                url: '{{ route("checkout.save-draft") }}',
+                url: '<?php echo e(route("checkout.save-draft")); ?>',
                 type: 'POST',
                 data: formData,
                 async: !isSync,
@@ -1199,7 +1200,7 @@
         }
 
         function executeSaveDraftBeacon() {
-            var email = '{{ auth("customer")->check() ? auth("customer")->user()->email : "" }}' || $('#guest_email').val();
+            var email = '<?php echo e(auth("customer")->check() ? auth("customer")->user()->email : ""); ?>' || $('#guest_email').val();
             var fname = $('#billing_fname').val();
             
             if (!email) return;
@@ -1222,7 +1223,7 @@
             fd.append('shipping_amount', currentShipping || 0);
             fd.append('_token', csrfToken);
 
-            navigator.sendBeacon('{{ route("checkout.save-draft") }}', fd);
+            navigator.sendBeacon('<?php echo e(route("checkout.save-draft")); ?>', fd);
         }
 
         // Trigger auto-save before leaving the page via Beacon API
@@ -1356,10 +1357,10 @@
         // ========== HIDE MESSAGES ON LOAD & SESSION TRACKING ==========
         $(document).ready(function () {
             // Check for guest session mismatch (Logout on Tab Close behavior)
-            @if($guestEmail && !auth('customer')->check())
+            <?php if($guestEmail && !auth('customer')->check()): ?>
                 if (!sessionStorage.getItem('guest_active')) {
                     // Browser says no guest session, but Server says yes -> Abandon it
-                    $.post('{{ route("checkout.abandon-guest") }}', { _token: csrfToken }, function() {
+                    $.post('<?php echo e(route("checkout.abandon-guest")); ?>', { _token: csrfToken }, function() {
                         window.location.reload();
                     });
                 } else {
@@ -1368,7 +1369,7 @@
                         $('#guest_message').html('<span class="text-info">You are already using guest checkout.</span>');
                     }
                 }
-            @endif
+            <?php endif; ?>
 
             // Hide all messages after 0.5s
             if ($('#guest_message').children().length > 0) {
@@ -1398,7 +1399,7 @@
             console.log('Attempting login with:', login_id);
 
             $.ajax({
-                url: '{{ route("checkout.login") }}',
+                url: '<?php echo e(route("checkout.login")); ?>',
                 type: 'POST',
                 data: {
                     _token: csrfToken,
@@ -1468,7 +1469,7 @@
 
             // Store guest email in session
             $.ajax({
-                url: '{{ route("checkout.guest-continue") }}',
+                url: '<?php echo e(route("checkout.guest-continue")); ?>',
                 type: 'POST',
                 data: {
                     _token: csrfToken,
@@ -1571,7 +1572,7 @@
             if (!state) return;
 
             $.ajax({
-                url: '{{ route("checkout.calculate-shipping") }}',
+                url: '<?php echo e(route("checkout.calculate-shipping")); ?>',
                 type: 'POST',
                 data: {
                     _token: csrfToken,
@@ -1596,7 +1597,7 @@
             if (!state) return;
             console.log('Calculating shipping with explicit state:', state, 'Subtotal:', cartSubtotal, 'Discount:', currentCouponDiscount);
             $.ajax({
-                url: '{{ route("checkout.calculate-shipping") }}',
+                url: '<?php echo e(route("checkout.calculate-shipping")); ?>',
                 type: 'POST',
                 data: {
                     _token: csrfToken,
@@ -1639,7 +1640,7 @@
             $('#apply_coupon_btn').prop('disabled', true).text('Applying...');
 
             $.ajax({
-                url: '{{ route("checkout.apply-coupon") }}',
+                url: '<?php echo e(route("checkout.apply-coupon")); ?>',
                 type: 'POST',
                 data: {
                     _token: csrfToken,
@@ -1914,7 +1915,7 @@
         function processRazorpayPayment(orderData) {
             toastr.info('Initializing payment...', 'Please wait');
             $.ajax({
-                url: '{{ route("checkout.razorpay.create-order") }}',
+                url: '<?php echo e(route("checkout.razorpay.create-order")); ?>',
                 type: 'POST',
                 data: orderData,
                 success: function (response) {
@@ -1979,7 +1980,7 @@
             };
 
             $.ajax({
-                url: '{{ route("checkout.razorpay.verify-payment") }}',
+                url: '<?php echo e(route("checkout.razorpay.verify-payment")); ?>',
                 type: 'POST',
                 data: verificationData,
                 success: function (response) {
@@ -2001,7 +2002,7 @@
         // ========== COD ORDER ==========
         function placeCODOrder(orderData) {
             $.ajax({
-                url: '{{ route("checkout.place-order") }}',
+                url: '<?php echo e(route("checkout.place-order")); ?>',
                 type: 'POST',
                 data: orderData,
                 success: function (response) {
@@ -2038,13 +2039,13 @@
         }
 
         function goToHome() {
-            window.location.href = '{{ route("index") }}?t=' + new Date().getTime();
+            window.location.href = '<?php echo e(route("index")); ?>?t=' + new Date().getTime();
         }
 
         // ========== CART QUANTITY UPDATE ==========
         function updateCartQty(cartId, action) {
             $.ajax({
-                url: '{{ route("cart.update-quantity") }}',
+                url: '<?php echo e(route("cart.update-quantity")); ?>',
                 type: 'POST',
                 data: {
                     _token: csrfToken,
@@ -2094,7 +2095,7 @@
             }
 
             $.ajax({
-                url: '{{ route("cart.remove") }}',
+                url: '<?php echo e(route("cart.remove")); ?>',
                 type: 'POST',
                 data: {
                     _token: csrfToken,
@@ -2129,17 +2130,17 @@
             });
         }
         // ========== ABANDON GUEST SESSION ON TAB CLOSE ==========
-        @if(!auth('customer')->check())
+        <?php if(!auth('customer')->check()): ?>
         window.addEventListener('beforeunload', function (e) {
             // Only abandon if not placing an order and session has guest data
-            if (!window.isPlacingOrder && "{{ session('guest_checkout_email') }}") {
-                var url = '{{ route("checkout.abandon-guest") }}';
+            if (!window.isPlacingOrder && "<?php echo e(session('guest_checkout_email')); ?>") {
+                var url = '<?php echo e(route("checkout.abandon-guest")); ?>';
                 var data = new FormData();
-                data.append('_token', '{{ csrf_token() }}');
+                data.append('_token', '<?php echo e(csrf_token()); ?>');
                 navigator.sendBeacon(url, data);
             }
         });
-        @endif
+        <?php endif; ?>
 
         // Flag to prevent abandonment when actually submitting the order
         window.isPlacingOrder = false;
@@ -2151,4 +2152,5 @@
             originalPlaceOrder();
         };
     </script>
-@endpush
+<?php $__env->stopPush(); ?>
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\chennais\frontend\resources\views/checkout/checkout-order.blade.php ENDPATH**/ ?>

@@ -19,7 +19,7 @@
                                 value="{{ $search ?? '' }}" />
                         </div>
                         <div class="col-md-2 col-6">
-                            <select name="type" class="form-select">
+                            <select name="type" class="form-select" onchange="this.form.submit()">
                                 <option value="">Email Type - All</option>
                                 <option value="order_confirmation" {{ ($type ?? '') == 'order_confirmation' ? 'selected' : '' }}>Order Confirmation</option>
                                 <option value="status_update" {{ ($type ?? '') == 'status_update' ? 'selected' : '' }}>Status
@@ -29,7 +29,7 @@
                             </select>
                         </div>
                         <div class="col-md-2 col-6">
-                            <select name="status" class="form-select">
+                            <select name="status" class="form-select" onchange="this.form.submit()">
                                 <option value="">Status - All</option>
                                 <option value="sent" {{ ($status ?? '') == 'sent' ? 'selected' : '' }}>Sent</option>
                                 <option value="failed" {{ ($status ?? '') == 'failed' ? 'selected' : '' }}>Failed</option>

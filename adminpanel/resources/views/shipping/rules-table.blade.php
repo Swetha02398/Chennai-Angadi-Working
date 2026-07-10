@@ -25,7 +25,7 @@
                                 value="{{ $search ?? '' }}" />
                         </div>
                         <div class="col-md-2 col-6">
-                            <select name="status" class="form-select">
+                            <select name="status" class="form-select" onchange="this.form.submit()">
                                 <option value="">Status - All</option>
                                 <option value="1" {{ (isset($status) && $status == '1') ? 'selected' : '' }}>Active</option>
                                 <option value="0" {{ (isset($status) && $status == '0') ? 'selected' : '' }}>Inactive</option>

@@ -25,7 +25,7 @@
                                 value="{{ $search ?? '' }}" />
                         </div>
                         <div class="col-md-2 col-6">
-                            <select name="status" class="form-select">
+                            <select name="status" class="form-select" onchange="this.form.submit()">
                                 <option value="">Status - All</option>
                                 <option value="1" {{ (isset($status) && $status == '1') ? 'selected' : '' }}>Active</option>
                                 <option value="0" {{ (isset($status) && $status == '0') ? 'selected' : '' }}>Inactive</option>
@@ -87,18 +87,20 @@
                                 </td>
 
                                 <td>
-                                    @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-edit'))
-                                    <a href="{{ route('shipping.state.edit', $states->id) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i> Edit</a>
-                                    @endif
+                                    <div class="d-inline-flex gap-1 align-items-center flex-wrap">
+                                        @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-edit'))
+                                        <a href="{{ route('shipping.state.edit', $states->id) }}" class="btn btn-sm btn-warning"><i class="bi bi-pencil-square me-1"></i> Edit</a>
+                                        @endif
 
-                                    @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-delete'))
-                                    <form action="{{ route('shipping.state.delete', $states->id) }}" method="POST"
-                                        style="display:inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-sm btn-danger btn-action-col d-inline-flex align-items-center justify-content-center " onclick="return confirm('Delete?')"><i class="bi bi-trash me-1"></i> Delete</button>
-                                    </form>
-                                    @endif
+                                        @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-delete'))
+                                        <form action="{{ route('shipping.state.delete', $states->id) }}" method="POST"
+                                            style="margin: 0;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-sm btn-danger btn-action-col d-inline-flex align-items-center justify-content-center " onclick="return confirm('Delete?')"><i class="bi bi-trash me-1"></i> Delete</button>
+                                        </form>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
