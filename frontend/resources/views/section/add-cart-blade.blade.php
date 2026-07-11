@@ -212,11 +212,15 @@
                         @endforeach
                     </div>
                     <div class="divider-2 mb-30"></div>
-                    <div class="cart-action d-flex justify-content-between">
-                        <a href="{{ route('index') }}" class="btn"><i class="fi-rs-arrow-left mr-10"></i>Continue
-                            Shopping</a>
-                        <!-- <a class="btn mr-10 mb-sm-15" onclick="updateCart(); return false;"><i
-                                                    class="fi-rs-refresh mr-10"></i>Update Cart</a> -->
+                    <div class="cart-action d-flex justify-content-between mb-4">
+                        {{-- Desktop: small button (auto width) --}}
+                        <a href="{{ route('index') }}" class="btn d-none d-md-inline-flex align-items-center">
+                            <i class="fi-rs-arrow-left mr-10"></i>Continue Shopping
+                        </a>
+                        {{-- Mobile: full-width button --}}
+                        <a href="{{ route('index') }}" class="btn w-100 d-md-none">
+                            <i class="fi-rs-arrow-left mr-10"></i>Continue Shopping
+                        </a>
                     </div>
                     <!-- <div class="row mt-50">
                                                     <div class="col-lg-7">

@@ -1206,13 +1206,20 @@
                     </div>
                 </div>
                 <div class="mobile-social-icon">
-                    <h6 class="mb-15">Follow Us</h6>
-                    <a href="https://www.facebook.com/chennaiangaadi"><img
+                   <a href="https://www.facebook.com/chennaiangaadi" target="_blank"><img
                             src="{{ asset('assets/imgs/theme/icons/icon-facebook-white.svg') }} " alt="" /></a>
-                    <a href="https://twitter.com/ChennaiAngadi"><img
+                    <a href="https://twitter.com/ChennaiAngadi" target="_blank"><img
                             src="{{ asset('assets/imgs/theme/icons/icon-twitter-white.svg') }} " alt="" /></a>
-                    <a href="https://www.instagram.com/chennaiangadii/"><img
+                    <a href="https://www.instagram.com/chennaiangadii/" target="_blank"><img
                             src="{{ asset('assets/imgs/theme/icons/icon-instagram-white.svg') }} " alt="" /></a>
+                    <a href="https://www.linkedin.com/company/35949244/admin/dashboard/" target="_blank"><img
+                            src="{{ asset('assets/imgs/theme/icons/icon-linkedin-white.svg') }} " alt="" /></a>
+                    <!-- <a href="#"><img src="{{ asset('assets/imgs/theme/icons/icon-pinterest-white.svg') }} "
+                            alt="" /></a> -->
+                    <a href="https://www.youtube.com/@chennaiangadi" target="_blank"><img
+                            src="{{ asset('assets/imgs/theme/icons/icon-youtube-white.svg') }} " alt="" /></a>
+                    <a href="https://wa.me/9094676665?text=Reply%20Refer%20chennaiangadi.com" target="_blank"><img
+                            src="{{ asset('assets/imgs/theme/icons/icon-whatsapp-white.svg') }} " alt="WhatsApp" style="width: 22px; max-width: 22px; vertical-align: middle; margin-left:2px; transform: scale(1.1);" /></a>
                 </div>
                 <!-- <div class="site-copyright"><a href="{{ url('/') }}">Copyright {{ now()->year }} Chennai Angadi. All
                         rights reserved.</a></div> -->

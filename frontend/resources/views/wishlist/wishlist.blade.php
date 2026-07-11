@@ -23,7 +23,7 @@
                     </div>
 
                     <div class="table-responsive shopping-summery">
-                        <table class="table table-wishlist">
+                        <table class="table table-wishlist table-bordered" style="border: 1px solid #dee2e6;">
                             <thead>
                                 <tr class="main-heading">
                                     <th class="custome-checkbox start ps-3">
@@ -32,8 +32,7 @@
                                     </th>
                                     <th colspan="2">Product</th>
                                     <th>Price</th>
-                                    <th>Action</th>
-                                    <th class="end">Remove</th>
+                                    <th colspan="2">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -107,16 +106,21 @@
                                                 @endif
                                             </td>
 
-                                            <td class="text-right" data-title="Cart">
-                                                <button type="button" class="btn btn-sm wishlist-add-to-cart-btn"
-                                                    data-product-id="{{ $p->id }}">Add to cart</button>
-                                            </td>
-
-                                            <td class="action text-center" data-title="Remove">
-                                                <button type="button" class="btn btn-sm wishlist-remove-btn"
-                                                    data-product-id="{{ $p->id }}">
-                                                    <i class="fi-rs-trash"></i>
-                                                </button>
+                                            <td colspan="2" data-title="Actions">
+                                                <div class="d-flex align-items-center flex-wrap" style="gap:6px;">
+                                                    <button type="button"
+                                                        class="btn btn-sm wishlist-add-to-cart-btn"
+                                                        data-product-id="{{ $p->id }}"
+                                                        style="width:110px;height:38px;border-radius:5px;font-size:12px;font-weight:600;padding:0;white-space:nowrap;">
+                                                        <i class="fi-rs-shopping-cart mr-3"></i>Add to cart
+                                                    </button>
+                                                    <button type="button"
+                                                        class="btn btn-sm wishlist-remove-btn"
+                                                        data-product-id="{{ $p->id }}"
+                                                        style="width:110px;height:38px;border-radius:5px;font-size:12px;font-weight:600;padding:0;background:#dc3545;color:#fff;border-color:#dc3545;white-space:nowrap;">
+                                                        <i class="fi-rs-trash mr-3"></i>Remove
+                                                    </button>
+                                                </div>
                                             </td>
                                         </tr>
                                     @endif

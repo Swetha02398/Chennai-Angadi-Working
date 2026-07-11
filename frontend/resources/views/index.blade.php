@@ -400,80 +400,112 @@
     </script>
     
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const categoryTabs = document.querySelector('#categoryTabs');
-            const productArea = document.querySelector('#productArea');
+        document.addEventListener('DOMContentLoaded', function () {
+            const categoryTabs  = document.querySelector('#categoryTabs');
+            const productArea   = document.querySelector('#productArea');
             const baseFilterUrl = "{{ route('filter.products') }}";
-            let currentSlug = 'all';
+
+            let currentSlug  = 'all';
+            let isLoading    = false;
+            let observer     = null;
+
+            /* ── helpers ─────────────────────────────────────── */
+
+            function showSpinner() {
+                const el = document.createElement('div');
+                el.id = 'infinite-loader';
+                el.className = 'col-12 text-center py-3';
+                el.innerHTML = '<div class="spinner-border text-success" role="status"><span class="visually-hidden">Loading…</span></div>';
+                productArea.appendChild(el);
+            }
+
+            function removeSpinner() {
+                const el = document.getElementById('infinite-loader');
+                if (el) el.remove();
+            }
+
+            function attachObserver() {
+                if (observer) { observer.disconnect(); observer = null; }
+
+                const sentinel = document.getElementById('infinite-scroll-sentinel');
+                if (!sentinel) return;
+
+                observer = new IntersectionObserver(function (entries) {
+                    if (!entries[0].isIntersecting || isLoading) return;
+
+                    const nextUrl = sentinel.dataset.nextPage;
+                    if (!nextUrl) return;
+
+                    isLoading = true;
+                    sentinel.remove();          // remove old sentinel immediately
+                    observer.disconnect();
+                    observer = null;
+
+                    showSpinner();
+
+                    fetch(nextUrl, {
+                        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'text/html' }
+                    })
+                    .then(r => r.text())
+                    .then(html => {
+                        removeSpinner();
+                        const tmp = document.createElement('div');
+                        tmp.innerHTML = html;
+                        // Append each child (product cards + maybe new sentinel)
+                        while (tmp.firstChild) {
+                            productArea.appendChild(tmp.firstChild);
+                        }
+                        isLoading = false;
+                        attachObserver();   // watch new sentinel if any
+                    })
+                    .catch(() => { removeSpinner(); isLoading = false; });
+
+                }, { rootMargin: '200px' });
+
+                observer.observe(sentinel);
+            }
+
+            /* ── fresh load (replaces entire product area) ─────── */
 
             function loadProducts(url) {
-                // Load products instantly without spinner placeholder
+                if (observer) { observer.disconnect(); observer = null; }
+                isLoading = false;
+
                 fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'Accept': 'text/html'
-                    }
+                    headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'text/html' }
                 })
-                .then(response => {
-                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                    return response.text();
+                .then(r => {
+                    if (!r.ok) throw new Error('HTTP ' + r.status);
+                    return r.text();
                 })
                 .then(html => {
                     productArea.innerHTML = html;
+                    attachObserver();
                 })
-                .catch(error => {
-                    console.error('Error:', error);
-                    productArea.innerHTML = `
-                        <div class="col-12 text-center py-5">
-                            <div class="alert alert-danger d-inline-block">
-                                <p class="mb-0">Error loading products. Please try again.</p>
-                            </div>
-                        </div>
-                    `;
+                .catch(() => {
+                    productArea.innerHTML =
+                        '<div class="col-12 text-center py-5"><div class="alert alert-danger d-inline-block"><p class="mb-0">Error loading products. Please try again.</p></div></div>';
                 });
             }
 
-            // Category Tabs Clicks
+            /* ── category tab clicks ─────────────────────────── */
+
             if (categoryTabs) {
-                categoryTabs.addEventListener('click', function(e) {
+                categoryTabs.addEventListener('click', function (e) {
                     const btn = e.target.closest('.nav-link');
                     if (!btn) return;
                     e.preventDefault();
 
-                    // Update active tab styling
                     categoryTabs.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
                     btn.classList.add('active');
 
-                    // Get category slug
                     currentSlug = btn.dataset.slug || 'all';
-
-                    // Build AJAX URL
-                    const url = `${baseFilterUrl}/${currentSlug}?page=1`;
-                    loadProducts(url);
+                    loadProducts(`${baseFilterUrl}/${currentSlug}?page=1`);
                 });
             }
 
-            // Intercept Pagination Clicks inside #productArea using Event Delegation
-            if (productArea) {
-                productArea.addEventListener('click', function(e) {
-                    const paginationLink = e.target.closest('.pagination-ajax-link');
-                    if (!paginationLink) return;
-                    e.preventDefault();
-
-                    const url = paginationLink.getAttribute('href');
-                    if (!url) return;
-
-                    // Load new page
-                    loadProducts(url);
-
-                    // Smooth scroll back to top of the products area
-                    const tabsSection = document.querySelector('.product-tabs');
-                    if (tabsSection) {
-                        tabsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                });
-            }
+            /* ── attach observer for the initial page load ────── */
+            attachObserver();
         });
     </script>
 @endsection

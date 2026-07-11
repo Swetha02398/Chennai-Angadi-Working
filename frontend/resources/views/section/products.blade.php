@@ -152,6 +152,45 @@
     }
 
     /* Out of stock product card styling */
+
+    /* ── Green Skeleton Loader ─────────────────────── */
+    .img-skeleton-wrap {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border-radius: 6px;
+    }
+    .img-skeleton-wrap .skeleton-shimmer {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            90deg,
+            #c8f0de 0%,
+            #eafaf3 40%,
+            #c8f0de 80%
+        );
+        background-size: 200% 100%;
+        animation: ca-shimmer 1.4s infinite linear;
+        z-index: 1;
+        transition: opacity 0.3s ease;
+    }
+    .img-skeleton-wrap .skeleton-shimmer.loaded {
+        opacity: 0;
+        pointer-events: none;
+    }
+    .img-skeleton-wrap img.default-img {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    @keyframes ca-shimmer {
+        0%   { background-position:  200% 0; }
+        100% { background-position: -200% 0; }
+    }
 </style>
 
 @if($products->count() > 0)
@@ -183,14 +222,21 @@
                         }
                     @endphp
                     <a href="{{ route('product.details', $product->id) }}" class="product-card-link">
-                        @if($primaryImage)
-                            <img class="default-img" src="{{ config('app.admin_asset_url') }}/{{ $primaryImage }}" 
-                                alt="{{ $product->productname }}"
-                                onerror="this.src='{{ asset('assets/imgs/theme/icons/category-1.svg') }}'">
-                        @else
-                            <img class="default-img" src="{{ asset('assets/imgs/theme/icons/category-1.svg') }}" 
-                                 alt="{{ $product->productname }}">
-                        @endif
+                        <div class="img-skeleton-wrap">
+                            <div class="skeleton-shimmer"></div>
+                            @if($primaryImage)
+                                <img class="default-img" loading="lazy"
+                                    src="{{ config('app.admin_asset_url') }}/{{ $primaryImage }}"
+                                    alt="{{ $product->productname }}"
+                                    onload="this.previousElementSibling.classList.add('loaded')"
+                                    onerror="this.previousElementSibling.classList.add('loaded'); this.src='{{ asset('assets/imgs/theme/icons/category-1.svg') }}'">
+                            @else
+                                <img class="default-img" loading="lazy"
+                                    src="{{ asset('assets/imgs/theme/icons/category-1.svg') }}"
+                                    alt="{{ $product->productname }}"
+                                    onload="this.previousElementSibling.classList.add('loaded')">
+                            @endif
+                        </div>
                     </a>
                     <div class="product-action-1" style="{{ $firstVariantStock <= 0 ? 'display: none !important;' : '' }}">
                         <a aria-label="Add To Wishlist"
@@ -328,34 +374,10 @@
         </div>
     @endforeach
 
-    @if($products instanceof \Illuminate\Pagination\LengthAwarePaginator && $products->hasPages())
-        <div class="col-12 mt-20 mb-20 d-flex justify-content-center">
-            <div class="pagination-area">
-                @php
-                    $totalPages = $products->lastPage();
-                    $currentPage = $products->currentPage();
-                @endphp
-
-                <ul class="pagination justify-content-center">
-                    <!-- Previous arrow -->
-                    <li class="page-item {{ $currentPage == 1 ? 'disabled' : '' }}">
-                        <a class="page-link d-flex align-items-center justify-content-center pagination-ajax-link" href="{{ $products->url($currentPage - 1) }}"><i
-                                class="fi-rs-angle-left"></i></a>
-                    </li>
-
-                    @for ($i = 1; $i <= $totalPages; $i++)
-                        <li class="page-item {{ $i == $currentPage ? 'active' : '' }}">
-                            <a class="page-link d-flex align-items-center justify-content-center pagination-ajax-link" href="{{ $products->url($i) }}">{{ $i }}</a>
-                        </li>
-                    @endfor
-
-                    <!-- Next arrow -->
-                    <li class="page-item {{ $currentPage == $totalPages ? 'disabled' : '' }}">
-                        <a class="page-link d-flex align-items-center justify-content-center pagination-ajax-link" href="{{ $products->url($currentPage + 1) }}"><i
-                                class="fi-rs-angle-right"></i></a>
-                    </li>
-                </ul>
-            </div>
+    @if($products instanceof \Illuminate\Pagination\LengthAwarePaginator && $products->hasMorePages())
+        <div id="infinite-scroll-sentinel"
+             data-next-page="{{ $products->nextPageUrl() }}"
+             style="width:100%; height:1px;">
         </div>
     @endif
 @else

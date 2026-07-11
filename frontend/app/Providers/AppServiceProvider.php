@@ -68,6 +68,13 @@ class AppServiceProvider extends ServiceProvider
             return $manager;
         });
 
+        View::composer('partials.footer', function ($view) {
+            $view->with('popularCategories', MainCategory::where('status', 'active')
+                ->orderByRaw('CASE WHEN orderby IS NULL THEN 1 ELSE 0 END, orderby ASC, id ASC')
+                ->take(4)
+                ->get());
+        });
+
         View::composer(['partials.header', 'layouts.app'], function ($view) {
             $view->with('categories', MainCategory::with([
                 'subcategories' => function ($query) {
