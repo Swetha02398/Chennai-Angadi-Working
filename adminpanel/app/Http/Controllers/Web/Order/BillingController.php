@@ -921,20 +921,20 @@ class BillingController extends Controller
      */
     private function generateOrderNumber()
     {
-        // Generate sequential order number (CA + 5 digits)
-        $latestOrder = Order::where('order_number', 'LIKE', 'CA%')
-            ->whereRaw('LENGTH(order_number) = 7')
+        // Generate sequential order number (A + digits starting from 6001)
+        $latestOrder = Order::where('order_number', 'LIKE', 'A%')
+            ->whereRaw('LENGTH(order_number) >= 5')
             ->orderBy('id', 'desc')
             ->first();
 
-        $nextId = 60001;
+        $nextId = 6001;
+        
         if ($latestOrder) {
-            // Extract number from CAxxxxx (remove first 2 chars)
-            $lastNumber = (int) substr($latestOrder->order_number, 2);
-            $nextId = max(60001, $lastNumber + 1);
+            $lastNumber = (int) substr($latestOrder->order_number, 1);
+            $nextId = max(6001, $lastNumber + 1);
         }
 
-        return 'CA' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+        return 'A' . $nextId;
     }
 
     /**

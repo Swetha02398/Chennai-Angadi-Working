@@ -1216,13 +1216,21 @@ class CheckoutController extends Controller
             // Strategy 1: Try to get weight from selected_weight field
             if (!empty($item->selected_weight)) {
                 $weight = $this->parseWeight($item->selected_weight);
+                if ($weight == 0) {
+                    // It might be a text like "Jumbo Pack", try to find it in quantities and get its label (weight value)
+                    $quantityDb = \App\Models\Quantity::where('name', $item->selected_weight)->first();
+                    if ($quantityDb && !empty($quantityDb->label)) {
+                        $weight = $this->parseWeight($quantityDb->label);
+                    }
+                }
             }
 
             // Strategy 2: If no weight found and we have variant_id, try to get from variant's quantity
             if ($weight == 0 && !empty($item->variant_id)) {
                 $variant = \App\Models\ProductVariant::with('quantity')->find($item->variant_id);
                 if ($variant && $variant->quantity) {
-                    $weight = $this->parseWeight($variant->quantity->name ?? '');
+                    $valToParse = !empty($variant->quantity->label) ? $variant->quantity->label : $variant->quantity->name;
+                    $weight = $this->parseWeight($valToParse ?? '');
                 }
             }
 
@@ -1232,7 +1240,8 @@ class CheckoutController extends Controller
                 if ($product && $product->variants->count() > 0) {
                     $defaultVariant = $product->variants->first();
                     if ($defaultVariant && $defaultVariant->quantity) {
-                        $weight = $this->parseWeight($defaultVariant->quantity->name ?? '');
+                        $valToParse = !empty($defaultVariant->quantity->label) ? $defaultVariant->quantity->label : $defaultVariant->quantity->name;
+                        $weight = $this->parseWeight($valToParse ?? '');
                     }
                 }
             }
@@ -1501,20 +1510,20 @@ class CheckoutController extends Controller
             if ($order) {
                 $orderNumber = $order->order_number;
             } else {
-                // Generate sequential order number (CA + 5 digits)
-                $latestOrder = Order::where('order_number', 'LIKE', 'CA%')
-                    ->whereRaw('LENGTH(order_number) = 7')
+                // Generate sequential order number (A + digits starting from 6001)
+                $latestOrder = Order::where('order_number', 'LIKE', 'A%')
+                    ->whereRaw('LENGTH(order_number) >= 5')
                     ->orderBy('id', 'desc')
                     ->first();
 
-                $nextId = 1;
+                $nextId = 6001;
                 if ($latestOrder) {
-                    // Extract number from CAxxxxx (remove first 2 chars)
-                    $lastNumber = (int) substr($latestOrder->order_number, 2);
-                    $nextId = $lastNumber + 1;
+                    // Extract number from Axxxx (remove first 1 chars)
+                    $lastNumber = (int) substr($latestOrder->order_number, 1);
+                    $nextId = max(6001, $lastNumber + 1);
                 }
 
-                $orderNumber = 'CA' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+                $orderNumber = 'A' . $nextId;
 
                 // Create the order with 'not_paid' status
                 $order = Order::create([
@@ -1871,10 +1880,7 @@ class CheckoutController extends Controller
 
             // Fallback for COD charge if payment method is cash_on_delivery and not provided
             if ($codCharge === 0.0 && $paymentOption === 'cash_on_delivery') {
-                $priceAfterCoupon = $subtotal - $couponDiscount;
-                if ($priceAfterCoupon < 600) {
-                    $codCharge = 50.0;
-                }
+                $codCharge = 75.0; // Flat ₹75 COD charge
             }
 
             $totalAmount = $subtotal + $shippingCharge + $codCharge;

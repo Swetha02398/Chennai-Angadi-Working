@@ -154,6 +154,7 @@ class OrderApiController extends Controller
             'coupon_code'            => 'nullable|string',
             'tax_amount'             => 'nullable|numeric|min:0',
             'shipping_amount'        => 'nullable|numeric|min:0',
+            'cod_charge'             => 'nullable|numeric|min:0',
         ]);
 
         DB::beginTransaction();
@@ -604,22 +605,22 @@ class OrderApiController extends Controller
         }
     }
 
-    // 🔹 Generate unique order number (CA + 5 digits)
+    // 🔹 Generate unique order number (A + digits starting from 6001)
     private function generateOrderNumber()
     {
-        $latestOrder = Order::where('order_number', 'LIKE', 'CA%')
-            ->whereRaw('LENGTH(order_number) = 7')
+        $latestOrder = Order::where('order_number', 'LIKE', 'A%')
+            ->whereRaw('LENGTH(order_number) >= 5')
             ->orderBy('id', 'desc')
             ->first();
 
-        $nextId = 60001;
+        $nextId = 6001;
         
         if ($latestOrder) {
-            $lastNumber = (int) substr($latestOrder->order_number, 2);
-            $nextId = max(60001, $lastNumber + 1);
+            $lastNumber = (int) substr($latestOrder->order_number, 1);
+            $nextId = max(6001, $lastNumber + 1);
         }
 
-        return 'CA' . str_pad($nextId, 5, '0', STR_PAD_LEFT);
+        return 'A' . $nextId;
     }
 
     // 🔹 Get all orders

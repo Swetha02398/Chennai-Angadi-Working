@@ -439,7 +439,7 @@
                                 <input class="form-check-input" required type="radio" name="payment_option"
                                     id="cash_on_delivery" value="cash_on_delivery" onchange="handlePaymentOptionChange()">
                                 <label class="form-check-label" for="cash_on_delivery">Cash on delivery</label>
-                                <p class="text-black" style="font-size: 15px; margin-left: 25px;">₹75 COD charge on orders below ₹600</p>
+                                <p class="text-black" style="font-size: 15px; margin-left: 25px;">₹75 COD charge</p>
                             </div>
                         </div>
                         <a href="#" class="btn btn-fill-out btn-block mt-2 col-12" onclick="placeOrder(); return false;">Place an
@@ -1076,7 +1076,7 @@
         var currentCouponDiscount = {{ $sessionCouponDiscount ?? 0 }};
         var appliedCouponCode = {!! $sessionCouponCode ? "'" . $sessionCouponCode . "'" : 'null' !!};
         var currentCodCharge = 0;
-        var COD_CHARGE_AMOUNT = 50;
+        var COD_CHARGE_AMOUNT = 75;
         var COD_CHARGE_THRESHOLD = 600;
         var customerEmail = '{{ auth("customer")->check() ? auth("customer")->user()->email : session("guest_checkout_email", "") }}';
 
@@ -1699,15 +1699,9 @@
         function calculateCodCharge() {
             var paymentOption = $('input[name="payment_option"]:checked').val();
             if (paymentOption === 'cash_on_delivery') {
-                var priceAfterCoupon = cartSubtotal - currentCouponDiscount;
-                if (priceAfterCoupon < COD_CHARGE_THRESHOLD) {
-                    currentCodCharge = COD_CHARGE_AMOUNT;
-                    $('#cod_charge_row').show();
-                    $('#cod_charge_display').text('₹' + COD_CHARGE_AMOUNT.toFixed(2));
-                } else {
-                    currentCodCharge = 0;
-                    $('#cod_charge_row').hide();
-                }
+                currentCodCharge = COD_CHARGE_AMOUNT;
+                $('#cod_charge_row').show();
+                $('#cod_charge_display').text('₹' + COD_CHARGE_AMOUNT.toFixed(2));
             } else {
                 currentCodCharge = 0;
                 $('#cod_charge_row').hide();
