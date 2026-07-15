@@ -152,6 +152,45 @@
     }
 
     /* Out of stock product card styling */
+
+    /* ── Green Skeleton Loader ─────────────────────── */
+    .img-skeleton-wrap {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        border-radius: 6px;
+    }
+    .img-skeleton-wrap .skeleton-shimmer {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+            90deg,
+            #c8f0de 0%,
+            #eafaf3 40%,
+            #c8f0de 80%
+        );
+        background-size: 200% 100%;
+        animation: ca-shimmer 1.4s infinite linear;
+        z-index: 1;
+        transition: opacity 0.3s ease;
+    }
+    .img-skeleton-wrap .skeleton-shimmer.loaded {
+        opacity: 0;
+        pointer-events: none;
+    }
+    .img-skeleton-wrap img.default-img {
+        position: relative;
+        z-index: 2;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    @keyframes ca-shimmer {
+        0%   { background-position:  200% 0; }
+        100% { background-position: -200% 0; }
+    }
 </style>
 
 <?php if($products->count() > 0): ?>
@@ -182,15 +221,22 @@
                             }
                         }
                     ?>
-                    <a href="<?php echo e(route('product.details', $product->id)); ?>" class="product-card-link">
-                        <?php if($primaryImage): ?>
-                            <img class="default-img" src="<?php echo e(config('app.admin_asset_url')); ?>/<?php echo e($primaryImage); ?>" 
-                                alt="<?php echo e($product->productname); ?>"
-                                onerror="this.src='<?php echo e(asset('assets/imgs/theme/icons/category-1.svg')); ?>'">
-                        <?php else: ?>
-                            <img class="default-img" src="<?php echo e(asset('assets/imgs/theme/icons/category-1.svg')); ?>" 
-                                 alt="<?php echo e($product->productname); ?>">
-                        <?php endif; ?>
+                    <a href="<?php echo e(route('product.details', $product->slug)); ?>" class="product-card-link">
+                        <div class="img-skeleton-wrap">
+                            <div class="skeleton-shimmer"></div>
+                            <?php if($primaryImage): ?>
+                                <img class="default-img" loading="lazy"
+                                    src="<?php echo e(config('app.admin_asset_url')); ?>/<?php echo e($primaryImage); ?>"
+                                    alt="<?php echo e($product->productname); ?>"
+                                    onload="this.previousElementSibling.classList.add('loaded')"
+                                    onerror="this.previousElementSibling.classList.add('loaded'); this.src='<?php echo e(asset('assets/imgs/theme/icons/category-1.svg')); ?>'">
+                            <?php else: ?>
+                                <img class="default-img" loading="lazy"
+                                    src="<?php echo e(asset('assets/imgs/theme/icons/category-1.svg')); ?>"
+                                    alt="<?php echo e($product->productname); ?>"
+                                    onload="this.previousElementSibling.classList.add('loaded')">
+                            <?php endif; ?>
+                        </div>
                     </a>
                     <div class="product-action-1" style="<?php echo e($firstVariantStock <= 0 ? 'display: none !important;' : ''); ?>">
                         <a aria-label="Add To Wishlist"
@@ -211,7 +257,7 @@
                 </div>
                 <div class="product-content-wrap">
                     <h2 style="text-align: center;">
-                        <a href="<?php echo e($firstVariantStock <= 0 ? 'javascript:void(0)' : route('product.details', $product->id)); ?>" class="product-card-link">
+                        <a href="<?php echo e($firstVariantStock <= 0 ? 'javascript:void(0)' : route('product.details', $product->slug)); ?>" class="product-card-link">
                             <?php echo e($product->productname); ?>
 
                         </a>
@@ -332,33 +378,9 @@
     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 
     <?php if($products instanceof \Illuminate\Pagination\LengthAwarePaginator && $products->hasPages()): ?>
-        <div class="col-12 mt-20 mb-20 d-flex justify-content-center">
-            <div class="pagination-area">
-                <?php
-                    $totalPages = $products->lastPage();
-                    $currentPage = $products->currentPage();
-                ?>
+        <div class="pagination-area mt-30 mb-50 col-12 ajax-pagination-links d-flex justify-content-center">
+            <?php echo e($products->appends(request()->query())->links('vendor.pagination.custom')); ?>
 
-                <ul class="pagination justify-content-center">
-                    <!-- Previous arrow -->
-                    <li class="page-item <?php echo e($currentPage == 1 ? 'disabled' : ''); ?>">
-                        <a class="page-link d-flex align-items-center justify-content-center pagination-ajax-link" href="<?php echo e($products->url($currentPage - 1)); ?>"><i
-                                class="fi-rs-angle-left"></i></a>
-                    </li>
-
-                    <?php for($i = 1; $i <= $totalPages; $i++): ?>
-                        <li class="page-item <?php echo e($i == $currentPage ? 'active' : ''); ?>">
-                            <a class="page-link d-flex align-items-center justify-content-center pagination-ajax-link" href="<?php echo e($products->url($i)); ?>"><?php echo e($i); ?></a>
-                        </li>
-                    <?php endfor; ?>
-
-                    <!-- Next arrow -->
-                    <li class="page-item <?php echo e($currentPage == $totalPages ? 'disabled' : ''); ?>">
-                        <a class="page-link d-flex align-items-center justify-content-center pagination-ajax-link" href="<?php echo e($products->url($currentPage + 1)); ?>"><i
-                                class="fi-rs-angle-right"></i></a>
-                    </li>
-                </ul>
-            </div>
         </div>
     <?php endif; ?>
 <?php else: ?>

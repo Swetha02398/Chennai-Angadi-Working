@@ -290,7 +290,7 @@
                                                             $primaryImage = basename($primaryImage);
                                                         }
                                                     @endphp
-                                                    <a href="{{ route('product.details', $item->product->id) }}">
+                                                    <a href="{{ route('product.details', $item->product->slug) }}">
                                                         <img src="{{ env('ADMIN_ASSET_URL') }}/products/{{ $primaryImage }}"
                                                             alt="{{ $item->product->productname }}"
                                                             onerror="this.src='{{ asset('assets/imgs/theme/icons/category-1.svg') }}'">
@@ -298,7 +298,7 @@
                                                 </td>
                                                 <td>
                                                     <h6 class="w-160 mb-5"><a
-                                                            href="{{ route('product.details', $item->product->id) }}"
+                                                            href="{{ route('product.details', $item->product->slug) }}"
                                                             class="text-heading">{{ $item->product->productname }}</a></h6>
                                                     @php
                                                         $weightName = null;
@@ -384,12 +384,14 @@
                                     <td class="cart_total_label">
                                         <h6 class="text-black">Shipping Charges</h6>
                                     </td>
-                                    <td class="cart_total_amount text-end" id="shipping_display">
+                                    <td class="cart_total_amount text-end">
+                                        <h4 class="text-brand" id="shipping_display">
                                         @if($shipping > 0)
-                                            <h4 class="text-brand">₹ {{ number_format($shipping, 0) }}</h4>
+                                            ₹ {{ number_format($shipping, 0) }}
                                         @else
-                                            <h4 class="text-brand fw-bold">Free</h4>
+                                            Free
                                         @endif
+                                        </h4>
                                     </td>
                                 </tr>
                                 <tr id="cod_charge_row" style="display: none;">
@@ -439,7 +441,7 @@
                                 <input class="form-check-input" required type="radio" name="payment_option"
                                     id="cash_on_delivery" value="cash_on_delivery" onchange="handlePaymentOptionChange()">
                                 <label class="form-check-label" for="cash_on_delivery">Cash on delivery</label>
-                                <p class="text-black" style="font-size: 15px; margin-left: 25px;">₹75 COD charge</p>
+                                <p class="text-black" style="font-size: 15px; margin-left: 25px;">₹75 COD charge on orders below ₹600</p>
                             </div>
                         </div>
                         <a href="#" class="btn btn-fill-out btn-block mt-2 col-12" onclick="placeOrder(); return false;">Place an
@@ -882,6 +884,19 @@
             /* Summary totals - proper alignment */
             .cart-totals>table.no-border {
                 width: 100%;
+            }
+
+            .cart-totals>table.no-border tr {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .cart-totals>table.no-border td {
+                display: block !important;
+                width: auto !important;
+                border: none !important;
             }
 
             .cart-totals>table.no-border td.cart_total_label {
@@ -1651,8 +1666,8 @@
                     if (response.success) {
                         currentCouponDiscount = response.coupon.discount;
                         appliedCouponCode = response.coupon.code;
-                        $('#coupon_discount_row').show();
-                        $('#coupon_discount_display').text('-₹' + Math.round(currentCouponDiscount));
+                        $('#coupon_discount_row').css('display', 'flex');
+                        $('#coupon_discount_display').text('-₹ ' + Math.round(currentCouponDiscount));
                         $('#coupon_message').html('<span class="text-success">' + response.message + '</span>');
                         $('#coupon_code').prop('readonly', true);
                         $('#apply_coupon_btn').text('Applied').addClass('btn-success');
@@ -1681,7 +1696,7 @@
         function removeCoupon() {
             currentCouponDiscount = 0;
             appliedCouponCode = null;
-            $('#coupon_discount_row').hide();
+            $('#coupon_discount_row').css('display', 'none');
             $('#coupon_code').val('').prop('readonly', false);
             $('#apply_coupon_btn').prop('disabled', false).text('Apply Coupon').removeClass('btn-success');
             $('#coupon_message').html('');
@@ -1699,9 +1714,15 @@
         function calculateCodCharge() {
             var paymentOption = $('input[name="payment_option"]:checked').val();
             if (paymentOption === 'cash_on_delivery') {
-                currentCodCharge = COD_CHARGE_AMOUNT;
-                $('#cod_charge_row').show();
-                $('#cod_charge_display').text('₹' + COD_CHARGE_AMOUNT.toFixed(2));
+                if (cartSubtotal >= 600) {
+                    currentCodCharge = 0;
+                    $('#cod_charge_row').show();
+                    $('#cod_charge_display').html('<span class="text-success" style="color: #3BB77E !important; font-weight: bold;">Free</span>');
+                } else {
+                    currentCodCharge = COD_CHARGE_AMOUNT;
+                    $('#cod_charge_row').show();
+                    $('#cod_charge_display').text('₹' + COD_CHARGE_AMOUNT.toFixed(2));
+                }
             } else {
                 currentCodCharge = 0;
                 $('#cod_charge_row').hide();
@@ -1713,7 +1734,7 @@
             var total = cartSubtotal - currentCouponDiscount + currentShipping + currentCodCharge;
             $('#total_display').text('₹' + Math.round(total));
             if (currentShipping == 0) {
-                $('#shipping_display').html('<h4 class="text-brand">Free</h4>');
+                $('#shipping_display').text('Free');
             } else {
                 $('#shipping_display').text('₹' + Math.round(currentShipping));
             }

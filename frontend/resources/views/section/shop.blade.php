@@ -425,13 +425,9 @@
             e.preventDefault();
             const sort = this.getAttribute('href').split('sort=')[1];
 
-            // Re-fetch the first page of products based on sort parameter using infinite scroll loader
             isLoading = true;
-            currentPage = 1;
-            hasMoreProducts = true;
             document.getElementById('infinite-scroll-grid').innerHTML = ''; // Clear existing
             document.getElementById('infinite-scroll-loader').style.display = 'block';
-            document.getElementById('infinite-scroll-end').style.display = 'none';
 
             let fetchUrl = new URL(window.location.href);
             fetchUrl.searchParams.set('sort', sort);
@@ -446,10 +442,6 @@
                 if (data.html) {
                     document.getElementById('infinite-scroll-grid').innerHTML = data.html;
                 }
-                hasMoreProducts = data.hasMore;
-                if (!hasMoreProducts) {
-                    document.getElementById('infinite-scroll-end').style.display = 'block';
-                }
                 isLoading = false;
                 
                 // Update URL gently
@@ -463,52 +455,42 @@
         });
     });
 
-    let currentPage = 1;
     let isLoading = false;
-    let hasMoreProducts = true;
     
-    function handleScroll() {
-        if (isLoading || !hasMoreProducts) return;
-        
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 400) {
-            isLoading = true;
-            currentPage++;
-            
-            document.getElementById('infinite-scroll-loader').style.display = 'block';
-            
-            let fetchUrl = new URL(window.location.href);
-            fetchUrl.searchParams.set('page', currentPage);
-            
-            fetch(fetchUrl, {
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest'
-                }
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('infinite-scroll-loader').style.display = 'none';
-                
-                if (data.html) {
-                    document.getElementById('infinite-scroll-grid').insertAdjacentHTML('beforeend', data.html);
-                }
-                
-                hasMoreProducts = data.hasMore;
-                
-                if (!hasMoreProducts) {
-                    document.getElementById('infinite-scroll-end').style.display = 'block';
-                }
-                
-                isLoading = false;
-            })
-            .catch(error => {
-                console.error('Error fetching products:', error);
-                document.getElementById('infinite-scroll-loader').style.display = 'none';
-                isLoading = false;
-            });
-        }
-    }
+    $(document).on('click', '.ajax-pagination-links a', function(e) {
+        e.preventDefault();
+        let fetchUrl = $(this).attr('href');
+        if(!fetchUrl) return;
 
-    // Attach scroll event dynamically
-    window.addEventListener('scroll', handleScroll);
+        isLoading = true;
+        // document.getElementById('infinite-scroll-loader').style.display = 'block';
+        
+        // Remove old grid while loading for better UX or we can keep it and just show loader over it.
+        // Let's just clear for now to show the loader.
+        // document.getElementById('infinite-scroll-grid').innerHTML = ''; // User requested to remove loader and not clear content
+
+        fetch(fetchUrl, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById('infinite-scroll-loader').style.display = 'none';
+            if (data.html) {
+                document.getElementById('infinite-scroll-grid').innerHTML = data.html;
+            }
+            isLoading = false;
+            
+            // Update URL gently
+            window.history.pushState(null, '', fetchUrl);
+            
+            // Scroll to top of products smoothly
+            document.querySelector('.shop-product-fillter').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        })
+        .catch(err => {
+            console.error(err);
+            document.getElementById('infinite-scroll-loader').style.display = 'none';
+            isLoading = false;
+        });
+    });
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lazysizes/5.3.2/lazysizes.min.js" async></script>

@@ -776,8 +776,6 @@
                                     <div class="product-price primary-color float-left">
                                         <span class="current-price text-brand" id="quickview-price">₹0</span>
                                         <span>
-                                            <span class="save-price font-md color3 ml-15" id="quickview-discount">0%
-                                                Off</span>
                                             <span class="old-price font-md ml-15" id="quickview-old-price">₹0</span>
                                         </span>
                                     </div>
@@ -855,7 +853,7 @@
                         <ul class="mobile-cat-list">
                             <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li class="mobile-cat-item">
-                                    <a href="<?php echo e(route('category.products', $cat->id)); ?>" class="mobile-cat-link">
+                                    <a href="<?php echo e(route('category.products', $cat->slug)); ?>" class="mobile-cat-link">
                                         <?php $catImg = str_replace('uploads/', '', $cat->image); ?>
                                         <img src="<?php echo e(config('app.admin_asset_url')); ?>/<?php echo e($catImg); ?>" alt="<?php echo e($cat->name); ?>"
                                             class="mobile-cat-img" onerror="this.style.display='none'">
@@ -868,7 +866,7 @@
                                         <ul class="mobile-sub-list">
                                             <?php $__currentLoopData = $cat->subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <li class="mobile-sub-item">
-                                                    <a href="<?php echo e(route('subcategory.products', $sub->id)); ?>" class="mobile-sub-link">
+                                                    <a href="<?php echo e(route('subcategory.products', $sub->slug)); ?>" class="mobile-sub-link">
                                                         <?php if($sub->subimage): ?>
                                                             <?php $subImg = str_replace('uploads/', '', $sub->subimage); ?>
                                                             <img src="<?php echo e(config('app.admin_asset_url')); ?>/<?php echo e($subImg); ?>" alt="<?php echo e($sub->name); ?>"
@@ -883,7 +881,7 @@
                                                         <ul class="mobile-child-list">
                                                             <?php $__currentLoopData = $sub->childCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                 <li>
-                                                                    <a href="<?php echo e(route('childcategory.products', $child->id)); ?>">
+                                                                    <a href="<?php echo e(route('childcategory.products', $child->slug)); ?>">
                                                                         <?php if($child->childimage): ?>
                                                                             <?php $childImg = str_replace('uploads/', '', $child->childimage); ?>
                                                                             <img src="<?php echo e(config('app.admin_asset_url')); ?>/<?php echo e($childImg); ?>"
@@ -1207,13 +1205,20 @@
                     </div>
                 </div>
                 <div class="mobile-social-icon">
-                    <h6 class="mb-15">Follow Us</h6>
-                    <a href="https://www.facebook.com/chennaiangaadi"><img
+                   <a href="https://www.facebook.com/chennaiangaadi" target="_blank"><img
                             src="<?php echo e(asset('assets/imgs/theme/icons/icon-facebook-white.svg')); ?> " alt="" /></a>
-                    <a href="https://twitter.com/ChennaiAngadi"><img
+                    <a href="https://twitter.com/ChennaiAngadi" target="_blank"><img
                             src="<?php echo e(asset('assets/imgs/theme/icons/icon-twitter-white.svg')); ?> " alt="" /></a>
-                    <a href="https://www.instagram.com/chennaiangadii/"><img
+                    <a href="https://www.instagram.com/chennaiangadii/" target="_blank"><img
                             src="<?php echo e(asset('assets/imgs/theme/icons/icon-instagram-white.svg')); ?> " alt="" /></a>
+                    <a href="https://www.linkedin.com/company/35949244/admin/dashboard/" target="_blank"><img
+                            src="<?php echo e(asset('assets/imgs/theme/icons/icon-linkedin-white.svg')); ?> " alt="" /></a>
+                    <!-- <a href="#"><img src="<?php echo e(asset('assets/imgs/theme/icons/icon-pinterest-white.svg')); ?> "
+                            alt="" /></a> -->
+                    <a href="https://www.youtube.com/@chennaiangadi" target="_blank"><img
+                            src="<?php echo e(asset('assets/imgs/theme/icons/icon-youtube-white.svg')); ?> " alt="" /></a>
+                    <a href="https://wa.me/919094676665" target="_blank"><img
+                            src="<?php echo e(asset('assets/imgs/theme/icons/icon-whatsapp-white.svg')); ?> " alt="WhatsApp" style="width: 22px; max-width: 22px; vertical-align: middle; margin-left:2px; transform: scale(1.1);" /></a>
                 </div>
                 <!-- <div class="site-copyright"><a href="<?php echo e(url('/')); ?>">Copyright <?php echo e(now()->year); ?> Chennai Angadi. All
                         rights reserved.</a></div> -->
@@ -1536,19 +1541,15 @@
                 document.getElementById('quickview-price').textContent = '₹' + Math.round(sellPrice);
 
                 const oldPriceEl = document.getElementById('quickview-old-price');
-                const discountEl = document.getElementById('quickview-discount');
                 const badge = document.getElementById('quickview-badge');
 
                 if (mrpPrice && mrpPrice > sellPrice) {
                     oldPriceEl.textContent = '₹' + Math.round(mrpPrice);
                     oldPriceEl.style.display = 'inline';
-                    discountEl.textContent = discountPercent + '% Off';
-                    discountEl.style.display = 'inline';
                     badge.textContent = discountPercent + '% Off';
                     badge.style.display = 'inline-block';
                 } else {
                     oldPriceEl.style.display = 'none';
-                    discountEl.style.display = 'none';
                     badge.style.display = 'none';
                 }
             }
@@ -1570,7 +1571,7 @@
                     addBtn.style.color = '#fff';
                     addBtn.disabled = true;
                 } else {
-                    stockEl.textContent = 'Available';
+                    stockEl.textContent = stock + ' Available';
                     stockEl.style.color = '';
                     stockEl.classList.add('text-brand');
                     addBtn.innerHTML = '<i class="fi-rs-shopping-cart"></i>Add to cart';
@@ -2514,6 +2515,49 @@
             return false;
         }
     </script>
+
+
+    <!-- WhatsApp Floating Icon -->
+    <a href="https://wa.me/919094676665" class="whatsapp-floating-icon" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <style>
+        .whatsapp-floating-icon {
+            position: fixed;
+            bottom: 80px; /* Positioned slightly higher to not overlap with standard scroll-to-top */
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .whatsapp-floating-icon:hover {
+            background-color: #128c7e;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .whatsapp-floating-icon {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 26px;
+            }
+        }
+    </style>
 
     <?php echo $__env->yieldPushContent('scripts'); ?>
 

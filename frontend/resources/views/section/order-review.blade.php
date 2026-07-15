@@ -125,9 +125,9 @@
                                     </tr>
                                     <tr>
                                         <td><strong>Shipping Charges:</strong></td>
-                                        <td class="text-end" id="shipping_display">
+                                        <td class="text-end text-brand" id="shipping_display">
                                             @if($shipping > 0)
-                                                <span class="text-brand">₹{{ number_format($shipping, 2) }}</span>
+                                                ₹{{ number_format($shipping, 2) }}
                                             @else
                                                 <span class="text-success">Free</span>
                                             @endif

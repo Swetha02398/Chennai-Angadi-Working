@@ -43,11 +43,11 @@ Route::get('/logout', [DashController::class, 'logout'])->name('logout');
 // 👇 Category show route (same controller)
 Route::get('/ajax/categories', [CategoryController::class, 'ajaxList'])->name('ajax.categories');
 // Category products loop route
-Route::get('/category/{id}', [CategoryController::class, 'products'])->name('category.products');
+Route::get('/category/{slug}', [CategoryController::class, 'products'])->name('category.products');
 // Subcategory products loop route
-Route::get('/subcategory/{id}', [CategoryController::class, 'subcategoryProducts'])->name('subcategory.products');
+Route::get('/subcategory/{slug}', [CategoryController::class, 'subcategoryProducts'])->name('subcategory.products');
 // Child category products route
-Route::get('/childcategory/{id}', [CategoryController::class, 'childcategoryProducts'])->name('childcategory.products');
+Route::get('/childcategory/{slug}', [CategoryController::class, 'childcategoryProducts'])->name('childcategory.products');
 // Quick view route
 Route::get('/product/quick-view/{id}', [ProductController::class, 'quickView'])->name('product.quickview');
 

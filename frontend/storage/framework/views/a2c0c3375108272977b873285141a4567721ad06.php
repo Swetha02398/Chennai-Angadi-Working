@@ -3,7 +3,7 @@
 ?>
 <article class="row align-items-center hover-up <?php echo e($listItemStock <= 0 ? 'product-out-of-stock' : ''); ?>">
     <figure class="col-md-4 mb-0">
-        <a href="<?php echo e(route('product.details', $product->id)); ?>" class="product-card-link">
+        <a href="<?php echo e(route('product.details', $product->slug)); ?>" class="product-card-link">
             <?php
                 $images = $product->productimage;
                 if (is_array($images) && count($images) > 0) {
@@ -24,7 +24,7 @@
     </figure>
     <div class="col-md-8 mb-0">
         <h6>
-            <a href="<?php echo e(route('product.details', $product->id)); ?>"><?php echo e($product->productname); ?></a>
+            <a href="<?php echo e(route('product.details', $product->slug)); ?>"><?php echo e($product->productname); ?></a>
         </h6>
 
 

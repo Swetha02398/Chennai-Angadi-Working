@@ -6,7 +6,7 @@
         <div class="product-cart-wrap mb-30 product-card-{{ $product->id }} {{ $firstVariantStock <= 0 ? 'product-out-of-stock' : '' }}">
             <div class="product-img-action-wrap">
                 <div class="product-img product-img-zoom">
-                    <a href="{{ route('product.details', $product->id) }}" class="product-card-link">
+                    <a href="{{ route('product.details', $product->slug) }}" class="product-card-link">
                         @php
                             // productimage is already cast as array in the Product model
                             $images = $product->productimage;
@@ -49,7 +49,7 @@
 
             <div class="product-content-wrap">
                 <h2 style="text-align: center;">
-                    <a href="{{ route('product.details', $product->id) }}" class="product-card-link">
+                    <a href="{{ route('product.details', $product->slug) }}" class="product-card-link">
                         {{ $product->productname }}
                     </a>
                 </h2>
@@ -166,3 +166,9 @@
         </div>
     </div>
 @endforeach
+
+@if($products instanceof \Illuminate\Pagination\LengthAwarePaginator && $products->hasPages() && in_array(request()->route()->getName(), ['home', 'index', 'shop', 'filter.products']))
+    <div class="pagination-area mt-30 mb-50 col-12 d-flex justify-content-center ajax-pagination-links">
+        {{ $products->appends(request()->query())->links('vendor.pagination.custom') }}
+    </div>
+@endif

@@ -238,8 +238,11 @@
                             <td class="text-center">{{ $index + 1 }}</td>
                             <td>
                                 {{ $item->product_productname }}
-                                @if($item->variant_name)
-                                    <br><small style="color: #666;">({{ $item->variant_name }})</small>
+                                @php
+                                    $displayVariant = $item->variant->quantity->name ?? $item->variant->quantity->label ?? $item->variant_name;
+                                @endphp
+                                @if($displayVariant)
+                                    <br><small style="color: #666;">({{ $displayVariant }})</small>
                                 @endif
                             </td>
                             <td class="text-right">Rs. {{ number_format($item->price, 2) }}</td>

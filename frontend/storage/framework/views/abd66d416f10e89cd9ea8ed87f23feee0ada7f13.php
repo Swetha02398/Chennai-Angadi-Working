@@ -290,7 +290,7 @@
                                                             $primaryImage = basename($primaryImage);
                                                         }
                                                     ?>
-                                                    <a href="<?php echo e(route('product.details', $item->product->id)); ?>">
+                                                    <a href="<?php echo e(route('product.details', $item->product->slug)); ?>">
                                                         <img src="<?php echo e(env('ADMIN_ASSET_URL')); ?>/products/<?php echo e($primaryImage); ?>"
                                                             alt="<?php echo e($item->product->productname); ?>"
                                                             onerror="this.src='<?php echo e(asset('assets/imgs/theme/icons/category-1.svg')); ?>'">
@@ -298,7 +298,7 @@
                                                 </td>
                                                 <td>
                                                     <h6 class="w-160 mb-5"><a
-                                                            href="<?php echo e(route('product.details', $item->product->id)); ?>"
+                                                            href="<?php echo e(route('product.details', $item->product->slug)); ?>"
                                                             class="text-heading"><?php echo e($item->product->productname); ?></a></h6>
                                                     <?php
                                                         $weightName = null;
@@ -385,12 +385,15 @@
                                     <td class="cart_total_label">
                                         <h6 class="text-black">Shipping Charges</h6>
                                     </td>
-                                    <td class="cart_total_amount text-end" id="shipping_display">
+                                    <td class="cart_total_amount text-end">
+                                        <h4 class="text-brand" id="shipping_display">
                                         <?php if($shipping > 0): ?>
-                                            <h4 class="text-brand">₹ <?php echo e(number_format($shipping, 0)); ?></h4>
+                                            ₹ <?php echo e(number_format($shipping, 0)); ?>
+
                                         <?php else: ?>
-                                            <h4 class="text-brand fw-bold">Free</h4>
+                                            Free
                                         <?php endif; ?>
+                                        </h4>
                                     </td>
                                 </tr>
                                 <tr id="cod_charge_row" style="display: none;">
@@ -885,6 +888,19 @@
                 width: 100%;
             }
 
+            .cart-totals>table.no-border tr {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-bottom: 1px solid #f1f1f1;
+            }
+
+            .cart-totals>table.no-border td {
+                display: block !important;
+                width: auto !important;
+                border: none !important;
+            }
+
             .cart-totals>table.no-border td.cart_total_label {
                 text-align: left;
             }
@@ -1077,7 +1093,7 @@
         var currentCouponDiscount = <?php echo e($sessionCouponDiscount ?? 0); ?>;
         var appliedCouponCode = <?php echo $sessionCouponCode ? "'" . $sessionCouponCode . "'" : 'null'; ?>;
         var currentCodCharge = 0;
-        var COD_CHARGE_AMOUNT = 50;
+        var COD_CHARGE_AMOUNT = 75;
         var COD_CHARGE_THRESHOLD = 600;
         var customerEmail = '<?php echo e(auth("customer")->check() ? auth("customer")->user()->email : session("guest_checkout_email", "")); ?>';
 
@@ -1700,14 +1716,14 @@
         function calculateCodCharge() {
             var paymentOption = $('input[name="payment_option"]:checked').val();
             if (paymentOption === 'cash_on_delivery') {
-                var priceAfterCoupon = cartSubtotal - currentCouponDiscount;
-                if (priceAfterCoupon < COD_CHARGE_THRESHOLD) {
+                if (cartSubtotal >= 600) {
+                    currentCodCharge = 0;
+                    $('#cod_charge_row').show();
+                    $('#cod_charge_display').html('<span class="text-success" style="color: #3BB77E !important; font-weight: bold;">Free</span>');
+                } else {
                     currentCodCharge = COD_CHARGE_AMOUNT;
                     $('#cod_charge_row').show();
                     $('#cod_charge_display').text('₹' + COD_CHARGE_AMOUNT.toFixed(2));
-                } else {
-                    currentCodCharge = 0;
-                    $('#cod_charge_row').hide();
                 }
             } else {
                 currentCodCharge = 0;
@@ -1720,7 +1736,7 @@
             var total = cartSubtotal - currentCouponDiscount + currentShipping + currentCodCharge;
             $('#total_display').text('₹' + Math.round(total));
             if (currentShipping == 0) {
-                $('#shipping_display').html('<h4 class="text-brand">Free</h4>');
+                $('#shipping_display').text('Free');
             } else {
                 $('#shipping_display').text('₹' + Math.round(currentShipping));
             }

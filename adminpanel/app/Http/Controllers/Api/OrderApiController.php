@@ -608,19 +608,19 @@ class OrderApiController extends Controller
     // 🔹 Generate unique order number (A + digits starting from 6001)
     private function generateOrderNumber()
     {
-        $latestOrder = Order::where('order_number', 'LIKE', 'A%')
-            ->whereRaw('LENGTH(order_number) >= 5')
+        $latestOrder = Order::where('order_number', 'LIKE', 'CA%')
+            ->whereRaw('LENGTH(order_number) >= 6')
             ->orderBy('id', 'desc')
             ->first();
 
         $nextId = 6001;
         
         if ($latestOrder) {
-            $lastNumber = (int) substr($latestOrder->order_number, 1);
+            $lastNumber = (int) substr($latestOrder->order_number, 2);
             $nextId = max(6001, $lastNumber + 1);
         }
 
-        return 'A' . $nextId;
+        return 'CA' . $nextId;
     }
 
     // 🔹 Get all orders

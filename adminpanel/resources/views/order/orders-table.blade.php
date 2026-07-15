@@ -26,7 +26,7 @@
                     <div class="row g-3 align-items-center">
                         <div class="col-md-3">
                             <input type="text" id="ordersSearchNumber" class="form-control"
-                                placeholder="Search by Order ID or Order Source" value="{{ $search ?? '' }}">
+                                placeholder="Search by Order ID or Mobile Number" value="{{ $search ?? '' }}">
                         </div>
                         <div class="col-md-2">
                             <input type="date" id="ordersSearchDate" class="form-control" placeholder="Filter by Date" value="{{ $date ?? request('date') }}">
@@ -154,7 +154,7 @@
                                                     default => 'bg-light text-dark'
                                                 };
                                             @endphp
-                                            <span class="badge rounded-pill {{ $sourceClass }}">
+                                            <span class="badge {{ $sourceClass }}">
                                                 {{ ucfirst(str_replace('_', ' ', $source)) }}
                                             </span>
                                         </td>

@@ -56,6 +56,30 @@
         flex-shrink: 0;
         font-size: 12px;
     }
+
+    @media (max-width: 768px) {
+        #carausel-10-columns-arrows {
+            display: flex !important;
+            justify-content: space-between !important;
+            width: 100% !important;
+            position: absolute !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            z-index: 10 !important;
+            pointer-events: none !important;
+            left: 0 !important;
+            right: 0 !important;
+            padding: 0 10px;
+        }
+
+        #carausel-10-columns-arrows .slider-btn {
+            position: relative !important;
+            left: auto !important;
+            right: auto !important;
+            pointer-events: auto !important;
+            margin: 0 !important;
+        }
+    }
 </style>
 <div class="carausel-10-columns-cover arrow-center position-relative">
     <div class="slider-arrow slider-arrow-2 carausel-10-columns-arrow" id="carausel-10-columns-arrows"></div>
@@ -64,7 +88,7 @@
             <div class="card-2 bg-<?php echo e(($loop->index % 6) + 9); ?> wow animate__animated animate__fadeInUp"
                 data-wow-delay=".<?php echo e($loop->iteration); ?>s">
                 <figure class="img-hover-scale overflow-hidden">
-                    <a href="<?php echo e(route('category.products', $category->id)); ?>">
+                    <a href="<?php echo e(route('category.products', $category->slug)); ?>">
                         <img src="<?php echo e(config('app.admin_asset_url')); ?>/maincategory/<?php echo e(basename($category->image)); ?>"
                             alt="<?php echo e($category->name); ?>"
                             onerror="this.src='<?php echo e(asset('assets/imgs/theme/icons/category-1.svg')); ?>'" />
@@ -72,7 +96,7 @@
                 </figure>
 
                 <h6>
-                    <a href="<?php echo e(route('category.products', $category->id)); ?>"><?php echo e($category->name); ?></a>
+                    <a href="<?php echo e(route('category.products', $category->slug)); ?>"><?php echo e($category->name); ?></a>
                 </h6>
 
                 <span><?php echo e($category->products_count); ?> Available</span>

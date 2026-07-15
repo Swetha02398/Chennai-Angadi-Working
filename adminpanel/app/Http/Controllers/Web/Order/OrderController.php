@@ -29,6 +29,8 @@ class OrderController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('id', 'LIKE', "%{$search}%")
                     ->orWhere('order_number', 'LIKE', "%{$search}%")
+                    ->orWhere('guest_details->phone', 'LIKE', "%{$search}%")
+                    ->orWhere('billing_address->phone', 'LIKE', "%{$search}%")
                     ->orWhereHas('customer', function ($cq) use ($search) {
                         $cq->where('username', 'LIKE', "%{$search}%")
                             ->orWhere('email', 'LIKE', "%{$search}%")
@@ -636,6 +638,11 @@ class OrderController extends Controller
             // Send invoice email
             Mail::mailer('smtp')
                 ->to([['email' => $recipientEmail, 'name' => $recipientName]])
+                ->send(new InvoiceMail($order));
+
+            // Send explicitly to care@chennaiangadi.com as the 3rd email
+            Mail::mailer('smtp')
+                ->to([['email' => 'care@chennaiangadi.com', 'name' => 'Care Chennai Angadi']])
                 ->send(new InvoiceMail($order));
 
             // Log to EmailHistory table

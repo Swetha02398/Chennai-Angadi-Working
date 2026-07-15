@@ -527,7 +527,7 @@
                     <a href="{{ route('index') }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                     @if($product->category)
                         <span></span>
-                        <a href="{{ route('category.products', $product->category->id) }}">{{ $product->category->name }}</a>
+                        <a href="{{ route('category.products', $product->category->slug) }}">{{ $product->category->name }}</a>
                     @endif
                     <span></span> {{ $product->productname }}
                 </div>
@@ -577,8 +577,13 @@
                                                 }
                                             @endphp
                                             <!-- MAIN PRODUCT IMAGE - NO SLICK -->
-                                            <div class="custom-main-image-container d-flex justify-content-center">
-                                                <figure class="border-radius-10">
+                                            <div class="custom-main-image-container d-flex justify-content-center {{ $displayStock <= 0 ? 'product-out-of-stock' : '' }}">
+                                                <figure class="border-radius-10" style="position: relative;">
+                                                    @if($displayStock <= 0)
+                                                        <div class="product-badges product-badges-position product-badges-mrg" style="position: absolute; top: 10px; left: 10px; z-index: 9;">
+                                                            <span class="hot" style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">OUT OF STOCK</span>
+                                                        </div>
+                                                    @endif
                                                     @if($primaryImage)
                                                         <img id="main-product-image"
                                                             src="{{ env('ADMIN_ASSET_URL') }}/{{ $primaryImage }}"
@@ -605,7 +610,6 @@
                                                             <i class="fi-rs-eye"></i>
                                                         </a>
                                                     </div>
-                                                    {{-- Out of Stock badge removed --}}
                                                 </figure>
                                             </div>
 
@@ -905,7 +909,7 @@
                                                         <div class="product-cart-wrap hover-up mb-30 {{ $relatedStock <= 0 ? 'product-out-of-stock' : '' }}">
                                                             <div class="product-img-action-wrap">
                                                                 <div class="product-img product-img-zoom">
-                                                                    <a href="{{ route('product.details', $related->id) }}" class="product-card-link">
+                                                                    <a href="{{ route('product.details', $related->slug) }}" class="product-card-link">
                                                                         @if($relatedPrimaryImage)
                                                                             <img class="default-img"
                                                                                 src="{{ env('ADMIN_ASSET_URL') }}/{{ $relatedPrimaryImage }}"
@@ -948,7 +952,7 @@
                                                             </div>
                                                             <div class="product-content-wrap">
                                                                 <h2><a
-                                                                        href="{{ route('product.details', $related->id) }}" class="product-card-link">{{ $related->productname }}</a>
+                                                                        href="{{ route('product.details', $related->slug) }}" class="product-card-link">{{ $related->productname }}</a>
                                                                 </h2>
                                                                 <!-- @php
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $relatedAvgRating = $related->reviews_avg_rating ? round($related->reviews_avg_rating, 1) : 0;
@@ -1133,7 +1137,7 @@
                                                 @php
                                                     $sidebarCatImage = str_replace('uploads/', '', $cat->image);
                                                 @endphp
-                                                <a href="{{ route('category.products', $cat->id) }}">
+                                                <a href="{{ route('category.products', $cat->slug) }}">
                                                     <img src="{{ env('ADMIN_ASSET_URL') }}/{{ $sidebarCatImage }}"
                                                         alt="{{ $cat->name }}"
                                                         style="width: 30px; height: 30px; object-fit: cover;">

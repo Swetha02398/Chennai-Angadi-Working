@@ -1,49 +1,4 @@
 <footer class="main">
-    <!-- <section class="newsletter mb-15 wow animate_animated animate_fadeIn">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="position-relative newsletter-inner">
-                        <div class="newsletter-content">
-                            <?php if(isset($bottomSlider) && $bottomSlider): ?>
-                                <?php if($bottomSlider->title_text): ?>
-                                    <?php echo $bottomSlider->title_text; ?>
-
-                                <?php else: ?>
-                                    <h2 class="mb-20">
-                                        Stay home & get your daily <br />
-                                        needs from our shop
-                                    </h2>
-                                    <p class="mb-45">Start You'r Daily Shopping with <span class="text-brand">Nest Mart</span></p>
-                                <?php endif; ?>
-                            <?php else: ?>
-                                <h2 class="mb-20">
-                                    Stay home & get your daily <br />
-                                    needs from our shop
-                                </h2>
-                                <p class="mb-45">Start You'r Daily Shopping with <span class="text-brand">Nest Mart</span>
-                                </p>
-                            <?php endif; ?>
-                            <form class="form-subcriber d-flex">
-                                <input type="email" placeholder="Your emaill address" />
-                                <button class="btn" type="submit">Subscribe</button>
-                            </form>
-                        </div>
-                        <?php if(isset($bottomSlider) && $bottomSlider): ?>
-                            <?php 
-                                $botImg = str_replace(['\\', 'uploads/'], ['/', ''], $bottomSlider->image); 
-                                $botImg = ltrim($botImg, '/');
-                                $adminUrl = rtrim(config('app.admin_asset_url'), '/');
-                            ?>
-                            <img src="<?php echo e($adminUrl); ?>/<?php echo e($botImg); ?>" alt="newsletter" />
-                        <?php else: ?>
-                            <img src="<?php echo e(asset('assets/imgs/banner/banner-9.png')); ?>" alt="newsletter" />
-                        <?php endif; ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section> -->
     <section class="featured pt-3">
         <div class="container">
             <div class="row">
@@ -173,14 +128,14 @@
                         <!-- <li><a href="<?php echo e(route('customer.myAccount')); ?>">Order List</a></li> -->
                     </ul>
                 </div>
-                <div class="footer-link-widget col wow animate_animated animate_fadeInUp" data-wow-delay=".2s">
+                <div class="footer-link-widget col wow animate__animated animate__fadeInUp" data-wow-delay=".2s">
                     <h4 class="widget-title">Popular Categories</h4>
                     <ul class="footer-list mb-sm-5 mb-md-0">
-                        <li><a href="<?php echo e(route('category.products', 7)); ?>">Jams</a></li>
-                        <li><a href="<?php echo e(route('category.products', 1)); ?>">Chocolate candies</a></li>
-                        <li><a href="<?php echo e(route('category.products', 2)); ?>">Jelly and gummy</a></li>
-                        <li><a href="<?php echo e(route('category.products', 3)); ?>">Lollipop and pops</a></li>
-                        <li><a href="<?php echo e(route('category.products', 4)); ?>">Mittai</a></li>
+                        <?php if(isset($popularCategories)): ?>
+                            <?php $__currentLoopData = $popularCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $popCat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <li><a href="<?php echo e(route('category.products', $popCat->slug)); ?>"><?php echo e($popCat->name); ?></a></li>
+                            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                        <?php endif; ?>
                     </ul>
                 </div>
                 <div class="footer-link-widget widget-install-app col wow animate_animated animate_fadeInUp"
@@ -238,7 +193,7 @@
                             alt="" /></a> -->
                     <a href="https://www.youtube.com/@chennaiangadi" target="_blank"><img
                             src="<?php echo e(asset('assets/imgs/theme/icons/icon-youtube-white.svg')); ?> " alt="" /></a>
-                    <a href="https://wa.me/9094676665?text=Reply%20Refer%20chennaiangadi.com" target="_blank"><img
+                    <a href="https://wa.me/919094676665" target="_blank"><img
                             src="<?php echo e(asset('assets/imgs/theme/icons/icon-whatsapp-white.svg')); ?> " alt="WhatsApp" style="width: 22px; max-width: 22px; vertical-align: middle; margin-left:2px; transform: scale(1.1);" /></a>
                 </div>
 

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Mail\MailManager;
 use Symfony\Component\Mailer\Transport\Dsn;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;
+use Illuminate\Pagination\Paginator;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -28,6 +29,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Paginator::useBootstrap();
+
         $this->app->extend('mail.manager', function (MailManager $manager) {
             $manager->extend('smtp', function () {
                 $config = $this->app['config']->get('mail.mailers.smtp', []);

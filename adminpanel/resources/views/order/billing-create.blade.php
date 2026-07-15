@@ -228,13 +228,20 @@
                 width: 100%;
                 height: 100%;
                 background: rgba(0, 0, 0, 0.5);
-                z-index: 1000
+                z-index: 1000;
+                overflow-y: auto;
+            }
+
+            body:has(.modal.show) {
+                overflow: hidden;
             }
 
             .modal.show {
                 display: flex;
-                align-items: center;
-                justify-content: center
+                align-items: flex-start; /* flex-start prevents top cut-off when scrolling tall flex containers */
+                justify-content: center;
+                padding-top: 5vh;
+                padding-bottom: 5vh;
             }
 
             .modal-content {
@@ -426,14 +433,12 @@
                             <small style="color:#2e7d32;font-weight:600"><i class="mdi mdi-account-check"></i> <span
                                     id="selectedCustomerName"></span></small>
 
-                            {{-- Ship Same Address Checkbox for Registered User --}}
                             <div style="margin-top:10px;padding-top:10px;border-top:1px solid #c8e6c9">
-                                <label
-                                    style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:normal;color:#333">
-                                    <input type="checkbox" id="registeredShipSameAddress" checked
-                                        onchange="toggleRegisteredShippingOption()">
-                                    <span>🚚 Ship to Same Address</span>
-                                </label>
+                                <div style="text-align: left !important; display: block !important; overflow: hidden;">
+                                    <input type="checkbox" id="regShipSameAddress" checked
+                                        onchange="toggleRegisteredShippingOption()" style="float:left; margin:3px 8px 0 0; width:auto !important; height:auto !important;">
+                                    <label for="regShipSameAddress" style="cursor:pointer;font-weight:normal;float:left;margin:0;white-space:nowrap;">🚚 Ship to Same Address</label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -518,58 +523,41 @@
                         style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label>Name *</label>
-                        <input type="text" id="guestName" required>
+                    <div class="form-group" style="display:none;">
+                        <input type="hidden" id="guestName" value="Guest">
                     </div>
                     <div class="form-group">
-                        <label>Email *</label>
-                        <input type="email" id="guestEmail" required>
+                        <input type="text" id="guestPhone" placeholder="Phone Number *" required>
                     </div>
                     <div class="form-group">
-                        <label>Phone Number *</label>
-                        <input type="text" id="guestPhone" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Address</label>
-                        <textarea id="guestAddress" rows="3"></textarea>
+                        <textarea id="guestAddress" rows="3" placeholder="Address"></textarea>
                     </div>
 
                     {{-- Ship Same Address Checkbox --}}
-                    <div class="form-group" style="margin-top:15px;padding-top:15px;border-top:1px solid #eee">
-                        <label
-                            style="display:flex;align-items:center;gap:8px;cursor:pointer;font-weight:normal;justify-content:flex-start">
-                            <input type="checkbox" id="guestShipSameAddress" checked onchange="toggleGuestShippingFields()"
-                                style="margin:0">
-                            <span>🚚 Ship to Same Address</span>
-                        </label>
+                    <div class="form-group" style="margin-top:15px;padding-top:15px;border-top:1px solid #eee; text-align:left !important; display:block !important; overflow:hidden;">
+                        <input type="checkbox" id="guestShipSameAddress" checked onchange="toggleGuestShippingFields()"
+                            style="float:left; margin:3px 8px 0 0; width:auto !important; height:auto !important;">
+                        <label for="guestShipSameAddress" style="cursor:pointer;font-weight:normal;float:left;margin:0;white-space:nowrap;">🚚 Ship to Same Address</label>
                     </div>
 
                     {{-- Shipping Address Fields (Hidden by default) --}}
                     <div id="guestShippingFields"
                         style="display:none;margin-top:15px;padding:15px;background:#f9f9f9;border-radius:4px">
                         <h6 style="margin-bottom:12px;color:#333">📦 Shipping Address</h6>
-                        <div class="form-group">
-                            <label>Shipping Name *</label>
-                            <input type="text" id="guestShipName">
+                        <div class="form-group" style="display:none;">
+                            <input type="hidden" id="guestShipName" value="Guest">
                         </div>
                         <div class="form-group">
-                            <label>Shipping Email</label>
-                            <input type="email" id="guestShipEmail">
+                            <input type="text" id="guestShipPhone" placeholder="Shipping Phone *">
                         </div>
                         <div class="form-group">
-                            <label>Shipping Phone *</label>
-                            <input type="text" id="guestShipPhone">
-                        </div>
-                        <div class="form-group">
-                            <label>Shipping Address *</label>
-                            <textarea id="guestShipAddress" rows="3"></textarea>
+                            <textarea id="guestShipAddress" rows="3" placeholder="Shipping Address *"></textarea>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn-secondary" onclick="closeGuestModal()">Cancel</button>
-                    <button class="btn-primary" onclick="saveGuest()">Save</button>
+                <div class="modal-footer" style="justify-content: flex-start; gap: 5px;">
+                    <button class="btn-secondary" onclick="closeGuestModal()" style="width: 100px; height: 38px; border-radius: 4px !important;">Cancel</button>
+                    <button class="btn-primary" onclick="saveGuest()" style="width: 100px; height: 38px; border-radius: 4px !important;">Save</button>
                 </div>
             </div>
         </div>
@@ -706,7 +694,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer" style="justify-content: flex-start; gap: 5px;">
                     <button class="btn-secondary" onclick="closeShippingModal()">Cancel</button>
                     <button class="btn-primary" onclick="calculateAndApplyShipping()">Calculate & Apply</button>
                 </div>
@@ -833,9 +821,9 @@
                         </select>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button class="btn-secondary" onclick="closeCheckoutModal()">Cancel</button>
-                    <button class="btn-primary" onclick="processPayment()" style="background:#28a745">Process Payment</button>
+                <div class="modal-footer" style="justify-content: flex-start; gap: 5px;">
+                    <button class="btn-secondary" onclick="closeCheckoutModal()" style="width: 160px; height: 38px; border-radius: 4px !important; white-space: nowrap;">Cancel</button>
+                    <button class="btn-primary" onclick="processPayment()" style="width: 160px; height: 38px; border-radius: 4px !important; background:#28a745; white-space: nowrap;">Process Payment</button>
                 </div>
             </div>
         </div>
@@ -899,6 +887,12 @@
             }
 
             function loadStateFromSession() {
+                const urlParams = new URLSearchParams(window.location.search);
+                if (urlParams.get('new') === '1') {
+                    sessionStorage.removeItem('pos_billing_state');
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                }
+
                 const savedState = sessionStorage.getItem('pos_billing_state');
                 if (savedState) {
                     try {
@@ -1094,6 +1088,8 @@
                 // Store variant IDs before clearing
                 const variantIds = cart.map(item => item.variant_id);
                 cart = [];
+                draftOrderId = null; // Fix: Clear order ID so next order is new
+                appliedCoupon = { code: null, discount: 0 }; // Clear coupon
 
                 // Update all stock displays
                 variantIds.forEach(vid => updateStockDisplay(vid));
@@ -1252,7 +1248,8 @@
                     body: JSON.stringify({
                         state: state,
                         order_total: subtotal,
-                        total_weight: 0
+                        total_weight: 0,
+                        items: cart
                     })
                 })
                     .then(res => res.json())
@@ -1349,14 +1346,19 @@
             }
 
             function saveGuest() {
-                const name = document.getElementById('guestName').value;
-                const email = document.getElementById('guestEmail').value;
-                const phone = document.getElementById('guestPhone').value;
-                const address = document.getElementById('guestAddress').value;
+                try {
+                    const name = document.getElementById('guestName').value;
+                    const phone = document.getElementById('guestPhone').value;
+                    const email = ''; // No longer collecting email
+                    const address = document.getElementById('guestAddress').value;
 
-                if (!name || !email || !phone) {
-                    alert('Please fill required fields');
-                    return;
+                    if (!phone) {
+                        alert('Phone number is required for guest checkout');
+                        return;
+                    }
+
+                if (customerData.type !== 'guest' || (customerData.details && customerData.details.phone !== phone)) {
+                    draftOrderId = null; // Important: Clear draft context when guest phone fundamentally changes
                 }
 
                 // Check if ship same address
@@ -1375,7 +1377,7 @@
 
                     shippingAddress = {
                         name: shipName,
-                        email: document.getElementById('guestShipEmail').value || email,
+                        email: email, // empty
                         phone: shipPhone,
                         address: shipAddr
                     };
@@ -1394,12 +1396,16 @@
                     shipping_address: shippingAddress
                 };
 
-                // Keep dropdown at Guest
-                document.getElementById('customerType').value = 'guest';
+                    // Keep dropdown at Guest
+                    document.getElementById('customerType').value = 'guest';
 
-                saveStateToSession();
-                closeGuestModal();
-                saveDraft(); // Auto-save draft after guest details entered
+                    saveStateToSession();
+                    closeGuestModal();
+                    saveDraft(); // Auto-save draft after guest details entered
+                } catch(e) {
+                    console.error("Save Guest Error:", e);
+                    alert("Developer Error: Failed to save guest details. " + e.message);
+                }
             }
 
             // Toggle guest shipping fields visibility
@@ -1409,6 +1415,10 @@
             }
 
             function selectCustomer(id, name) {
+                if (customerData.id !== id) {
+                    draftOrderId = null; // Important: Clear draft context when assigning a completely different customer
+                }
+
                 customerData = {
                     type: 'registered',
                     id: id,
@@ -1422,7 +1432,7 @@
                 document.getElementById('selectedCustomerDisplay').style.display = 'block';
 
                 // Reset shipping checkbox to checked
-                document.getElementById('registeredShipSameAddress').checked = true;
+                document.getElementById('regShipSameAddress').checked = true;
 
                 // Keep dropdown at Registered
                 document.getElementById('customerType').value = 'registered';
@@ -1520,8 +1530,8 @@
 
                 // If Guest, check if guest details are filled
                 if (customerType === 'guest') {
-                    if (!customerData.details || !customerData.details.first_name || !customerData.details.email || !customerData.details.phone) {
-                        alert('Please fill Guest details (Name, Email, Phone)');
+                    if (!customerData.details || !customerData.details.first_name || !customerData.details.phone) {
+                        alert('Please fill Guest details (Name, Phone)');
                         document.getElementById('guestModal').classList.add('show');
                         return;
                     }

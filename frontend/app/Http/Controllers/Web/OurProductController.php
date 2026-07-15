@@ -25,7 +25,7 @@ class OurProductController extends Controller
             ], 'rating')
             ->where('status', 1)
             ->orderByRaw('(SELECT MAX(stock) FROM product_variants WHERE product_variants.product_id = products.id) > 0 DESC')
-            ->paginate(20);
+            ->paginate(50);
 
         if ($request->ajax()) {
             return view('section.products', compact('products'))->render();
@@ -40,7 +40,7 @@ class OurProductController extends Controller
             ], 'rating')
             ->where('status', 1)
             ->where('top_selling', 1)
-            ->take(3)
+            ->take(10)
             ->get();
 
         // TRENDING PRODUCTS (where trending_product = 1)
@@ -52,7 +52,7 @@ class OurProductController extends Controller
             ], 'rating')
             ->where('status', 1)
             ->where('trending_product', 1)
-            ->take(3)
+            ->take(10)
             ->get();
 
         // RECENTLY ADDED PRODUCTS (latest created)
@@ -64,7 +64,7 @@ class OurProductController extends Controller
             ], 'rating')
             ->where('status', 1)
             ->latest()
-            ->take(3)
+            ->take(10)
             ->get();
 
         // HOT DEAL PRODUCTS (where hot_deal = 1)
@@ -151,7 +151,7 @@ class OurProductController extends Controller
             $products = $query
                 ->orderByRaw('(SELECT MAX(stock) FROM product_variants WHERE product_variants.product_id = products.id) > 0 DESC')
                 ->orderByRaw("COALESCE(reviews_avg_rating, 0) DESC")
-                ->paginate(20);
+                ->paginate(50);
 
             return view('section.products', compact('products'))->render();
 
@@ -164,9 +164,11 @@ class OurProductController extends Controller
 
 
 
-    public function view($id)
+    public function view($slug)
     {
-        $product = Product::with(['category', 'variants.quantity', 'specifications'])->findOrFail($id);
+        $product = Product::with(['category', 'variants.quantity', 'specifications'])
+            ->where('slug', $slug)
+            ->firstOrFail();
 
         $categories = MainCategory::withCount('products')
             ->orderByRaw('CASE WHEN orderby IS NULL THEN 1 ELSE 0 END, orderby ASC, id ASC')

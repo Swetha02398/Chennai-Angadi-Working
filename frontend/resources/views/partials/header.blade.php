@@ -197,7 +197,7 @@
                             <select class="select-active" name="category" id="search-category">
                                 <option value="">All Categories</option>
                                 @foreach($categories as $cat)
-                                    <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
+                                    <option value="{{ $cat->id }}" data-slug="{{ $cat->slug }}" {{ request('category') == $cat->id ? 'selected' : '' }}>
                                         {{ $cat->name }}
                                     </option>
                                 @endforeach
@@ -304,7 +304,7 @@
                                 <ul class="catfly-left">
                                     @foreach($categories as $cat)
                                         <li class="catfly-item" data-cat-id="{{ $cat->id }}">
-                                            <a href="{{ route('category.products', $cat->id) }}">
+                                            <a href="{{ route('category.products', $cat->slug) }}">
                                                 @php
                                                     $mainImage = str_replace('uploads/', '', $cat->image);
                                                 @endphp
@@ -326,7 +326,7 @@
                                                 <ul class="catfly-sub-list">
                                                     @foreach($cat->subcategories as $sub)
                                                         <li class="catfly-sub-item">
-                                                            <a href="{{ route('subcategory.products', $sub->id) }}">
+                                                            <a href="{{ route('subcategory.products', $sub->slug) }}">
                                                                 @if($sub->subimage)
                                                                     @php
                                                                         $subImage = str_replace('uploads/', '', $sub->subimage);
@@ -343,7 +343,7 @@
                                                                 <ul class="catfly-child">
                                                                     @foreach($sub->childCategories as $child)
                                                                         <li>
-                                                                            <a href="{{ route('subcategory.products', $sub->id) }}">
+                                                                            <a href="{{ route('subcategory.products', $sub->slug) }}">
                                                                                 @if($child->childimage)
                                                                                     @php
                                                                                         $childImage = str_replace('uploads/', '', $child->childimage);
@@ -391,14 +391,14 @@
                                     <ul class="mega-menu horizontal-scroll">
                                         @foreach ($categories as $cat)
                                             <li class="sub-mega-menu block-item">
-                                                <a class="menu-title" href="{{ route('category.products', $cat->id) }}">
+                                                <a class="menu-title" href="{{ route('category.products', $cat->slug) }}">
                                                     {{ $cat->name }}
                                                 </a>
 
                                                 <ul class="mega-scroll">
                                                     @foreach ($cat->subcategories as $sub)
                                                         <li><a
-                                                                href="{{ route('subcategory.products', $sub->id) }}">{{ $sub->name }}</a>
+                                                                href="{{ route('subcategory.products', $sub->slug) }}">{{ $sub->name }}</a>
                                                         </li>
                                                     @endforeach
                                                 </ul>
@@ -1154,9 +1154,10 @@
         if (categorySelect) {
             // Native change event (backup)
             categorySelect.addEventListener('change', function () {
-                const categoryId = this.value;
-                if (categoryId && categoryId !== '') {
-                    window.location.href = '{{ url("/category") }}/' + categoryId;
+                const selectedOption = this.options[this.selectedIndex];
+                const slug = selectedOption.getAttribute('data-slug');
+                if (slug && slug !== '') {
+                    window.location.href = '{{ url("/category") }}/' + slug;
                 }
             });
         }
@@ -1173,15 +1174,21 @@
                         $catSelect.on('select2:select', function (e) {
                             var categoryId = e.params.data.id;
                             if (categoryId && categoryId !== '') {
-                                window.location.href = '{{ url("/category") }}/' + categoryId;
+                                // Find the option with this ID to get its slug
+                                var $selectedOption = $catSelect.find('option[value="' + categoryId + '"]');
+                                var slug = $selectedOption.attr('data-slug');
+                                if (slug) {
+                                    window.location.href = '{{ url("/category") }}/' + slug;
+                                }
                             }
                         });
 
                         // Also bind to regular change event (via jQuery)
                         $catSelect.on('change', function () {
-                            var categoryId = $(this).val();
-                            if (categoryId && categoryId !== '') {
-                                window.location.href = '{{ url("/category") }}/' + categoryId;
+                            var $selectedOption = $(this).find('option:selected');
+                            var slug = $selectedOption.attr('data-slug');
+                            if (slug && slug !== '') {
+                                window.location.href = '{{ url("/category") }}/' + slug;
                             }
                         });
                     }

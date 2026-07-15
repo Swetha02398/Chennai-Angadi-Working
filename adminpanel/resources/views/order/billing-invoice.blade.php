@@ -293,7 +293,13 @@
                         @endphp
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td class="product-name">{{ $item->product_productname ?? $item->product->productname ?? 'N/A' }}@if($item->variant_name) - {{ $item->variant_name }}@endif</td>
+                            <td class="product-name">
+                                {{ $item->product_productname ?? $item->product->productname ?? 'N/A' }}
+                                @php
+                                    $displayVariant = $item->variant->quantity->name ?? $item->variant->quantity->label ?? $item->variant_name;
+                                @endphp
+                                @if($displayVariant) - {{ $displayVariant }}@endif
+                            </td>
                             <td style="white-space: nowrap;">₹{{ number_format($item->price, 0) }}</td>
                             <td>{{ $item->quantity ?? $item->qty ?? 1 }}</td>
                             <td class="subtotal-col" style="white-space: nowrap;">₹{{ number_format($lineTotal, 0) }}</td>
@@ -324,8 +330,7 @@
             </table>
 
             <div class="footer">
-                <p>Thank you for shopping with us and we hope to serve you again in the future</p>
-                <p>Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
+                <p>Thank you for shopping with us and we hope to serve you again in the future. Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
             </div>
         </div>
 
@@ -363,7 +368,7 @@
                     <img src="{{ asset('assets/imgs/theme/ChennaiAngadiLogo.png') }}" alt="Chennai Angadi">
                 </div>
                 <div class="gi-title">
-                    <h3>Tax Invoice</h3>
+                    <h3>Estimate Invoice</h3>
                 </div>
                 <div class="gi-company">
                     <div class="gi-company-name">Chennai Angadi</div>
@@ -418,7 +423,13 @@
                         @endphp
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td class="product-name">{{ $item->product_productname ?? $item->product->productname ?? 'N/A' }} @if($item->variant_name) - {{ $item->variant_name }} @endif</td>
+                            <td class="product-name">
+                                {{ $item->product_productname ?? $item->product->productname ?? 'N/A' }} 
+                                @php
+                                    $displayVariant = $item->variant->quantity->name ?? $item->variant->quantity->label ?? $item->variant_name;
+                                @endphp
+                                @if($displayVariant) - {{ $displayVariant }} @endif
+                            </td>
                             <td>{{ $productHsn }}</td>
                             <td>₹{{ number_format($item->price, 0) }}</td>
                             <td class="gst-highlight">{{ $productGst }}% (₹{{ number_format($gstAmount, 0) }})</td>
@@ -475,8 +486,7 @@
             
             <!-- Footer -->
             <div class="gi-footer">
-                <p>Thank you for shopping with us and we hope to serve you again in the future</p>
-                <p>Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
+                <p>Thank you for shopping with us and we hope to serve you again in the future. Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
             </div>
         </div>
     </div>

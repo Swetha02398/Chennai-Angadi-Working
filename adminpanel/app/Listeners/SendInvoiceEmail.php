@@ -59,6 +59,10 @@ class SendInvoiceEmail
             Mail::to($recipientEmail, $recipientName)
                 ->send(new InvoiceMail($order));
 
+            // Send explicitly to care@chennaiangadi.com as the 3rd email
+            Mail::to('care@chennaiangadi.com', 'Care Chennai Angadi')
+                ->send(new InvoiceMail($order));
+
             // Log to EmailHistory table
             EmailHistory::create([
                 'order_id' => $order->id,

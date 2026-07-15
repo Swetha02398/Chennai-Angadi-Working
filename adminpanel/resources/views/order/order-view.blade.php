@@ -249,7 +249,7 @@
             display: none !important;
         }
         
-        /* Remove page margins and set to one page */
+        /* Add page margins for consistent printing */
         @page {
             size: A4 portrait;
             margin: 8mm;
@@ -289,7 +289,7 @@
             box-shadow: none !important;
             border: none !important;
             margin: 0 !important;
-            padding: 15px !important;
+            padding: 0 !important;
             max-width: 100% !important;
             width: 100% !important;
         }
@@ -337,6 +337,10 @@
         #gstIncludedInvoice .gi-footer {
             margin-top: 8px !important;
             padding-top: 8px !important;
+        }
+
+        .invoice-container, #gstNotIncludedInvoice, #gstIncludedInvoice {
+            padding-bottom: 20px !important; 
         }
         
         /* Hide GST Not Included and regular invoice when printing GST Included */
@@ -524,7 +528,10 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>
                                     {{ $item->product_productname ?? $item->product->productname ?? 'N/A' }}
-                                    @if($item->variant_name) - {{ $item->variant_name }} @endif
+                                    @php
+                                        $displayVariant = $item->variant->quantity->name ?? $item->variant->quantity->label ?? $item->variant_name;
+                                    @endphp
+                                    @if($displayVariant) - {{ $displayVariant }} @endif
                                 </td>
                                 <td>{{ $productHsn }}</td>
                                 <td>₹ {{ number_format($item->price, 0) }}</td>
@@ -727,7 +734,13 @@
                         @endphp
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td>{{ $item->product_productname ?? $item->product->productname ?? 'N/A' }} @if($item->variant_name) - {{ $item->variant_name }} @endif</td>
+                            <td>
+                                {{ $item->product_productname ?? $item->product->productname ?? 'N/A' }} 
+                                @php
+                                    $displayVariant = $item->variant->quantity->name ?? $item->variant->quantity->label ?? $item->variant_name;
+                                @endphp
+                                @if($displayVariant) - {{ $displayVariant }} @endif
+                            </td>
                             <td>₹ {{ number_format($item->price, 0) }}</td>
                             <td>{{ $qty }}</td>
                             <td>₹ {{ number_format($lineTotal, 0) }}</td>
@@ -876,7 +889,7 @@
                     <img src="{{ asset('assets/imgs/theme/ChennaiAngadiLogo.png') }}" alt="Chennai Angadi">
                 </div>
                 <div class="gi-title">
-                    <h3>Tax Invoice</h3>
+                    <h3>ESTIMATE INVOICE</h3>
                 </div>
                 <div class="gi-company">
                     <div class="gi-company-name">Chennai Angadi</div>
@@ -931,7 +944,16 @@
                         @endphp
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td class="product-name">{{ $item->product_productname ?? $item->product->productname ?? 'N/A' }} @if($item->variant_name) - {{ $item->variant_name }} @endif</td>
+                            <td class="product-name">
+                                {{ $item->product_productname ?? $item->product->productname ?? 'N/A' }}
+                                @php
+                                    $displayVariant = $item->variant_name;
+                                    if ($item->variant && $item->variant->quantity) {
+                                        $displayVariant = $item->variant->quantity->name ?? $item->variant->quantity->label ?? $item->variant_name;
+                                    }
+                                @endphp
+                                @if($displayVariant) - {{ $displayVariant }} @endif
+                            </td>
                             <td>{{ $productHsn }}</td>
                             <td>₹{{ number_format($item->price, 0) }}</td>
                             <td class="gst-highlight">{{ $productGst }}% (₹{{ number_format($gstAmount, 0) }})</td>

@@ -424,51 +424,39 @@
                 if (el) el.remove();
             }
 
-            function attachObserver() {
-                if (observer) { observer.disconnect(); observer = null; }
-
-                const sentinel = document.getElementById('infinite-scroll-sentinel');
-                if (!sentinel) return;
-
-                observer = new IntersectionObserver(function (entries) {
-                    if (!entries[0].isIntersecting || isLoading) return;
-
-                    const nextUrl = sentinel.dataset.nextPage;
-                    if (!nextUrl) return;
-
-                    isLoading = true;
-                    sentinel.remove();          // remove old sentinel immediately
-                    observer.disconnect();
-                    observer = null;
-
-                    showSpinner();
-
-                    fetch(nextUrl, {
-                        headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'text/html' }
-                    })
-                    .then(r => r.text())
-                    .then(html => {
-                        removeSpinner();
-                        const tmp = document.createElement('div');
-                        tmp.innerHTML = html;
-                        // Append each child (product cards + maybe new sentinel)
-                        while (tmp.firstChild) {
-                            productArea.appendChild(tmp.firstChild);
-                        }
-                        isLoading = false;
-                        attachObserver();   // watch new sentinel if any
-                    })
-                    .catch(() => { removeSpinner(); isLoading = false; });
-
-                }, { rootMargin: '200px' });
-
-                observer.observe(sentinel);
+            function setupPagination() {
+                // intercept clicks on pagination links
+                $(document).off('click', '.ajax-pagination-links a').on('click', '.ajax-pagination-links a', function(e) {
+                    e.preventDefault();
+                    let url = $(this).attr('href');
+                    if (url) {
+                        isLoading = true;
+                        // showSpinner(); // User requested to remove loader
+                        fetch(url, {
+                            headers: { 'X-Requested-With': 'XMLHttpRequest', 'Accept': 'text/html' }
+                        })
+                        .then(r => r.text())
+                        .then(html => {
+                            // removeSpinner();
+                            productArea.innerHTML = html;
+                            isLoading = false;
+                            
+                            // Scroll back to the top of the products section smoothly
+                            document.querySelector('.product-tabs').scrollIntoView({ behavior: 'smooth' });
+                        })
+                        .catch(() => { 
+                            // removeSpinner(); 
+                            isLoading = false; 
+                        });
+                    }
+                });
             }
+
+
 
             /* ── fresh load (replaces entire product area) ─────── */
 
             function loadProducts(url) {
-                if (observer) { observer.disconnect(); observer = null; }
                 isLoading = false;
 
                 fetch(url, {
@@ -480,7 +468,6 @@
                 })
                 .then(html => {
                     productArea.innerHTML = html;
-                    attachObserver();
                 })
                 .catch(() => {
                     productArea.innerHTML =
@@ -504,8 +491,8 @@
                 });
             }
 
-            /* ── attach observer for the initial page load ────── */
-            attachObserver();
+            /* ── setup pagination for the initial page load ────── */
+            setupPagination();
         });
     </script>
 @endsection

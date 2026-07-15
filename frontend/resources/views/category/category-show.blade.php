@@ -25,7 +25,7 @@
 
                                 @foreach ($category->subcategories as $sub)
                                     <li class="hover-up">
-                                        <a href="{{ route('subcategory.products', $sub->id) }}">
+                                        <a href="{{ route('subcategory.products', $sub->slug) }}">
                                             <i class="fi-rs-cross mr-10"></i>{{ $sub->name }}
                                         </a>
                                     </li>
@@ -113,7 +113,7 @@
                             <ul>
                                 @foreach($categories as $cat)
                                     <li>
-                                        <a href="{{ route('category.products', $cat->id) }}">
+                                        <a href="{{ route('category.products', $cat->slug) }}">
                                             <img src="{{ env('ADMIN_ASSET_URL') }}/maincategory/{{ basename($cat->image) }}"
                                                 alt="{{ $cat->name }}" style="width: 30px; height: 30px; object-fit: cover;" />
                                             {{ $cat->name }}

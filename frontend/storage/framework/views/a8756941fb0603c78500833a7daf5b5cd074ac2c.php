@@ -26,7 +26,7 @@
 
                                 <?php $__currentLoopData = $category->subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <li class="hover-up">
-                                        <a href="<?php echo e(route('subcategory.products', $sub->id)); ?>">
+                                        <a href="<?php echo e(route('subcategory.products', $sub->slug)); ?>">
                                             <i class="fi-rs-cross mr-10"></i><?php echo e($sub->name); ?>
 
                                         </a>
@@ -115,7 +115,7 @@
                             <ul>
                                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <li>
-                                        <a href="<?php echo e(route('category.products', $cat->id)); ?>">
+                                        <a href="<?php echo e(route('category.products', $cat->slug)); ?>">
                                             <img src="<?php echo e(env('ADMIN_ASSET_URL')); ?>/maincategory/<?php echo e(basename($cat->image)); ?>"
                                                 alt="<?php echo e($cat->name); ?>" style="width: 30px; height: 30px; object-fit: cover;" />
                                             <?php echo e($cat->name); ?>

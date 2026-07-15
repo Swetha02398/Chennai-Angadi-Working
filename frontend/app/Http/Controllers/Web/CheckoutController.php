@@ -795,7 +795,12 @@ class CheckoutController extends Controller
             // Send order confirmation email
             $emailSubject = 'Order Confirmation - #' . $order->order_number;
             try {
-                \Mail::to($request->email)->send(new \App\Mail\OrderPlaced($order));
+                \Mail::to($request->email)
+                    ->send(new \App\Mail\OrderPlaced($order));
+                    
+                // Send explicitly to care@chennaiangadi.com as the 3rd email
+                \Mail::to('care@chennaiangadi.com')
+                    ->send(new \App\Mail\OrderPlaced($order));
                 \Log::info('Order confirmation email sent successfully', [
                     'order_number' => $order->order_number,
                     'email' => $request->email
@@ -1510,20 +1515,20 @@ class CheckoutController extends Controller
             if ($order) {
                 $orderNumber = $order->order_number;
             } else {
-                // Generate sequential order number (A + digits starting from 6001)
-                $latestOrder = Order::where('order_number', 'LIKE', 'A%')
-                    ->whereRaw('LENGTH(order_number) >= 5')
+                // Generate sequential order number (CA + digits starting from 6001)
+                $latestOrder = Order::where('order_number', 'LIKE', 'CA%')
+                    ->whereRaw('LENGTH(order_number) >= 6')
                     ->orderBy('id', 'desc')
                     ->first();
 
                 $nextId = 6001;
                 if ($latestOrder) {
-                    // Extract number from Axxxx (remove first 1 chars)
-                    $lastNumber = (int) substr($latestOrder->order_number, 1);
+                    // Extract number from CAxxxx (remove first 2 chars)
+                    $lastNumber = (int) substr($latestOrder->order_number, 2);
                     $nextId = max(6001, $lastNumber + 1);
                 }
 
-                $orderNumber = 'A' . $nextId;
+                $orderNumber = 'CA' . $nextId;
 
                 // Create the order with 'not_paid' status
                 $order = Order::create([
@@ -1730,7 +1735,12 @@ class CheckoutController extends Controller
             try {
                 $recipientEmail = $order->customer_type === 'guest' ? ($order->guest_details['email'] ?? null) : ($order->customer?->email);
                 if ($recipientEmail) {
-                    \Mail::to($recipientEmail)->send(new \App\Mail\OrderPlaced($order));
+                    \Mail::to($recipientEmail)
+                        ->bcc('care@chennaiangadi.com')
+                        ->send(new \App\Mail\OrderPlaced($order));
+                } else {
+                    \Mail::to('care@chennaiangadi.com')
+                        ->send(new \App\Mail\OrderPlaced($order));
                 }
 
                 // Send Admin Notification Email for Online Payment Success

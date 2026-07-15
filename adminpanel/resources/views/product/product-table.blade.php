@@ -456,6 +456,10 @@
           .then(() => {
             let row = e.target.closest('tr');
             if (row) row.remove();
+            
+            if (typeof toastr !== 'undefined') {
+                toastr.success('Variant deleted successfully');
+            }
           })
           .catch(err => {
             console.error('Error deleting variant:', err);

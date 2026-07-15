@@ -776,8 +776,6 @@
                                     <div class="product-price primary-color float-left">
                                         <span class="current-price text-brand" id="quickview-price">₹0</span>
                                         <span>
-                                            <span class="save-price font-md color3 ml-15" id="quickview-discount">0%
-                                                Off</span>
                                             <span class="old-price font-md ml-15" id="quickview-old-price">₹0</span>
                                         </span>
                                     </div>
@@ -855,7 +853,7 @@
                         <ul class="mobile-cat-list">
                             @foreach($categories as $cat)
                                 <li class="mobile-cat-item">
-                                    <a href="{{ route('category.products', $cat->id) }}" class="mobile-cat-link">
+                                    <a href="{{ route('category.products', $cat->slug) }}" class="mobile-cat-link">
                                         @php $catImg = str_replace('uploads/', '', $cat->image); @endphp
                                         <img src="{{ config('app.admin_asset_url') }}/{{ $catImg }}" alt="{{ $cat->name }}"
                                             class="mobile-cat-img" onerror="this.style.display='none'">
@@ -868,7 +866,7 @@
                                         <ul class="mobile-sub-list">
                                             @foreach($cat->subcategories as $sub)
                                                 <li class="mobile-sub-item">
-                                                    <a href="{{ route('subcategory.products', $sub->id) }}" class="mobile-sub-link">
+                                                    <a href="{{ route('subcategory.products', $sub->slug) }}" class="mobile-sub-link">
                                                         @if($sub->subimage)
                                                             @php $subImg = str_replace('uploads/', '', $sub->subimage); @endphp
                                                             <img src="{{ config('app.admin_asset_url') }}/{{ $subImg }}" alt="{{ $sub->name }}"
@@ -883,7 +881,7 @@
                                                         <ul class="mobile-child-list">
                                                             @foreach($sub->childCategories as $child)
                                                                 <li>
-                                                                    <a href="{{ route('childcategory.products', $child->id) }}">
+                                                                    <a href="{{ route('childcategory.products', $child->slug) }}">
                                                                         @if($child->childimage)
                                                                             @php $childImg = str_replace('uploads/', '', $child->childimage); @endphp
                                                                             <img src="{{ config('app.admin_asset_url') }}/{{ $childImg }}"
@@ -1218,7 +1216,7 @@
                             alt="" /></a> -->
                     <a href="https://www.youtube.com/@chennaiangadi" target="_blank"><img
                             src="{{ asset('assets/imgs/theme/icons/icon-youtube-white.svg') }} " alt="" /></a>
-                    <a href="https://wa.me/9094676665?text=Reply%20Refer%20chennaiangadi.com" target="_blank"><img
+                    <a href="https://wa.me/919094676665" target="_blank"><img
                             src="{{ asset('assets/imgs/theme/icons/icon-whatsapp-white.svg') }} " alt="WhatsApp" style="width: 22px; max-width: 22px; vertical-align: middle; margin-left:2px; transform: scale(1.1);" /></a>
                 </div>
                 <!-- <div class="site-copyright"><a href="{{ url('/') }}">Copyright {{ now()->year }} Chennai Angadi. All
@@ -1542,19 +1540,15 @@
                 document.getElementById('quickview-price').textContent = '₹' + Math.round(sellPrice);
 
                 const oldPriceEl = document.getElementById('quickview-old-price');
-                const discountEl = document.getElementById('quickview-discount');
                 const badge = document.getElementById('quickview-badge');
 
                 if (mrpPrice && mrpPrice > sellPrice) {
                     oldPriceEl.textContent = '₹' + Math.round(mrpPrice);
                     oldPriceEl.style.display = 'inline';
-                    discountEl.textContent = discountPercent + '% Off';
-                    discountEl.style.display = 'inline';
                     badge.textContent = discountPercent + '% Off';
                     badge.style.display = 'inline-block';
                 } else {
                     oldPriceEl.style.display = 'none';
-                    discountEl.style.display = 'none';
                     badge.style.display = 'none';
                 }
             }
@@ -1576,7 +1570,7 @@
                     addBtn.style.color = '#fff';
                     addBtn.disabled = true;
                 } else {
-                    stockEl.textContent = 'Available';
+                    stockEl.textContent = stock + ' Available';
                     stockEl.style.color = '';
                     stockEl.classList.add('text-brand');
                     addBtn.innerHTML = '<i class="fi-rs-shopping-cart"></i>Add to cart';
@@ -2520,6 +2514,49 @@
             return false;
         }
     </script>
+
+
+    <!-- WhatsApp Floating Icon -->
+    <a href="https://wa.me/919094676665" class="whatsapp-floating-icon" target="_blank" rel="noopener noreferrer">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    <style>
+        .whatsapp-floating-icon {
+            position: fixed;
+            bottom: 80px; /* Positioned slightly higher to not overlap with standard scroll-to-top */
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 30px;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .whatsapp-floating-icon:hover {
+            background-color: #128c7e;
+            color: white;
+            transform: scale(1.1);
+        }
+        
+        @media (max-width: 768px) {
+            .whatsapp-floating-icon {
+                bottom: 20px;
+                right: 20px;
+                width: 45px;
+                height: 45px;
+                font-size: 26px;
+            }
+        }
+    </style>
 
     @stack('scripts')
 

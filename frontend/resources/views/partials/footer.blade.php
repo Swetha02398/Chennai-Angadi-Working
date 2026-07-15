@@ -133,7 +133,7 @@
                     <ul class="footer-list mb-sm-5 mb-md-0">
                         @isset($popularCategories)
                             @foreach($popularCategories as $popCat)
-                                <li><a href="{{ route('category.products', $popCat->id) }}">{{ $popCat->name }}</a></li>
+                                <li><a href="{{ route('category.products', $popCat->slug) }}">{{ $popCat->name }}</a></li>
                             @endforeach
                         @endisset
                     </ul>
@@ -193,7 +193,7 @@
                             alt="" /></a> -->
                     <a href="https://www.youtube.com/@chennaiangadi" target="_blank"><img
                             src="{{ asset('assets/imgs/theme/icons/icon-youtube-white.svg') }} " alt="" /></a>
-                    <a href="https://wa.me/9094676665?text=Reply%20Refer%20chennaiangadi.com" target="_blank"><img
+                    <a href="https://wa.me/919094676665" target="_blank"><img
                             src="{{ asset('assets/imgs/theme/icons/icon-whatsapp-white.svg') }} " alt="WhatsApp" style="width: 22px; max-width: 22px; vertical-align: middle; margin-left:2px; transform: scale(1.1);" /></a>
                 </div>
 

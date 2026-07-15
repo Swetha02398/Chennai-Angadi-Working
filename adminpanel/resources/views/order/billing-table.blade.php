@@ -10,7 +10,7 @@
         <div class="content-header d-flex justify-content-between align-items-center mb-3">
             <h2>Billing Orders</h2>
             @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('billing-create'))
-            <a href="{{ route('admin.billing.create') }}" class="btn btn-primary">
+            <a href="{{ route('admin.billing.create') }}?new=1" class="btn btn-primary">
                 New Billing
             </a>
             @endif
@@ -142,7 +142,15 @@
 
                                     <td><strong>₹{{ number_format($order->final_amount, 2) }}</strong></td>
 
-                                    <td>{{ \Illuminate\Support\Str::headline($order->payment_method) }}</td>
+                                    <td>
+                                        @if(!empty($order->payment_provider) && in_array(strtolower($order->payment_provider), ['gpay', 'google pay', 'google_pay']))
+                                            GPay
+                                        @elseif(!empty($order->payment_provider) && strtolower($order->payment_provider) !== 'cash')
+                                            {{ \Illuminate\Support\Str::headline($order->payment_provider) }}
+                                        @else
+                                            {{ \Illuminate\Support\Str::headline($order->payment_method) }}
+                                        @endif
+                                    </td>
 
                                     <td>
                                         @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))

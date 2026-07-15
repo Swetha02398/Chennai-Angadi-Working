@@ -527,7 +527,7 @@
                     <a href="<?php echo e(route('index')); ?>" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                     <?php if($product->category): ?>
                         <span></span>
-                        <a href="<?php echo e(route('category.products', $product->category->id)); ?>"><?php echo e($product->category->name); ?></a>
+                        <a href="<?php echo e(route('category.products', $product->category->slug)); ?>"><?php echo e($product->category->name); ?></a>
                     <?php endif; ?>
                     <span></span> <?php echo e($product->productname); ?>
 
@@ -578,8 +578,13 @@
                                                 }
                                             ?>
                                             <!-- MAIN PRODUCT IMAGE - NO SLICK -->
-                                            <div class="custom-main-image-container d-flex justify-content-center">
-                                                <figure class="border-radius-10">
+                                            <div class="custom-main-image-container d-flex justify-content-center <?php echo e($displayStock <= 0 ? 'product-out-of-stock' : ''); ?>">
+                                                <figure class="border-radius-10" style="position: relative;">
+                                                    <?php if($displayStock <= 0): ?>
+                                                        <div class="product-badges product-badges-position product-badges-mrg" style="position: absolute; top: 10px; left: 10px; z-index: 9;">
+                                                            <span class="hot" style="background-color: #dc3545; color: white; padding: 5px 10px; border-radius: 5px; font-size: 12px; font-weight: bold;">OUT OF STOCK</span>
+                                                        </div>
+                                                    <?php endif; ?>
                                                     <?php if($primaryImage): ?>
                                                         <img id="main-product-image"
                                                             src="<?php echo e(env('ADMIN_ASSET_URL')); ?>/<?php echo e($primaryImage); ?>"
@@ -606,7 +611,6 @@
                                                             <i class="fi-rs-eye"></i>
                                                         </a>
                                                     </div>
-                                                    
                                                 </figure>
                                             </div>
 
@@ -909,7 +913,7 @@
                                                         <div class="product-cart-wrap hover-up mb-30 <?php echo e($relatedStock <= 0 ? 'product-out-of-stock' : ''); ?>">
                                                             <div class="product-img-action-wrap">
                                                                 <div class="product-img product-img-zoom">
-                                                                    <a href="<?php echo e(route('product.details', $related->id)); ?>" class="product-card-link">
+                                                                    <a href="<?php echo e(route('product.details', $related->slug)); ?>" class="product-card-link">
                                                                         <?php if($relatedPrimaryImage): ?>
                                                                             <img class="default-img"
                                                                                 src="<?php echo e(env('ADMIN_ASSET_URL')); ?>/<?php echo e($relatedPrimaryImage); ?>"
@@ -952,7 +956,7 @@
                                                             </div>
                                                             <div class="product-content-wrap">
                                                                 <h2><a
-                                                                        href="<?php echo e(route('product.details', $related->id)); ?>" class="product-card-link"><?php echo e($related->productname); ?></a>
+                                                                        href="<?php echo e(route('product.details', $related->slug)); ?>" class="product-card-link"><?php echo e($related->productname); ?></a>
                                                                 </h2>
                                                                 <!-- <?php
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             $relatedAvgRating = $related->reviews_avg_rating ? round($related->reviews_avg_rating, 1) : 0;
@@ -1139,7 +1143,7 @@
                                                 <?php
                                                     $sidebarCatImage = str_replace('uploads/', '', $cat->image);
                                                 ?>
-                                                <a href="<?php echo e(route('category.products', $cat->id)); ?>">
+                                                <a href="<?php echo e(route('category.products', $cat->slug)); ?>">
                                                     <img src="<?php echo e(env('ADMIN_ASSET_URL')); ?>/<?php echo e($sidebarCatImage); ?>"
                                                         alt="<?php echo e($cat->name); ?>"
                                                         style="width: 30px; height: 30px; object-fit: cover;">

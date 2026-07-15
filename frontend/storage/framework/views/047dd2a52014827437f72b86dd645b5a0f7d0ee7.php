@@ -197,7 +197,7 @@
                             <select class="select-active" name="category" id="search-category">
                                 <option value="">All Categories</option>
                                 <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($cat->id); ?>" <?php echo e(request('category') == $cat->id ? 'selected' : ''); ?>>
+                                    <option value="<?php echo e($cat->id); ?>" data-slug="<?php echo e($cat->slug); ?>" <?php echo e(request('category') == $cat->id ? 'selected' : ''); ?>>
                                         <?php echo e($cat->name); ?>
 
                                     </option>
@@ -306,7 +306,7 @@
                                 <ul class="catfly-left">
                                     <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <li class="catfly-item" data-cat-id="<?php echo e($cat->id); ?>">
-                                            <a href="<?php echo e(route('category.products', $cat->id)); ?>">
+                                            <a href="<?php echo e(route('category.products', $cat->slug)); ?>">
                                                 <?php
                                                     $mainImage = str_replace('uploads/', '', $cat->image);
                                                 ?>
@@ -328,7 +328,7 @@
                                                 <ul class="catfly-sub-list">
                                                     <?php $__currentLoopData = $cat->subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                         <li class="catfly-sub-item">
-                                                            <a href="<?php echo e(route('subcategory.products', $sub->id)); ?>">
+                                                            <a href="<?php echo e(route('subcategory.products', $sub->slug)); ?>">
                                                                 <?php if($sub->subimage): ?>
                                                                     <?php
                                                                         $subImage = str_replace('uploads/', '', $sub->subimage);
@@ -345,7 +345,7 @@
                                                                 <ul class="catfly-child">
                                                                     <?php $__currentLoopData = $sub->childCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                         <li>
-                                                                            <a href="<?php echo e(route('subcategory.products', $sub->id)); ?>">
+                                                                            <a href="<?php echo e(route('subcategory.products', $sub->slug)); ?>">
                                                                                 <?php if($child->childimage): ?>
                                                                                     <?php
                                                                                         $childImage = str_replace('uploads/', '', $child->childimage);
@@ -394,7 +394,7 @@
                                     <ul class="mega-menu horizontal-scroll">
                                         <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                             <li class="sub-mega-menu block-item">
-                                                <a class="menu-title" href="<?php echo e(route('category.products', $cat->id)); ?>">
+                                                <a class="menu-title" href="<?php echo e(route('category.products', $cat->slug)); ?>">
                                                     <?php echo e($cat->name); ?>
 
                                                 </a>
@@ -402,7 +402,7 @@
                                                 <ul class="mega-scroll">
                                                     <?php $__currentLoopData = $cat->subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                         <li><a
-                                                                href="<?php echo e(route('subcategory.products', $sub->id)); ?>"><?php echo e($sub->name); ?></a>
+                                                                href="<?php echo e(route('subcategory.products', $sub->slug)); ?>"><?php echo e($sub->name); ?></a>
                                                         </li>
                                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                                 </ul>
@@ -1158,9 +1158,10 @@
         if (categorySelect) {
             // Native change event (backup)
             categorySelect.addEventListener('change', function () {
-                const categoryId = this.value;
-                if (categoryId && categoryId !== '') {
-                    window.location.href = '<?php echo e(url("/category")); ?>/' + categoryId;
+                const selectedOption = this.options[this.selectedIndex];
+                const slug = selectedOption.getAttribute('data-slug');
+                if (slug && slug !== '') {
+                    window.location.href = '<?php echo e(url("/category")); ?>/' + slug;
                 }
             });
         }
@@ -1177,15 +1178,21 @@
                         $catSelect.on('select2:select', function (e) {
                             var categoryId = e.params.data.id;
                             if (categoryId && categoryId !== '') {
-                                window.location.href = '<?php echo e(url("/category")); ?>/' + categoryId;
+                                // Find the option with this ID to get its slug
+                                var $selectedOption = $catSelect.find('option[value="' + categoryId + '"]');
+                                var slug = $selectedOption.attr('data-slug');
+                                if (slug) {
+                                    window.location.href = '<?php echo e(url("/category")); ?>/' + slug;
+                                }
                             }
                         });
 
                         // Also bind to regular change event (via jQuery)
                         $catSelect.on('change', function () {
-                            var categoryId = $(this).val();
-                            if (categoryId && categoryId !== '') {
-                                window.location.href = '<?php echo e(url("/category")); ?>/' + categoryId;
+                            var $selectedOption = $(this).find('option:selected');
+                            var slug = $selectedOption.attr('data-slug');
+                            if (slug && slug !== '') {
+                                window.location.href = '<?php echo e(url("/category")); ?>/' + slug;
                             }
                         });
                     }

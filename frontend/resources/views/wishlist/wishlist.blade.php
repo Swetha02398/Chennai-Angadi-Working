@@ -112,13 +112,13 @@
                                                         class="btn btn-sm wishlist-add-to-cart-btn"
                                                         data-product-id="{{ $p->id }}"
                                                         style="width:110px;height:38px;border-radius:5px;font-size:12px;font-weight:600;padding:0;white-space:nowrap;">
-                                                        <i class="fi-rs-shopping-cart mr-3"></i>Add to cart
+                                                        <i class="fi-rs-shopping-cart mr-5"></i> Add to cart
                                                     </button>
                                                     <button type="button"
                                                         class="btn btn-sm wishlist-remove-btn"
                                                         data-product-id="{{ $p->id }}"
                                                         style="width:110px;height:38px;border-radius:5px;font-size:12px;font-weight:600;padding:0;background:#dc3545;color:#fff;border-color:#dc3545;white-space:nowrap;">
-                                                        <i class="fi-rs-trash mr-3"></i>Remove
+                                                        <i class="fi-rs-trash mr-5"></i> Remove
                                                     </button>
                                                 </div>
                                             </td>

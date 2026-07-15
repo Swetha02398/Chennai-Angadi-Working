@@ -5025,3 +5025,6 @@ html.dark .logo-mini {
   justify-content: center;
   font-size: 12px !important;
 }
+/* Global UI Standardization for Admin Panel Round Elements */
+.badge, .rounded-pill, .btn { border-radius: 4px !important; }
+

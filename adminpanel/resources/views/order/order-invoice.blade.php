@@ -6,7 +6,7 @@
     <title>Invoice - {{ $order->order_number }}</title>
     <style>
         * {
-            margin: 0;
+            margin: 8mm;
             padding: 0;
             box-sizing: border-box;
         }
@@ -307,7 +307,7 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 0;
+                margin: 8mm;
             }
 
             html,
@@ -326,7 +326,7 @@
 
             .invoice-container {
                 margin: 0 !important;
-                padding: 10mm !important;
+                padding: 0mm 10mm 10mm 10mm !important;
                 width: 100% !important;
                 max-width: none !important;
                 border: none !important;
@@ -417,7 +417,7 @@
                 <img src="{{ asset('assets/imgs/theme/ChennaiAngadiLogo.png') }}" alt="Chennai Angadi">
             </div>
             <div class="title-section">
-                <span class="title">EstimateInvoice</span>
+                <span class="title">Estimate Invoice</span>
             </div>
             <div class="company-details">
                 <div class="name">Chennai Angadi</div>
@@ -455,7 +455,16 @@
                     @endphp
                     <tr>
                         <td class="sno-col">{{ $index + 1 }}</td>
-                        <td class="product-name">{{ $item->product_productname ?? $item->product->productname ?? 'N/A' }} @if($item->variant_name) - {{ $item->variant_name }} @endif</td>
+                        <td class="product-name">
+                            {{ $item->product_productname ?? $item->product->productname ?? 'N/A' }}
+                            @php
+                                $displayVariant = $item->variant_name;
+                                if ($item->variant && $item->variant->quantity) {
+                                    $displayVariant = $item->variant->quantity->name ?? $item->variant->quantity->label ?? $item->variant_name;
+                                }
+                            @endphp
+                            @if($displayVariant) - {{ $displayVariant }} @endif
+                        </td>
                         <td class="price-col">₹ {{ number_format($item->price, 0) }}</td>
                         <td class="hide-on-print" style="text-align: center;">{{ $productGst }}%</td>
                         <td class="hide-on-print" style="text-align: center;">{{ $productSgst }}%</td>
@@ -515,8 +524,7 @@
 
         <!-- Footer -->
         <div class="footer">
-            <p>Thank you for shopping with us and we hope to serve you again in the future</p>
-            <p>Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
+            <p>Thank you for shopping with us and we hope to serve you again in the future. Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
         </div>
     </div>
 </body>

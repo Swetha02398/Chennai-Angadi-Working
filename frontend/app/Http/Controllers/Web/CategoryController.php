@@ -36,9 +36,9 @@ class CategoryController extends Controller
         return view('category.category-show', compact('category', 'products'));
     }
     // category products
-    public function products($id)
+    public function products($slug)
     {
-        $category = MainCategory::with('subcategories')->findOrFail($id);
+        $category = MainCategory::with('subcategories')->where('slug', $slug)->firstOrFail();
 
         $categories = MainCategory::withCount('products')
             ->orderByRaw('CASE WHEN orderby IS NULL THEN 1 ELSE 0 END, orderby ASC, id ASC')
@@ -172,9 +172,9 @@ class CategoryController extends Controller
     }
 
     // category subcategory products
-    public function subcategoryProducts($id)
+    public function subcategoryProducts($slug)
     {
-        $subcategory = SubCategory::findOrFail($id);
+        $subcategory = SubCategory::where('slug', $slug)->firstOrFail();
         $category = $subcategory->mainCategory;
 
         $categories = MainCategory::withCount('products')
@@ -187,7 +187,7 @@ class CategoryController extends Controller
             'reviews' => function ($q) {
                 $q->where('approved', 1);
             }
-        ], 'rating')->where('subcategory_id', $id);
+        ], 'rating')->where('subcategory_id', $subcategory->id);
 
 
         switch (request('sort')) {
@@ -245,9 +245,9 @@ class CategoryController extends Controller
 
 
     // child category products
-    public function childcategoryProducts($id)
+    public function childcategoryProducts($slug)
     {
-        $childcategory = ChildCategory::findOrFail($id);
+        $childcategory = ChildCategory::where('slug', $slug)->firstOrFail();
         $subcategory = $childcategory->subCategory;
         $category = $subcategory->mainCategory;
 
@@ -261,7 +261,7 @@ class CategoryController extends Controller
             'reviews' => function ($q) {
                 $q->where('approved', 1);
             }
-        ], 'rating')->where('childcategory_id', $id);
+        ], 'rating')->where('childcategory_id', $childcategory->id);
 
         switch (request('sort')) {
             case 'low_high':

@@ -263,7 +263,7 @@ class ProductController extends Controller
 
             if ($exactMatch) {
                 // Redirect directly to product details page
-                return redirect()->route('product.details', $exactMatch->id);
+                return redirect()->route('product.details', $exactMatch->slug);
             }
         }
 
@@ -305,7 +305,7 @@ class ProductController extends Controller
         // If only one product matches, redirect directly to product details
         if ($totalCount === 1 && !empty($searchTerm)) {
             $singleProduct = $productsQuery->first();
-            return redirect()->route('product.details', $singleProduct->id);
+            return redirect()->route('product.details', $singleProduct->slug);
         }
 
         // Get paginated results — out-of-stock last
@@ -362,7 +362,7 @@ class ProductController extends Controller
                 'name' => $product->productname,
                 'category' => $product->category->name ?? '',
                 'image' => $adminAssetUrl . '/products/' . $imageName,
-                'url' => route('product.details', $product->id),
+                'url' => route('product.details', $product->slug),
             ];
         });
 

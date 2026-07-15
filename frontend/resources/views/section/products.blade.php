@@ -221,7 +221,7 @@
                             }
                         }
                     @endphp
-                    <a href="{{ route('product.details', $product->id) }}" class="product-card-link">
+                    <a href="{{ route('product.details', $product->slug) }}" class="product-card-link">
                         <div class="img-skeleton-wrap">
                             <div class="skeleton-shimmer"></div>
                             @if($primaryImage)
@@ -257,7 +257,7 @@
                 </div>
                 <div class="product-content-wrap">
                     <h2 style="text-align: center;">
-                        <a href="{{ $firstVariantStock <= 0 ? 'javascript:void(0)' : route('product.details', $product->id) }}" class="product-card-link">
+                        <a href="{{ $firstVariantStock <= 0 ? 'javascript:void(0)' : route('product.details', $product->slug) }}" class="product-card-link">
                             {{ $product->productname }}
                         </a>
                     </h2>
@@ -374,10 +374,9 @@
         </div>
     @endforeach
 
-    @if($products instanceof \Illuminate\Pagination\LengthAwarePaginator && $products->hasMorePages())
-        <div id="infinite-scroll-sentinel"
-             data-next-page="{{ $products->nextPageUrl() }}"
-             style="width:100%; height:1px;">
+    @if($products instanceof \Illuminate\Pagination\LengthAwarePaginator && $products->hasPages())
+        <div class="pagination-area mt-30 mb-50 col-12 ajax-pagination-links d-flex justify-content-center">
+            {{ $products->appends(request()->query())->links('vendor.pagination.custom') }}
         </div>
     @endif
 @else

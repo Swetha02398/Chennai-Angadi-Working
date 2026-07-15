@@ -30,7 +30,7 @@
                                 <div class="product-cart-wrap offer-product-card-{{ $product->id }} {{ $firstVariantStock <= 0 ? 'product-out-of-stock' : '' }}">
                                     <div class="product-img-action-wrap">
                                             <div class="product-img product-img-zoom">
-                                                <a href="{{ route('product.details', $product->id) }}" class="product-card-link">
+                                                <a href="{{ route('product.details', $product->slug) }}" class="product-card-link">
                                                     @php
                                                         // productimage is already cast as array in the Product model
                                                         $images = $product->productimage;
@@ -77,7 +77,7 @@
                                     </div>
                                     <div class="product-content-wrap">
                                         <h2 style="text-align: center;"><a
-                                                href="{{ route('product.details', $product->id) }}" class="product-card-link">{{ $product->productname }}</a>
+                                                href="{{ route('product.details', $product->slug) }}" class="product-card-link">{{ $product->productname }}</a>
                                         </h2>
 
                                         <div class="product-card-bottom" style="flex-direction: column; align-items: stretch;">

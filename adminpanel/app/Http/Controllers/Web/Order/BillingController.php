@@ -37,6 +37,8 @@ class BillingController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('id', 'LIKE', "%{$search}%")
                     ->orWhere('order_number', 'LIKE', "%{$search}%")
+                    ->orWhere('guest_details->phone', 'LIKE', "%{$search}%")
+                    ->orWhere('billing_address->phone', 'LIKE', "%{$search}%")
                     ->orWhereHas('customer', function ($cq) use ($search) {
                         $cq->where('username', 'LIKE', "%{$search}%")
                             ->orWhere('email', 'LIKE', "%{$search}%")
@@ -118,6 +120,11 @@ class BillingController extends Controller
         $state = $request->input('state');
         $orderTotal = $request->input('order_total', 0);
         $totalWeight = $request->input('total_weight', 0);
+        $items = $request->input('items', []);
+
+        if (empty($totalWeight) && !empty($items)) {
+            $totalWeight = $this->calculateTotalWeight($items);
+        }
 
         if (!$state) {
             return response()->json([
@@ -377,6 +384,31 @@ class BillingController extends Controller
             $order = null;
             if ($orderId) {
                 $order = Order::find($orderId);
+                
+                // Prevent race conditions where a completed order gets overwritten
+                if ($order && $order->payment_status === 'paid') {
+                    $order = null;
+                } elseif ($order) {
+                    // Prevent draft overwriting if the customer identity has fundamentally changed
+                    $isDifferentCustomer = false;
+                    if ($order->customer_type !== $request->customer_type) {
+                        $isDifferentCustomer = true;
+                    } else if ($order->customer_type === 'registered') {
+                        if ($order->customer_id != $customerData['customer_id']) {
+                            $isDifferentCustomer = true;
+                        }
+                    } else if ($order->customer_type === 'guest') {
+                        $oldPhone = $order->guest_details['phone'] ?? null;
+                        $newPhone = $customerData['guest_details']['phone'] ?? null;
+                        if (!empty($oldPhone) && !empty($newPhone) && $oldPhone !== $newPhone) {
+                            $isDifferentCustomer = true;
+                        }
+                    }
+
+                    if ($isDifferentCustomer) {
+                        $order = null;
+                    }
+                }
             }
 
             if ($order) {
@@ -539,6 +571,31 @@ class BillingController extends Controller
             $order = null;
             if ($orderId) {
                 $order = Order::find($orderId);
+                
+                // Prevent race conditions where a completed order gets overwritten
+                if ($order && $order->payment_status === 'paid') {
+                    $order = null;
+                } elseif ($order) {
+                    // Prevent draft overwriting if the customer identity has fundamentally changed
+                    $isDifferentCustomer = false;
+                    if ($order->customer_type !== $request->customer_type) {
+                        $isDifferentCustomer = true;
+                    } else if ($order->customer_type === 'registered') {
+                        if ($order->customer_id != $customerData['customer_id']) {
+                            $isDifferentCustomer = true;
+                        }
+                    } else if ($order->customer_type === 'guest') {
+                        $oldPhone = $order->guest_details['phone'] ?? null;
+                        $newPhone = $customerData['guest_details']['phone'] ?? null;
+                        if (!empty($oldPhone) && !empty($newPhone) && $oldPhone !== $newPhone) {
+                            $isDifferentCustomer = true;
+                        }
+                    }
+
+                    if ($isDifferentCustomer) {
+                        $order = null;
+                    }
+                }
             }
 
             if ($order) {
@@ -921,20 +978,20 @@ class BillingController extends Controller
      */
     private function generateOrderNumber()
     {
-        // Generate sequential order number (A + digits starting from 6001)
-        $latestOrder = Order::where('order_number', 'LIKE', 'A%')
-            ->whereRaw('LENGTH(order_number) >= 5')
+        // Generate sequential order number (CA + digits starting from 6001)
+        $latestOrder = Order::where('order_number', 'LIKE', 'CA%')
+            ->whereRaw('LENGTH(order_number) >= 6')
             ->orderBy('id', 'desc')
             ->first();
 
         $nextId = 6001;
         
         if ($latestOrder) {
-            $lastNumber = (int) substr($latestOrder->order_number, 1);
+            $lastNumber = (int) substr($latestOrder->order_number, 2);
             $nextId = max(6001, $lastNumber + 1);
         }
 
-        return 'A' . $nextId;
+        return 'CA' . $nextId;
     }
 
     /**
@@ -1018,5 +1075,70 @@ class BillingController extends Controller
                 'error' => $e->getMessage()
             ]);
         }
+    }
+    private function parseWeight($weightString)
+    {
+        if (empty($weightString)) {
+            return 0;
+        }
+
+        $weightString = strtolower(trim($weightString));
+
+        if (preg_match('/(\d+(?:\.\d+)?)\s*kg/i', $weightString, $matches)) {
+            return floatval($matches[1]) * 1000;
+        }
+
+        if (preg_match('/(\d+(?:\.\d+)?)\s*g/i', $weightString, $matches)) {
+            return floatval($matches[1]);
+        }
+
+        return floatval(preg_replace('/[^0-9.]/', '', $weightString));
+    }
+
+    private function calculateTotalWeight($cartItems)
+    {
+        $totalWeight = 0;
+
+        foreach ($cartItems as $item) {
+            $weight = 0;
+
+            if (!empty($item['variant_name'])) {
+                $weight = $this->parseWeight($item['variant_name']);
+                if ($weight == 0) {
+                    $quantityDb = \App\Models\Quantity::where('name', $item['variant_name'])->first();
+                    if ($quantityDb && !empty($quantityDb->label)) {
+                        $weight = $this->parseWeight($quantityDb->label);
+                    }
+                }
+            }
+
+            if ($weight == 0 && !empty($item['variant_id'])) {
+                $variant = \App\Models\ProductVariant::with('quantity')->find($item['variant_id']);
+                if ($variant && $variant->quantity) {
+                    $valToParse = !empty($variant->quantity->label) ? $variant->quantity->label : $variant->quantity->name;
+                    $weight = $this->parseWeight($valToParse ?? '');
+                }
+            }
+
+            if ($weight == 0 && !empty($item['product_id'])) {
+                $product = \App\Models\Product::with('variants.quantity')->find($item['product_id']);
+                if ($product && $product->variants->count() > 0) {
+                    $defaultVariant = $product->variants->first();
+                    if ($defaultVariant && $defaultVariant->quantity) {
+                        $valToParse = !empty($defaultVariant->quantity->label) ? $defaultVariant->quantity->label : $defaultVariant->quantity->name;
+                        $weight = $this->parseWeight($valToParse ?? '');
+                    }
+                }
+            }
+
+            if ($weight == 0) {
+                $weight = 250;
+            }
+
+            $quantity = $item['qty'] ?? 1;
+            $totalWeight += $weight * $quantity;
+        }
+
+        return $totalWeight;
     }
 }
