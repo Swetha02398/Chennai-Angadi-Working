@@ -523,8 +523,8 @@
                         style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group" style="display:none;">
-                        <input type="hidden" id="guestName" value="Guest">
+                    <div class="form-group">
+                        <input type="text" id="guestName" placeholder="Name *" required>
                     </div>
                     <div class="form-group">
                         <input type="text" id="guestPhone" placeholder="Phone Number *" required>
@@ -544,8 +544,8 @@
                     <div id="guestShippingFields"
                         style="display:none;margin-top:15px;padding:15px;background:#f9f9f9;border-radius:4px">
                         <h6 style="margin-bottom:12px;color:#333">📦 Shipping Address</h6>
-                        <div class="form-group" style="display:none;">
-                            <input type="hidden" id="guestShipName" value="Guest">
+                        <div class="form-group">
+                            <input type="text" id="guestShipName" placeholder="Shipping Name *">
                         </div>
                         <div class="form-group">
                             <input type="text" id="guestShipPhone" placeholder="Shipping Phone *">
@@ -1352,8 +1352,8 @@
                     const email = ''; // No longer collecting email
                     const address = document.getElementById('guestAddress').value;
 
-                    if (!phone) {
-                        alert('Phone number is required for guest checkout');
+                    if (!name || !phone) {
+                        alert('Name and Phone number are required for guest checkout');
                         return;
                     }
 

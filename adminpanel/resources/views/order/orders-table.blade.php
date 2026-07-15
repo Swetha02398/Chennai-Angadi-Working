@@ -10,6 +10,16 @@
         .modal-backdrop {
             z-index: 9998 !important;
         }
+
+        /* Prevent table columns from squishing on smaller screens */
+        #ordersTable th, #ordersTable td {
+            white-space: nowrap;
+        }
+        
+        #ordersTable td:nth-child(4) {
+            white-space: normal;
+            min-width: 280px;
+        }
     </style>
     <section class="content-main">
         <div class="container mt-4">
@@ -68,9 +78,9 @@
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-hover" id="ordersTable">
-                            <thead>
+                            <thead class="table-light">
                                 <tr>
-                                    <th>S.No</th>
+                                    <th>No</th>
                                     <th>Order Id</th>
                                     <th>Order Date</th>
                                     <th>Billing Name/Address</th>
