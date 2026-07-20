@@ -8,7 +8,7 @@
              <h2>Admin Notifications</h2>
         </div>
         <div>
-            <a href="{{ route('notifications.table') }}" class="btn btn-primary mb-3">Back to All Notifications</a>
+            <a href="{{ route('notifications.table') }}" class="btn btn-primary mb-3"><i class="bi bi-arrow-left me-1"></i> Back</a>
         </div>
   </div>
      <!-- Table -->
@@ -27,11 +27,13 @@
                         </select>
                     </div>
                     <div class="col-md-2 col-6">
-                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                        <button type="submit" class="btn btn-primary w-100">
+<i class="bi bi-search me-1"></i> Search</button>
                     </div>
                     @if($search || $status)
                     <div class="col-md-2 col-6">
-                        <a href="{{ route('notifications.admin') }}" class="btn btn-secondary w-100">Clear</a>
+                        <a href="{{ route('notifications.admin') }}" class="btn btn-secondary w-100">
+<i class="bi bi-eraser me-1"></i> Clear</a>
                     </div>
                     @endif
                 </div>
@@ -71,7 +73,7 @@
                                                 $roles = $item->recipients->pluck('role')->unique();
                                             @endphp
                                             @foreach($roles as $role)
-                                                <span class="badge bg-info">{{ ucfirst($role) }}</span>
+                                                <span class="badge bg-info"><i class="bi bi-people me-1"></i> {{ ucfirst($role) }}</span>
                                             @endforeach
                                         </td>
                                         <td>

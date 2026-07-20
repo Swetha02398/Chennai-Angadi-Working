@@ -80,15 +80,19 @@
     }).slick({
         slidesToShow: 1,
         slidesToScroll: 1,
-        fade: true,
+        fade: false,
         loop: true,
         dots: true,
         arrows: true,
         accessibility: false,
-        prevArrow: '<span class="slider-btn slider-prev"><i class="fi-rs-angle-left"></i></span>',
-        nextArrow: '<span class="slider-btn slider-next"><i class="fi-rs-angle-right"></i></span>',
-        appendArrows: ".hero-slider-1-arrow",
-        autoplay: true
+        prevArrow: '<span class="slider-btn slider-prev slider-center-arrow"><i class="fi-rs-angle-left"></i></span>',
+        nextArrow: '<span class="slider-btn slider-next slider-center-arrow"><i class="fi-rs-angle-right"></i></span>',
+        autoplay: true,
+        autoplaySpeed: 3000,
+        rtl: false, /* Normal standard visual right-to-left sliding */
+        customPaging: function (slider, i) {
+            return '<div class="number-dot">' + (i + 1) + '</div>';
+        }
     });
 
     /*Carausel 8 columns*/

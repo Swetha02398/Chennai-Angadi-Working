@@ -15,6 +15,7 @@
          <!-- Template CSS -->
         <script src="{{ asset('assets/js/vendors/color-modes.js') }}"></script>
         <link href="{{ asset('assets/css/main.css?v=6.0') }}" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     </head>
 
     <body>
