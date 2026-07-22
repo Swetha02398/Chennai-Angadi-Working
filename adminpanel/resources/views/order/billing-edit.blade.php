@@ -507,7 +507,7 @@
                     {{-- Action Buttons --}}
                     <div class="actions">
                         <button class="btn-cancel" onclick="clearCart()"><i class="bi bi-x-circle me-1"></i> Cancel</button>
-                        <button class="btn-checkout" onclick="checkout()">Checkout</button>
+                        <button class="btn-checkout" onclick="checkout()"><i class="bi bi-save me-1"></i> Update</button>
                     </div>
                 </div>
             </div>
@@ -522,16 +522,13 @@
                     <button onclick="closeGuestModal()"
                         style="background:none;border:none;font-size:24px;cursor:pointer">&times;</button>
                 </div>
-                    <div class="modal-body pb-0">
-                        <div class="form-group mb-3">
-                            <input type="text" id="guestName" class="form-control" placeholder="Name *" required>
-                            <small class="text-danger error-text d-none" id="err-guestName">Name is required</small>
-                        </div>
-                        <div class="form-group mb-3">
-                            <input type="tel" id="guestPhone" class="form-control" placeholder="Phone Number *" required 
-                                maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
-                            <small class="text-danger error-text d-none" id="err-guestPhone">Phone number must be 10 digits</small>
-                        </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <input type="text" id="guestName" placeholder="Name *" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="guestPhone" placeholder="Phone Number *" required>
+                    </div>
                     <div class="form-group">
                         <textarea id="guestAddress" rows="3" placeholder="Address"></textarea>
                     </div>
@@ -949,7 +946,8 @@
                             guest_details: customerData.details,
                             items: cart,
                             subtotal: subtotal,
-                            final_amount: total
+                            final_amount: total,
+                            is_edit_mode: true
                         })
                     })
                     .then(res => res.json())
@@ -1366,37 +1364,15 @@
 
             function saveGuest() {
                 try {
-                    const nameInput = document.getElementById('guestName');
-                    const phoneInput = document.getElementById('guestPhone');
-                    const errName = document.getElementById('err-guestName');
-                    const errPhone = document.getElementById('err-guestPhone');
-                    
-                    const name = nameInput.value.trim();
-                    const phone = phoneInput.value.trim();
+                    const name = document.getElementById('guestName').value;
+                    const phone = document.getElementById('guestPhone').value;
                     const email = ''; // No longer collecting email
                     const address = document.getElementById('guestAddress').value;
 
-                    let valid = true;
-
-                    // Clean previous errors
-                    nameInput.classList.remove('is-invalid');
-                    errName.classList.add('d-none');
-                    phoneInput.classList.remove('is-invalid');
-                    errPhone.classList.add('d-none');
-
-                    if (!name) {
-                        nameInput.classList.add('is-invalid');
-                        errName.classList.remove('d-none');
-                        valid = false;
+                    if (!name || !phone) {
+                        alert('Name and Phone number are required for guest checkout');
+                        return;
                     }
-
-                    if (!phone || phone.length !== 10) {
-                        phoneInput.classList.add('is-invalid');
-                        errPhone.classList.remove('d-none');
-                        valid = false;
-                    }
-
-                    if (!valid) return;
 
                 if (customerData.type !== 'guest' || (customerData.details && customerData.details.phone !== phone)) {
                     draftOrderId = null; // Important: Clear draft context when guest phone fundamentally changes
@@ -1529,6 +1505,11 @@
                 saveDraft(); // Auto-save draft after shipping address updated
             }
 
+            let appliedCoupon = { code: null, discount: 0 };
+            
+            // Hydrate Cart for Edit Mode
+            let editOrderData = {!! isset($editOrder) ? json_encode($editOrder->toArray()) : 'null' !!};
+            
             // Customer Search
             document.addEventListener('DOMContentLoaded', function () {
                 const searchInput = document.getElementById('customerSearch');
@@ -1548,11 +1529,90 @@
                         });
                     });
                 }
+
+                if (editOrderData) {
+                    draftOrderId = editOrderData.id;
+                    
+                    // WIPE session cart on entering Edit Mode to prevent ghost items from other draft tabs
+                    cart = [];
+                    sessionStorage.removeItem('pos_billing_state');
+                    
+                    // Set Customer Data Safely (Bypassing non-existent DOM elements)
+                    if (editOrderData.customer_type === 'guest') {
+                        document.getElementById('customerType').value = 'guest';
+                        
+                        const guest = editOrderData.guest_details || {};
+                        customerData = {
+                            type: 'guest',
+                            id: null,
+                            details: guest,
+                            ship_same_address: true,
+                            shipping_address: editOrderData.shipping_address
+                        };
+                        
+                        if (document.getElementById('guestName')) document.getElementById('guestName').value = guest.first_name || guest.name || '';
+                        if (document.getElementById('guestPhone')) document.getElementById('guestPhone').value = guest.phone || '';
+                        
+                        handleCustomerType();
+                    } else if (editOrderData.customer_type === 'registered') {
+                        document.getElementById('customerType').value = 'registered';
+                        
+                        const customerName = editOrderData.customer ? editOrderData.customer.username : 'Registered Customer';
+                        customerData = {
+                            type: 'registered',
+                            id: editOrderData.customer_id,
+                            details: {},
+                            ship_same_address: true,
+                            shipping_address: editOrderData.shipping_address
+                        };
+                        
+                        const nameDisplay = document.getElementById('selectedCustomerName');
+                        const displayPanel = document.getElementById('selectedCustomerDisplay');
+                        if (nameDisplay && displayPanel) {
+                            nameDisplay.innerText = customerName;
+                            displayPanel.style.display = 'block';
+                        }
+                    }
+                    
+                    // Map items into cart array
+                    if (editOrderData.items && editOrderData.items.length > 0) {
+                        editOrderData.items.forEach(item => {
+                            let resolvedVariantName = item.variant_name || '';
+                            if (item.variant && item.variant.quantity) {
+                                resolvedVariantName = item.variant.quantity.name || item.variant.quantity.label || resolvedVariantName;
+                            }
+                            
+                            // Initialize variant stock so we don't end up with NaN errors
+                            const vid = item.product_variant_id;
+                            if (vid && !(vid in variantStocks)) {
+                                variantStocks[vid] = item.variant ? item.variant.stock : 1000;
+                            }
+                            
+                            cart.push({
+                                product_id: item.product_id,
+                                variant_id: vid,
+                                product_name: item.product_productname,
+                                variant_name: resolvedVariantName,
+                                price: parseFloat(item.price),
+                                gst: 0, 
+                                sgst: 0,
+                                igst: 0,
+                                qty: parseInt(item.qty),
+                                total: parseFloat(item.total)
+                            });
+                        });
+                        
+                        cart.forEach(item => {
+                            updateStockDisplay(item.variant_id);
+                        });
+                        
+                        renderCart();
+                    }
+                }
             });
 
             // Prevent double submission flag
             let isSubmitting = false;
-            let appliedCoupon = { code: null, discount: 0 };
 
             // Open checkout modal instead of directly creating order
             function checkout() {
@@ -1717,7 +1777,8 @@
                         payment_provider: paymentProvider,
                         tax_data: { enabled: true, total: tax },
                         shipping_data: { enabled: true, amount: shipping },
-                        final_amount: total
+                        final_amount: total,
+                        is_edit_mode: true
                     })
                 })
                     .then(res => res.json())

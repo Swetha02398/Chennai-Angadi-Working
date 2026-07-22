@@ -245,7 +245,7 @@
         }
 
         .summary-row .amount {
-            text-align: right;
+            text-align: center;
             font-weight: normal;
             color: #dc3545;
             font-size: 20px;
@@ -478,42 +478,34 @@
 
         <!-- Summary Section -->
         <div class="summary-section">
-            @if(($order->tax_amount ?? 0) > 0)
+            @if((float)($order->tax_amount ?? 0) > 0)
             <div class="summary-row">
                 <span class="label">GST</span>
                 <span class="amount">₹ {{ number_format($order->tax_amount, 2) }}</span>
             </div>
             @endif
 
+            @if((float)($order->discount_amount ?? 0) > 0)
             <div class="summary-row">
-                <span class="label">Shipping Charges</span>
-                <span class="amount">
-                    @if(($order->shipping_amount ?? 0) == 0)
-                        Free
-                    @else
-                        ₹ {{ number_format($order->shipping_amount, 0) }}
-                    @endif
-                </span>
-            </div>
-
-            @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
-            <div class="summary-row">
-                <span class="label">COD Charges</span>
-                <span class="amount">
-                    @if(($order->cod_charge ?? 0) == 0)
-                        Free
-                    @else
-                        ₹ {{ number_format($order->cod_charge, 0) }}
-                    @endif
-                </span>
+                <span class="label" style="color: #28a745 !important;">Coupon Applied @if($order->coupon_code)({{ $order->coupon_code }})@endif</span>
+                <span class="amount" style="color: #28a745 !important;">- ₹ {{ number_format($order->discount_amount, 2) }}</span>
             </div>
             @endif
 
-            @if(($order->discount_amount ?? 0) > 0)
+            @if((float)($order->shipping_amount ?? 0) > 0)
             <div class="summary-row">
-                <span class="label" style="color: #28a745 !important;">Coupon @if($order->coupon_code)({{ $order->coupon_code }})@endif</span>
-                <span class="amount" style="color: #28a745 !important;">- ₹ {{ number_format($order->discount_amount, 2) }}</span>
+                <span class="label">Shipping Charges</span>
+                <span class="amount">₹ {{ number_format($order->shipping_amount, 0) }}</span>
             </div>
+            @endif
+
+            @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
+            @if((float)($order->cod_charge ?? 0) > 0)
+            <div class="summary-row">
+                <span class="label">COD Charges</span>
+                <span class="amount">₹ {{ number_format($order->cod_charge, 0) }}</span>
+            </div>
+            @endif
             @endif
 
             <div class="summary-row total">

@@ -445,9 +445,9 @@
                                             <td><input type="text" name="specifications[{{ $sIndex }}][value]" class="form-control" value="{{ $spec->spec_value }}"></td>
                                             <td>
                                                 @if($loop->first)
-                                                    <button type="button" class="btn btn-success addSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
+                                                    <button type="button" class="btn btn-success addSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-plus-circle me-1"></i> Add</button>
                                                 @else
-                                                    <button type="button" class="btn btn-danger removeSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>
+                                                    <button type="button" class="btn btn-danger removeSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-dash-circle me-1"></i> Remove</button>
                                                 @endif
                                             </td>
                                         </tr>
@@ -456,7 +456,7 @@
                                     <tr>
                                         <td><input type="text" name="specifications[0][key]" class="form-control" placeholder="e.g. Height"></td>
                                         <td><input type="text" name="specifications[0][value]" class="form-control" placeholder="e.g. 10cm"></td>
-                                        <td><button type="button" class="btn btn-success addSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button></td>
+                                        <td><button type="button" class="btn btn-success addSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-plus-circle me-1"></i> Add</button></td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -513,10 +513,10 @@
                                                     <td>
                                                         @if($index == 0)
                                                             <button type="button"
-                                                                class="btn btn-success btn-sm-custom addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
+                                                                class="btn btn-success btn-sm-custom addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-plus-circle me-1"></i> Add</button>
                                                         @else
                                                             <button type="button"
-                                                                class="btn btn-danger btn-sm-custom removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>
+                                                                class="btn btn-danger btn-sm-custom removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-dash-circle me-1"></i> Remove</button>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -551,10 +551,10 @@
                                                     <td>
                                                         @if($index == 0)
                                                             <button type="button"
-                                                                class="btn btn-success btn-sm-custom addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
+                                                                class="btn btn-success btn-sm-custom addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-plus-circle me-1"></i> Add</button>
                                                         @else
                                                             <button type="button"
-                                                                class="btn btn-danger btn-sm-custom removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>
+                                                                class="btn btn-danger btn-sm-custom removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-dash-circle me-1"></i> Remove</button>
                                                         @endif
                                                     </td>
                                                 </tr>
@@ -605,8 +605,8 @@
                     </div>
 
                     <div class="mt-4">
-                        <button class="btn btn-primary px-4">Update Product</button>
-                        <a href="{{ route('product.table') }}" class="btn btn-secondary px-4">Cancel</a>
+                        <button class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Update</button>
+                        <a href="{{ route('product.table') }}" class="btn btn-secondary px-4"><i class="bi bi-x-circle me-1"></i> Cancel</a>
                     </div>
 
                 </form>
@@ -632,7 +632,7 @@
                     el.value = '';
                 });
 
-                clone.querySelector('.addRow').outerHTML = '<button type="button" class="btn btn-danger btn-sm-custom removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>';
+                clone.querySelector('.addRow').outerHTML = '<button type="button" class="btn btn-danger btn-sm-custom removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-dash-circle me-1"></i> Remove</button>';
 
                 document.querySelector('#variantTable tbody').appendChild(clone);
                 rowIndex++;

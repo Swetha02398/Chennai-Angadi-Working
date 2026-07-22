@@ -34,7 +34,7 @@
             </select>
         </div>
 
-        <button class="btn btn-primary">Update</button>
+        <button class="btn btn-primary"><i class="bi bi-save me-1"></i> Update</button>
     </form>
 </section>
 

@@ -50,7 +50,7 @@
             <div class="col-md-6">
                 <label class="form-label fw-bold">Change Image (Optional)</label>
                 <input type="file" name="image" class="form-control" accept="image/*">
-                <small class="text-muted">Supported formats: JPEG, PNG, JPG, WebP (Max 2MB)</small>
+                <small class="text-muted">Supported formats: JPEG, PNG, JPG, WebP (Max 2MB) | Recommended Size: 1422x1106 px</small>
             </div>
 
             <div class="col-md-6">
@@ -61,8 +61,8 @@
             </div>
 
             <div class="col-md-12 mt-3">
-                <button type="submit" class="btn btn-primary">Update Slider</button>
-                <a href="{{ route('slider.table') }}" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Update</button>
+                <a href="{{ route('slider.table') }}" class="btn btn-secondary"><i class="bi bi-x-circle me-1"></i> Cancel</a>
             </div>
 
         </div>

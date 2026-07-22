@@ -104,7 +104,7 @@
                 <!-- Users Multi-Select -->
     <div class="col-md-6">
     <label class="form-label">Select Products <span class="text-danger"></span></label>
-    <select name="product_ids[]" id="productSelect" class="form-control" multiple required>
+    <select name="product_ids[]" id="productSelect" class="form-control" multiple required size="8" style="min-height: 180px;">
         @php
             // safely convert to array (works for both string & array)
             if (isset($offer)) {
@@ -147,8 +147,8 @@
 
                 <!-- Buttons -->
                 <div class="col-md-12 mt-4">
-                    <button type="submit" class="btn btn-primary">{{ isset($offer) ? 'Update Offer' : 'Save Offer' }}</button>
-                    <a href="{{ route('offer.table') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> {{ isset($offer) ? 'Update Offer' : 'Save Offer' }}</button>
+                    <a href="{{ route('offer.table') }}" class="btn btn-secondary"><i class="bi bi-x-circle me-1"></i> Cancel</a>
                 </div>
             </div>
         </form>

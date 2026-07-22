@@ -36,11 +36,13 @@
                             </select>
                         </div>
                         <div class="col-md-2 col-6">
-                            <button type="submit" class="btn btn-primary w-100">Search</button>
+                            <button type="submit" class="btn btn-primary w-100">
+<i class="bi bi-search me-1"></i> Search</button>
                         </div>
                         @if(($search ?? '') || ($type ?? '') || ($status ?? ''))
                             <div class="col-md-2 col-6">
-                                <a href="{{ route('email-history.table') }}" class="btn btn-secondary w-100">Clear</a>
+                                <a href="{{ route('email-history.table') }}" class="btn btn-secondary w-100">
+<i class="bi bi-eraser me-1"></i> Clear</a>
                             </div>
                         @endif
                     </div>
@@ -88,7 +90,7 @@
                                                 default => 'bg-secondary'
                                             };
                                         @endphp
-                                        <span class="badge {{ $typeClass }} email-type-badge">{{ $email->email_type_label }}</span>
+                                        <span class="badge {{ $typeClass }} email-type-badge"><i class="bi bi-{{ $email->email_type == 'order_confirmation' ? 'bag-check' : ($email->email_type == 'status_update' ? 'arrow-repeat' : 'receipt') }} me-1"></i> {{ $email->email_type_label }}</span>
                                     </td>
                                     <td>
                                         <div>{{ $email->recipient_name ?? '-' }}</div>
@@ -104,12 +106,8 @@
                                     </td>
                                     <td>
                                         <span class="badge {{ $email->status_badge_class }}">
-                                            {{ ucfirst($email->status) }}
+                                            <i class="bi bi-{{ $email->status == 'sent' ? 'check2-all' : 'x-circle' }} me-1"></i> {{ ucfirst($email->status) }}
                                         </span>
-                                        @if($email->status == 'failed' && $email->error_message)
-                                            <i class="bi bi-info-circle text-danger" data-bs-toggle="tooltip"
-                                                title="{{ $email->error_message }}"></i>
-                                        @endif
                                     </td>
                                     <td>
                                         @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('email-history-delete'))
@@ -211,7 +209,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i> Close</button>
                 </div>
             </div>
         </div>

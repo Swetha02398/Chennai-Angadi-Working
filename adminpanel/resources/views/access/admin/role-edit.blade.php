@@ -47,9 +47,7 @@
                     </button>
 
                     <button type="button" class="btn btn-sm btn-info text-black column-toggle-btn btn-action-col d-inline-flex align-items-center justify-content-center " data-column="view"><i class="bi bi-eye me-1"></i> View</button>
-                    <button type="button" class="btn btn-sm btn-info text-black column-toggle-btn" data-column="create">
-                        <i class="bi bi-plus-circle"></i> Create
-                    </button>
+                    <button type="button" class="btn btn-sm btn-info text-black column-toggle-btn" data-column="create"><i class="bi bi-plus-circle me-1"></i> Create</button>
                     <button type="button" class="btn btn-sm btn-info text-black column-toggle-btn" data-column="edit">
                         <i class="bi bi-pencil-square"></i> Edit
                     </button>
@@ -99,8 +97,8 @@
                 </div>
 
                 <div class="mt-4">
-                    <button type="submit" class="btn btn-primary">Update Role</button>
-                    <a href="{{ route('admin.roles.index') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Update</button>
+                    <a href="{{ route('admin.roles.index') }}" class="btn btn-secondary"><i class="bi bi-x-circle me-1"></i> Cancel</a>
                 </div>
             </form>
         </div>

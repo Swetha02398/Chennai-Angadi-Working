@@ -71,7 +71,7 @@
                 @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-edit'))
                 <a href="{{ route('shipping.rules.edit', $rule->id) }}" class="btn btn-primary">Edit </a>
                 @endif
-                <a href="{{ route('shipping.rules.table') }}" class="btn btn-secondary">Back </a>
+                <a href="{{ route('shipping.rules.table') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-circle me-1"></i> Back</a>
             </div>
 
         </div>

@@ -23,8 +23,10 @@
                     </div>
                     <div class="col-md-3">
                         <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary flex-fill">Search</button>
-                            <a href="{{ route('admin.contact.index') }}" class="btn btn-secondary flex-fill">Clear</a>
+                            <button type="submit" class="btn btn-primary flex-fill">
+<i class="bi bi-search me-1"></i> Search</button>
+                            <a href="{{ route('admin.contact.index') }}" class="btn btn-secondary flex-fill">
+<i class="bi bi-eraser me-1"></i> Clear</a>
                         </div>
                     </div>
                 </form>
@@ -59,7 +61,10 @@
                                         $statusLabel = ($enquiry->status === 'unread' || $enquiry->status === 'pending') ? 'Unread' : ucfirst($enquiry->status);
                                     @endphp
                                     <span class="badge {{ $statusClass }}">
-                                        {{ $statusLabel }}
+                                        @php
+                                            $icon = ($enquiry->status === 'unread' || $enquiry->status === 'pending') ? '<i class="bi bi-envelope me-1"></i>' : '<i class="bi bi-envelope-open me-1"></i>';
+                                        @endphp
+                                        {!! $icon !!} {{ $statusLabel }}
                                     </span>
                                 </td>
                                 <td>{{ $enquiry->created_at->format('d-m-Y') }}</td>

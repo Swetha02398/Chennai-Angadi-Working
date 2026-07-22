@@ -74,8 +74,8 @@
 
             <!-- Buttons -->
             <div class="mt-4">
-                <button type="submit" class="btn btn-primary">Update Notification</button>
-                <a href="{{ route('notifications.table') }}" class="btn btn-secondary btn-lg">Cancel</a>
+                <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Update</button>
+                <a href="{{ route('notifications.table') }}" class="btn btn-secondary btn-lg"><i class="bi bi-x-circle me-1"></i> Cancel</a>
             </div>
 
         </div>

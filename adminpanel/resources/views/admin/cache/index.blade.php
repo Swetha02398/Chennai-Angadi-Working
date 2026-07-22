@@ -64,7 +64,7 @@
                             <form action="{{ route('admin.cache.clear') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to clear all cache? This may temporarily slow down the site.')">
-                                    <i class="material-icons md-delete_sweep"></i> Clear Cache Now
+                                    <i class="material-icons md-delete_sweep"></i> Clear
                                 </button>
                             </form>
                         </div>
@@ -74,7 +74,7 @@
                             <form action="{{ route('admin.cache.rebuild') }}" method="POST">
                                 @csrf
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="material-icons md-autorenew"></i> Rebuild Cache
+                                    <i class="material-icons md-autorenew"></i> Reset
                                 </button>
                             </form>
                         </div>
@@ -105,7 +105,7 @@
                             <small class="text-muted">Example: 02:30 for 2:30 AM</small>
                         </div>
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary">Save Settings</button>
+                            <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Save</button>
                         </div>
                     </form>
                 </div>

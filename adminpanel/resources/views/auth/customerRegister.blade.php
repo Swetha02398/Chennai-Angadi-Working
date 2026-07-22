@@ -70,8 +70,8 @@
                                         </div>
 
                                     <br>
-                                       <button class="btn btn-primary" type="submit">Save changes</button>
-                                       <a href="{{ route('customer') }}" class="btn btn-secondary px-4">Back</a>
+                                       <button class="btn btn-primary" type="submit"><i class="bi bi-save me-1"></i> Save</button>
+                                       <a href="{{ route('customer') }}" class="btn btn-secondary px-4"><i class="bi bi-arrow-left-circle me-1"></i> Back</a>
                                     </form>
 
                                     

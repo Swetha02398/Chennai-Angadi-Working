@@ -60,8 +60,8 @@
                 </div>
 
                 <div class="mb-4 ">
-                    <button type="submit" class="btn btn-primary   text-center">Update Profile</button>
-                   <a href="{{ route('index') }}" class="btn btn-secondary text-center"> Back</a>
+                    <button type="submit" class="btn btn-primary   text-center"><i class="bi bi-save me-1"></i> Update</button>
+                   <a href="{{ route('index') }}" class="btn btn-secondary text-center"><i class="bi bi-arrow-left-circle me-1"></i> Back</a>
                 </div>
             </form>
             <script>

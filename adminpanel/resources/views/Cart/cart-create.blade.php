@@ -45,7 +45,7 @@
                 <input type="number" name="products[0][quantity]" class="form-control" min="1" value="1" required>
             </div>
             <div class="col-md-2">
-                <button type="button" class="btn btn-danger remove-product mt-4">Remove</button>
+                <button type="button" class="btn btn-danger remove-product mt-4"><i class="bi bi-dash-circle me-1"></i> Remove</button>
             </div>
         </div>
     </div>

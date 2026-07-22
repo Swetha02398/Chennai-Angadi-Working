@@ -44,7 +44,7 @@
                         <div class="col-md-2">
                             <select id="ordersFilterStatus" class="form-select">
                                 <option value="">All Status</option>
-                                <option value="pending" {{ ($status ?? '') == 'pending' ? 'selected' : '' }}>Pending</option>
+                                <option value="pending" {{ ($status ?? '') == 'pending' ? 'selected' : '' }}>Hold</option>
                                 <option value="processing" {{ ($status ?? '') == 'processing' ? 'selected' : '' }}>Processing</option>
                                 <option value="shipped" {{ ($status ?? '') == 'shipped' ? 'selected' : '' }}>Shipping</option>
                                 <option value="delivered" {{ ($status ?? '') == 'delivered' ? 'selected' : '' }}>Delivered</option>
@@ -62,10 +62,10 @@
                         <div class="col-md-3">
                             <div class="d-flex gap-2">
                                 <button type="button" id="ordersSearchBtn" class="btn btn-primary flex-fill">
-                                    Search
+                                    <i class="bi bi-search me-1"></i> Search
                                 </button>
                                 <button type="button" id="ordersClearFilters" class="btn btn-secondary flex-fill">
-                                    Clear
+                                    <i class="bi bi-eraser me-1"></i> Clear
                                 </button>
                             </div>
                         </div>
@@ -163,9 +163,15 @@
                                                     'admin_panel' => 'bg-secondary text-white',
                                                     default => 'bg-light text-dark'
                                                 };
+                                                $sourceIcon = match ($source) {
+                                                    'web' => '<i class="bi bi-globe me-1"></i>',
+                                                    'app' => '<i class="bi bi-phone me-1"></i>',
+                                                    'admin_panel' => '<i class="bi bi-person-workspace me-1"></i>',
+                                                    default => ''
+                                                };
                                             @endphp
                                             <span class="badge {{ $sourceClass }}">
-                                                {{ ucfirst(str_replace('_', ' ', $source)) }}
+                                                {!! $sourceIcon !!} {{ ucfirst(str_replace('_', ' ', $source)) }}
                                             </span>
                                         </td>
                                         <td><strong>₹{{ number_format($order->final_amount ?? $order->total_amount, 2) }}</strong>
@@ -175,19 +181,22 @@
                                                 if (in_array($order->payment_method, ['cash_on_delivery', 'cod'])) {
                                                     $paymentClass = 'bg-warning text-dark';
                                                     $paymentLabel = 'COD';
+                                                    $paymentIcon = '<i class="bi bi-cash me-1"></i>';
                                                 } elseif ($order->payment_status === 'paid') {
                                                     $paymentClass = 'bg-success text-white';
                                                     $paymentLabel = 'Paid';
+                                                    $paymentIcon = '<i class="bi bi-check-circle me-1"></i>';
                                                 } else {
                                                     $paymentClass = 'bg-danger text-white';
                                                     $paymentLabel = 'Not Paid';
+                                                    $paymentIcon = '<i class="bi bi-x-circle me-1"></i>';
                                                 }
                                             @endphp
                                             <button class="btn btn-sm badge {{ $paymentClass }} payment-status-toggle" type="button" 
                                                 id="paymentStatusBtn{{ $order->id }}" 
                                                 data-order-id="{{ $order->id }}" 
                                                 data-current-status="{{ $paymentLabel }}">
-                                                {{ $paymentLabel }}
+                                                {!! $paymentIcon !!} {{ $paymentLabel }}
                                             </button>
                                         </td>
                                         <td>
@@ -210,13 +219,21 @@
                                                     default => 'bg-info'
                                                 };
                                                 $statusLabel = match ($displayStatus) {
-                                                    'pending' => 'Pending',
-                                                    'shipped' => 'Shipping',
+                                                    'pending' => 'Hold',
+                                                    'shipped' => 'Shipped',
                                                     default => ucfirst($displayStatus)
+                                                };
+                                                $statusIcon = match ($displayStatus) {
+                                                    'pending' => '<i class="bi bi-clock me-1"></i>',
+                                                    'processing' => '<i class="bi bi-arrow-repeat me-1"></i>',
+                                                    'shipped' => '<i class="bi bi-truck me-1"></i>',
+                                                    'delivered' => '<i class="bi bi-box-seam me-1"></i>',
+                                                    'cancelled' => '<i class="bi bi-x-octagon me-1"></i>',
+                                                    default => '<i class="bi bi-arrow-repeat me-1"></i>'
                                                 };
                                             @endphp
                                             <span class="badge {{ $statusClass }}">
-                                                {{ $statusLabel }}
+                                                {!! $statusIcon !!} {{ $statusLabel }}
                                             </span>
                                         </td>
                                         <td class="text-start">
@@ -330,7 +347,7 @@
                         <div class="mb-3">
                             <label for="editStatus" class="form-label"><strong>Status</strong></label>
                             <select class="form-select" id="editStatus" name="status">
-                                <option value="pending">Pending</option>
+                                <option value="pending">Hold</option>
                                 <option value="confirmed">Confirmed</option>
                                 <option value="packed">Packed</option>
                                 <option value="shipped">Shipped</option>
@@ -345,7 +362,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i> Cancel</button>
                         <button type="submit" class="btn btn-primary" id="saveNotesBtn">
                             <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                             Save Notes
@@ -642,7 +659,7 @@
                                     'delivered': 'bg-success',
                                     'cancelled': 'bg-danger'
                                 }[data.status] || 'bg-secondary';
-                                const displayStatusLabel = data.status === 'shipped' ? 'Shipping' : (data.status.charAt(0).toUpperCase() + data.status.slice(1));
+                                const displayStatusLabel = data.status === 'shipped' ? 'Shipped' : (data.status === 'pending' ? 'Hold' : (data.status.charAt(0).toUpperCase() + data.status.slice(1)));
                                 statusCell.innerHTML = `<span class="badge ${statusClass}">${displayStatusLabel}</span>`;
                             }
                         }

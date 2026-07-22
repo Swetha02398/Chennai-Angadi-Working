@@ -75,8 +75,8 @@
             <input type="text" name="category" class="form-control" value="{{ old('category') }}">
         </div>
 
-        <button type="submit" class="btn btn-primary">Save</button>
-        <a href="{{ route('hsncode.table') }}" class="btn btn-secondary">Back</a>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Save</button>
+        <a href="{{ route('hsncode.table') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-circle me-1"></i> Back</a>
     </form>
 </div>
 

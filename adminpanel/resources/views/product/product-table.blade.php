@@ -9,7 +9,8 @@
       </div>
       <div>
         @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-create'))
-        <a href="{{ route('product.create') }}" class="btn btn-primary btn-sm rounded">+ Add Product</a>
+        <a href="{{ route('product.create') }}" class="btn btn-primary btn-sm rounded">
+<i class="bi bi-plus-circle me-1"></i> Add New</a>
         @endif
       </div>
     </div>
@@ -28,11 +29,13 @@
               </select>
             </div>
             <div class="col-md-2 col-6">
-              <button type="submit" class="btn btn-primary w-100">Search</button>
+              <button type="submit" class="btn btn-primary w-100">
+<i class="bi bi-search me-1"></i> Search</button>
             </div>
             @if((isset($search) && $search) || (isset($status) && $status !== ''))
               <div class="col-md-2 col-6">
-                <a href="{{ route('product.table') }}" class="btn btn-secondary w-100">Clear</a>
+                <a href="{{ route('product.table') }}" class="btn btn-secondary w-100">
+<i class="bi bi-eraser me-1"></i> Clear</a>
               </div>
             @endif
           </div>
@@ -82,16 +85,20 @@
                     @method('PATCH')
 
                     @if($product->status == 1)
-                      <button type="submit" class="badge rounded-pill bg-success">Active</button>
+                      <button type="submit" class="badge rounded-pill bg-success">
+<i class="bi bi-check-circle me-1"></i> Active</button>
                     @else
-                      <button type="submit" class="badge rounded-pill bg-danger">Inactive</button>
+                      <button type="submit" class="badge rounded-pill bg-danger">
+<i class="bi bi-x-circle me-1"></i> Inactive</button>
                     @endif
                   </form>
                   @else
                     @if($product->status == 1)
-                      <span class="badge rounded-pill bg-success">Active</span>
+                      <span class="badge rounded-pill bg-success">
+<i class="bi bi-check-circle me-1"></i> Active</span>
                     @else
-                      <span class="badge rounded-pill bg-danger">Inactive</span>
+                      <span class="badge rounded-pill bg-danger">
+<i class="bi bi-x-circle me-1"></i> Inactive</span>
                     @endif
                   @endif
                 </td>
@@ -221,7 +228,7 @@
           </table>
           <div class="d-flex justify-content-end">
             <button id="saveVariantBtn" class="btn btn-primary btn-sm d-none"
-              style="pointer-events: auto !important; z-index: 1060 !important;">Save</button>
+              style="pointer-events: auto !important; z-index: 1060 !important;"><i class="bi bi-save me-1"></i> Save</button>
           </div>
         </div>
       </div>

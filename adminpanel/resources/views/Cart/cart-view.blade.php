@@ -56,7 +56,7 @@
         </div>
 
         <div class="col-md-4 mt-4">
-            <a href="{{ route('cart.table') }}" class="btn btn-primary">Back</a>
+            <a href="{{ route('cart.table') }}" class="btn btn-primary"><i class="bi bi-arrow-left-circle me-1"></i> Back</a>
         </div>
 
     </div>

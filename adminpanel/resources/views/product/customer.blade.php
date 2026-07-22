@@ -8,9 +8,9 @@
         </div>
         <div>
             @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('customer-create'))
-            <a href="{{ route('customerRegister') }}" class="btn btn-primary mb-3 ">Add new</a>
+            <a href="{{ route('customerRegister') }}" class="btn btn-primary mb-3 "><i class="bi bi-plus-circle me-1"></i>Add new</a>
             @endif
-            <a href="{{ route('customers.export') }}" class="btn btn-secondary mb-3"><i class="bi bi-file-earmark-excel"></i> Export to Excel</a>
+            <a href="{{ route('customers.export') }}" class="btn btn-secondary mb-3"><i class="bi bi-download me-1"></i> Download Excel</a>
         </div>
     </div>
 
@@ -29,11 +29,11 @@
                         </select>
                     </div>
                     <div class="col-md-2 col-6">
-                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                        <button type="submit" class="btn btn-primary w-100"><i class="bi bi-search me-1"></i> Search</button>
                     </div>
                     @if($search || $status)
                     <div class="col-md-2 col-6">
-                        <a href="{{ route('customer') }}" class="btn btn-secondary w-100">Clear</a>
+                        <a href="{{ route('customer') }}" class="btn btn-secondary w-100"><i class="bi bi-eraser me-1"></i> Clear</a>
                     </div>
                     @endif
                 </div>
@@ -75,27 +75,34 @@
                                      @method('PATCH')
 
                                   @if($customer->status == 1)
-                                    <button type="submit" class="badge rounded-pill bg-success">Active</button>
+                                    <button type="submit" class="badge rounded-pill bg-success"><i class="bi bi-check-circle me-1"></i> Active</button>
                                    @else
-                                     <button type="submit" class="badge rounded-pill bg-danger">Inactive</button>
+                                     <button type="submit" class="badge rounded-pill bg-danger"><i class="bi bi-x-circle me-1"></i>Inactive</button>
                                    @endif
                                  </form>
                                 @else
                                     @if($customer->status == 1)
-                                        <span class="badge rounded-pill bg-success">Active</span>
+                                        <span class="badge rounded-pill bg-success"><i class="bi bi-check-circle me-1"></i> Active</span>
                                     @else
-                                        <span class="badge rounded-pill bg-danger">Inactive</span>
+                                        <span class="badge rounded-pill bg-danger"><i class="bi bi-x-circle me-1"></i> Inactive</span>
                                     @endif
                                 @endif
                              </td>
                             <td class="text-start">
-                               @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('customer-delete'))
-                                <a href="{{ route('customer.delete', $customer->id) }}" 
-                                   onclick="return confirm('Are you sure you want to delete this customer?')" 
-                                   class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash me-1"></i> Delete 
-                                </a>
-                                @endif
+                                <div class="d-inline-flex gap-2">
+                                  @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('customer-edit'))
+                                    <a href="{{ route('customer.edit', $customer->id) }}" class="btn btn-sm btn-warning">
+                                        <i class="bi bi-pencil-square me-1"></i> Edit
+                                    </a>
+                                  @endif
+                                  @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('customer-delete'))
+                                    <a href="{{ route('customer.delete', $customer->id) }}" 
+                                       onclick="return confirm('Are you sure you want to delete this customer?')" 
+                                       class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash me-1"></i> Delete 
+                                    </a>
+                                  @endif
+                                </div>
                             </td>
                         </tr>
                         @endforeach

@@ -11,9 +11,10 @@
         </div>
         <div>
             @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('notifications-create'))
-            <a href="{{ route('notifications.create') }}" class="btn btn-primary mb-3">Create Notification</a>
+            <a href="{{ route('notifications.create') }}" class="btn btn-primary mb-3">
+<i class="bi bi-plus-circle me-1"></i> Add New</a>
             @endif
-            <a href="{{ route('notifications.admin') }}" class="btn btn-secondary mb-3">Admin Notifications</a>
+            <a href="{{ route('notifications.admin') }}" class="btn btn-secondary mb-3"><i class="bi bi-bell"></i> Admin</a>
         </div>
     </div>
 
@@ -34,11 +35,13 @@
 </div>
 
                     <div class="col-md-2 col-6">
-                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                        <button type="submit" class="btn btn-primary w-100">
+<i class="bi bi-search me-1"></i> Search</button>
                     </div>
                     @if($search || $status)
                     <div class="col-md-2 col-6">
-                        <a href="{{ route('notifications.table') }}" class="btn btn-secondary w-100">Clear</a>
+                        <a href="{{ route('notifications.table') }}" class="btn btn-secondary w-100">
+<i class="bi bi-eraser me-1"></i> Clear</a>
                     </div>
                     @endif
                 </div>
@@ -86,15 +89,15 @@
                                     $roles = $item->recipients->pluck('role')->unique();
                                 @endphp
                                 @foreach($roles as $role)
-                                    <span class="badge bg-info">{{ ucfirst($role) }}</span>
+                                    <span class="badge bg-info"><i class="bi bi-people me-1"></i> {{ ucfirst($role) }}</span>
                                 @endforeach
                             </td>
 
                             <td>
                                 @if($item->type === 'high')
-                                    <span class="badge bg-danger">High</span>
+                                    <span class="badge bg-danger"><i class="bi bi-exclamation-triangle me-1"></i> High</span>
                                 @else
-                                    <span class="badge bg-success">Normal</span>
+                                    <span class="badge bg-success"><i class="bi bi-check-circle me-1"></i> Normal</span>
                                 @endif
                             </td>
                         <td>
@@ -105,16 +108,16 @@
                          @method('PATCH')
 
                       @if($item->status === 'read')
-                        <button type="submit" class="badge rounded-pill bg-success">Read</button>
+                        <button type="submit" class="badge rounded-pill bg-success"><i class="bi bi-envelope-open me-1"></i> Read</button>
                        @else
-                        <button type="submit" class="badge rounded-pill bg-warning">Unread</button>
+                        <button type="submit" class="badge rounded-pill bg-warning"><i class="bi bi-envelope me-1"></i> Unread</button>
                        @endif
                      </form>
                     @else
                         @if($item->status === 'read')
-                            <span class="badge rounded-pill bg-success">Read</span>
+                            <span class="badge rounded-pill bg-success"><i class="bi bi-envelope-open me-1"></i> Read</span>
                         @else
-                            <span class="badge rounded-pill bg-warning">Unread</span>
+                            <span class="badge rounded-pill bg-warning"><i class="bi bi-envelope me-1"></i> Unread</span>
                         @endif
                     @endif
                  </td>

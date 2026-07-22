@@ -77,9 +77,9 @@
                 <div class="row mt-4">
                     <div class="col-md-4">
                         @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('coupons-edit'))
-                        <a href="{{ route('coupon.edit', $coupon->id) }}" class="btn btn-primary">Edit</a>
+                        <a href="{{ route('coupon.edit', $coupon->id) }}" class="btn btn-primary"><i class="bi bi-pencil-square me-1"></i> Edit</a>
                         @endif
-                        <a href="{{ route('coupon.table') }}" class="btn btn-secondary">Cancel</a>
+                        <a href="{{ route('coupon.table') }}" class="btn btn-secondary"><i class="bi bi-x-circle me-1"></i> Cancel</a>
                     </div>
 
                 </div>

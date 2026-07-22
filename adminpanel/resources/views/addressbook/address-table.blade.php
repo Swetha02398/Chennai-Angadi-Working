@@ -4,7 +4,8 @@
     <section class="content-main">
         <div class="content-header d-flex justify-content-between align-items-center">
             <h2 class="content-title card-title">Address Book</h2>
-            <a href="{{ route('addressbook.create') }}" class="btn btn-primary">+ Add Address</a>
+            <a href="{{ route('addressbook.create') }}" class="btn btn-primary">
+<i class="bi bi-plus-circle me-1"></i> Add New</a>
         </div>
 
         @include('includes.alert')
@@ -26,11 +27,13 @@
                             </select>
                         </div>
                         <div class="col-md-2 col-6">
-                            <button type="submit" class="btn btn-primary w-100">Search</button>
+                            <button type="submit" class="btn btn-primary w-100">
+<i class="bi bi-search me-1"></i> Search</button>
                         </div>
                         @if($search || $status)
                             <div class="col-md-2 col-6">
-                                <a href="{{ route('addressbook.table') }}" class="btn btn-secondary w-100">Clear</a>
+                                <a href="{{ route('addressbook.table') }}" class="btn btn-secondary w-100">
+<i class="bi bi-eraser me-1"></i> Clear</a>
                             </div>
                         @endif
                     </div>
@@ -76,10 +79,12 @@
                                             @method('PATCH')
 
                                             @if($address->status == 1)
-                                                <button type="submit" class="badge rounded-pill bg-success border-0">Active</button>
+                                                <button type="submit" class="badge rounded-pill bg-success border-0">
+<i class="bi bi-check-circle me-1"></i> Active</button>
                                             @else
                                                 <button type="submit"
-                                                    class="badge rounded-pill bg-danger border-0">Inactive</button>
+                                                    class="badge rounded-pill bg-danger border-0">
+<i class="bi bi-x-circle me-1"></i> Inactive</button>
                                             @endif
                                         </form>
                                     </td>

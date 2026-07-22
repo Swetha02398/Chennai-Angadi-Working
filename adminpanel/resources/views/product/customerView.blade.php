@@ -80,7 +80,7 @@
                 <!-- RIGHT SIDE IMAGE -->
                  <div class="col-md-3 text-center">
                    @if($customer->profile_image)
-                   <img src="{{ env('ADMIN_ASSET_URL') }}/profile/{{ $customer->profile_image }}"
+                   <img src="{{ asset('uploads/profile/' . $customer->profile_image) }}"
                width="150" height="150" class="rounded-circle" style="object-fit:cover;border:3px solid #ddd;" alt="Customer Profile">
                    @else
                    <img src="{{ asset('assets/imgs/people/avatar.jpg') }}"
@@ -91,7 +91,7 @@
                 </div>
 
             </div>
- <a href="{{ route('customer') }}" class="btn btn-primary">Back</a>
+ <a href="{{ route('customer') }}" class="btn btn-primary"><i class="bi bi-arrow-left-circle me-1"></i> Back</a>
         </div>
         </div>
     </div>

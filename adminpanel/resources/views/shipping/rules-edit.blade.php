@@ -87,9 +87,9 @@
                             </td>
                             <td class="text-center">
                                 @if($i == 0)
-                                    <button type="button" class="btn btn-success add" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
+                                    <button type="button" class="btn btn-success add" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-plus-circle me-1"></i> Add</button>
                                 @else
-                                    <button type="button" class="btn btn-danger remove" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>
+                                    <button type="button" class="btn btn-danger remove" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-dash-circle me-1"></i> Remove</button>
                                 @endif
                             </td>
                         </tr>
@@ -104,7 +104,7 @@
                                 </div>
                             </td>
                             <td class="text-center">
-                                <button type="button" class="btn btn-success add" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
+                                <button type="button" class="btn btn-success add" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-plus-circle me-1"></i> Add</button>
                             </td>
                         </tr>
                         @endforelse
@@ -112,8 +112,8 @@
                 </table>
 
                 <div>
-                    <button type="submit" class="btn btn-primary">{{ isset($rule) ? 'Update' : 'Save' }}</button>
-                    <a href="{{ route('shipping.rules.table') }}" class="btn btn-secondary">Back</a>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> {{ isset($rule) ? 'Update' : 'Save' }}</button>
+                    <a href="{{ route('shipping.rules.table') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-circle me-1"></i> Back</a>
                 </div>
             </form>
         </div>

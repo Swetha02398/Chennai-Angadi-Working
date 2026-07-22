@@ -230,7 +230,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="status" id="statusPending"
                                         value="pending" {{ $currentStatus == 'pending' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="statusPending">Pending</label>
+                                    <label class="form-check-label" for="statusPending">Hold</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="status" id="statusProcessing"
@@ -240,7 +240,7 @@
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="status" id="statusShipping"
                                         value="shipped" {{ $currentStatus == 'shipped' ? 'checked' : '' }}>
-                                    <label class="form-check-label" for="statusShipping">Shipping</label>
+                                    <label class="form-check-label" for="statusShipping">Shipped</label>
                                 </div>
                                 <div class="form-check">
                                     <input class="form-check-input" type="radio" name="status" id="statusDelivered"
@@ -264,9 +264,7 @@
 
                         <!-- Action Buttons -->
                         <div class="btn-group-actions">
-                            <button type="submit" class="btn btn-save">
-                                <i class="bi bi-check-lg"></i> Save
-                            </button>
+                            <button type="submit" class="btn btn-save"><i class="bi bi-save me-1"></i> Save</button>
                             <a href="{{ route('orders.view', $order->id) }}" class="btn btn-cancel">Cancel</a>
                         </div>
                     </div>
@@ -293,13 +291,13 @@
                             <td>1.</td>
                             <td>Create Order</td>
                             <td>-</td>
-                            <td>{{ $order->created_at->format('d/m/y') }}</td>
+                            <td>{{ $order->created_at->format('d/m/y, H:i:s') }}</td>
                         </tr>
                         {{-- Show order histories --}}
                         @foreach($orderHistories as $index => $history)
                             <tr>
                                 <td>{{ $index + 2 }}.</td>
-                                <td>{{ ucfirst($history->status) == 'Shipped' ? 'Shipping' : ucfirst($history->status) }}</td>
+                                <td>{{ ucfirst($history->status) == 'Pending' ? 'Hold' : ucfirst($history->status) }}</td>
                                 <td>{!! $history->message !!}</td>
                                 <td>{{ $history->created_at->format('d/m/y, H:i:s') }}</td>
                             </tr>
@@ -364,7 +362,7 @@
                             });
 
                             // Get display label for status
-                            const statusLabel = selectedStatus === 'shipped' ? 'Shipping' :
+                            const statusLabel = selectedStatus === 'pending' ? 'Hold' :
                                 (selectedStatus.charAt(0).toUpperCase() + selectedStatus.slice(1));
 
                             const notesDisplay = (notesValue && notesValue.trim() !== '') ? notesValue : statusLabel;
@@ -377,6 +375,7 @@
                                             <td>${dateStr}</td>
                                         `;
                             tbody.appendChild(newRow);
+                            document.getElementById('deliverComments').value = '';
 
                             if (typeof toastr !== 'undefined') {
                                 toastr.success(data.message);

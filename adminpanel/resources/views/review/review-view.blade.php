@@ -52,7 +52,7 @@
             @endif
 
 
-            <a href="{{ route('review.table') }}" class="btn btn-secondary">Back</a>
+            <a href="{{ route('review.table') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-circle me-1"></i> Back</a>
         </div>
 
     </div>

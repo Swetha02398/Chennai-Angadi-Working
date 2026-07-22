@@ -86,7 +86,7 @@
 
         <div class="col-md-4 mt-4">
              @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('addressbook-edit'))
-             <a href="{{ route('addressbook.edit', $address->id) }}" class="btn btn-primary">Edit</a>
+             <a href="{{ route('addressbook.edit', $address->id) }}" class="btn btn-primary"><i class="bi bi-pencil-square me-1"></i> Edit</a>
              @endif
             <a href="{{ route('addressbook.table') }}" class="btn btn-secondary">canel</a>
         </div>

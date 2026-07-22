@@ -18,8 +18,8 @@
             @error('label') <small class="text-danger">{{ $message }}</small> @enderror
             <small class="text-danger d-none" id="labelError">Weight value is required.</small>
         </div>
-        <button type="submit" class="btn btn-primary">Update</button>
-        <button type="reset" class="btn btn-secondary">Reset</button>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Update</button>
+        <button type="reset" class="btn btn-secondary"><i class="bi bi-arrow-counterclockwise me-1"></i> Reset</button>
     </form>
 </div>
 </section>

@@ -126,7 +126,7 @@
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid var(--glass-border);
         border-radius: 24px;
-        padding: 48px 40px;
+        padding: 15px;
         box-shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.1);
         position: relative;
         overflow: hidden;
@@ -158,7 +158,7 @@
     .brand-logo {
         display: block;
         width: 140px;
-        margin: 0 auto 32px;
+        margin: 0 auto 12px;
         filter: drop-shadow(0 0 10px rgba(59, 183, 126, 0.3));
         transition: transform 0.3s ease;
     }
@@ -179,14 +179,14 @@
         color: #444444 !important;
         text-align: center;
         font-size: 14px;
-        margin-bottom: 40px;
+        margin-bottom: 12px;
         letter-spacing: 0.5px;
     }
 
     /* Elegant Input Fields */
     .input-group-custom {
         position: relative;
-        margin-bottom: 24px;
+        margin-bottom: 12px;
     }
 
     html body .input-group-custom input, html.dark body .input-group-custom input {
@@ -246,7 +246,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 32px;
+        margin-bottom: 12px;
     }
 
     html body .remember-me, html.dark body .remember-me {

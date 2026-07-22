@@ -28,8 +28,7 @@
                         </li>
                     </ul>
                     <button type="button" id="downloadExcelBtn" class="btn btn-secondary btn-sm">
-                        <i class="bi bi-file-earmark-excel" style="font-size: 16px; vertical-align: middle;"></i>
-                        Download Excel
+                        <i class="bi bi-download me-1" style="font-size: 16px; vertical-align: middle;"></i>Download Excel
                     </button>
                 </div>
 
@@ -88,8 +87,7 @@
                                         <i class="material-icons md-filter_alt"></i> Filter
                                     </button>
                                     <button type="button" id="reportClearFilter" class="btn btn-secondary btn-sm">
-                                        Clear
-                                    </button>
+<i class="bi bi-eraser me-1"></i> Clear</button>
                                 </div>
                             </div>
                         </div>
@@ -216,38 +214,7 @@
             transition: background-color 0.2s ease;
         }
 
-        .pagination-area .page-item {
-            margin: 0 5px;
-        }
 
-        .pagination-area .page-item .page-link {
-            border: 0;
-            padding: 0 10px;
-            box-shadow: none;
-            outline: 0;
-            width: 34px;
-            height: 34px;
-            display: block;
-            border-radius: 4px;
-            background: #e9ecee;
-            line-height: 34px;
-            text-align: center;
-            font-size: 13px;
-            color: #383e50;
-            font-weight: 600;
-        }
-
-        .pagination-area .page-item.active .page-link,
-        .pagination-area .page-item:hover .page-link {
-            color: #fff;
-            background: #3BB77E;
-        }
-
-        .pagination-area .page-item.disabled .page-link {
-            color: #ccc;
-            background-color: #f8f9fa;
-            opacity: 0.6;
-        }
 
         /* Enforce exactly identical physical size for Download Excel, Filter, and Clear buttons */
         #downloadExcelBtn, #reportClearFilter, #reportApplyFilter {
@@ -332,7 +299,7 @@
                                     <td>${order.customer}</td>
                                     <td>
                                         <span class="badge ${order.order_source === 'app' ? 'bg-success' : (order.order_source === 'web' ? 'bg-primary' : 'bg-warning')}">
-                                            ${order.order_source ? order.order_source.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A'}
+                                            ${order.order_source === 'app' ? '<i class="bi bi-phone me-1"></i>' : (order.order_source === 'web' ? '<i class="bi bi-globe me-1"></i>' : '<i class="bi bi-display me-1"></i>')} ${order.order_source ? order.order_source.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A'}
                                         </span>
                                     </td>
                                     <td>${order.items_count}</td>
@@ -340,22 +307,36 @@
                                     <td>${order.payment_method}</td>
                                     <td>
                                         <span class="badge ${
-                                            (order.payment_status === 'Paid' || (order.payment_status && order.payment_status.toLowerCase() === 'cod')) 
-                                                ? 'bg-success' 
-                                                : (order.payment_status === 'Pending' ? 'bg-warning' : 'bg-danger')
+                                            (order.payment_status === 'Paid') 
+                                                ? 'bg-success text-white' 
+                                                : ((order.payment_status && order.payment_status.toLowerCase() === 'cod') ? 'bg-warning text-dark' : 'bg-danger text-white')
                                         }">
-                                            ${order.payment_status ? order.payment_status.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A'}
+                                            ${(order.payment_status === 'Paid') ? '<i class="bi bi-check-circle me-1"></i> Paid' : ((order.payment_status && order.payment_status.toLowerCase() === 'cod') ? '<i class="bi bi-cash me-1"></i> COD' : '<i class="bi bi-x-circle me-1"></i> Not Paid')}
                                         </span>
                                     </td>
                                     <td>
-                                        <span class="badge ${order.status === 'Confirmed' ? 'bg-success' : 'bg-warning'}">
-                                            ${order.status}
+                                        <span class="badge ${
+                                            {'confirmed':'bg-success text-white',
+                                             'hold':'bg-warning text-dark', 'pending':'bg-warning text-dark',
+                                             'processing':'bg-info text-dark',
+                                             'shipped':'bg-primary text-white',
+                                             'delivered':'bg-success text-white',
+                                             'cancelled':'bg-danger text-white'}[(order.status || '').toLowerCase()] || 'bg-info text-dark' 
+                                        }">
+                                        ${
+                                            {'hold':'<i class="bi bi-clock me-1"></i> Hold', 'pending':'<i class="bi bi-clock me-1"></i> Hold',
+                                             'confirmed':'<i class="bi bi-check2-circle me-1"></i> Confirmed',
+                                             'processing':'<i class="bi bi-arrow-repeat me-1"></i> Processing',
+                                             'shipped':'<i class="bi bi-truck me-1"></i> Shipped',
+                                             'delivered':'<i class="bi bi-box-seam me-1"></i> Delivered',
+                                             'cancelled':'<i class="bi bi-x-octagon me-1"></i> Cancelled'}[(order.status || '').toLowerCase()] || '<i class="bi bi-arrow-repeat me-1"></i> ' + order.status
+                                        }
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="${invoiceUrl}" target="_blank" class="btn btn-sm btn-info" onclick="event.stopPropagation();" title="View Invoice">
+                                        <button type="button" class="btn btn-sm btn-info" onclick="event.stopPropagation(); window.open('${invoiceUrl}', '_blank');" title="View Invoice">
                                             <i class="bi bi-printer-fill"> Print</i>
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                             `}).join('');

@@ -244,8 +244,6 @@
                     </a>
                 </li>
             @endif
-
-            <br /><br />
     </nav>
 </aside>
 
@@ -309,4 +307,4 @@
 
             </ul>
         </div>
-</header>
+</header>

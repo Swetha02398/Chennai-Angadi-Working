@@ -106,8 +106,8 @@
                     </div>
 
                     <div class="col-md-12 mt-3">
-                        <button type="submit" class="btn btn-primary">Update Coupon</button>
-                        <a href="{{ route('coupon.table') }}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Update</button>
+                        <a href="{{ route('coupon.table') }}" class="btn btn-secondary"><i class="bi bi-x-circle me-1"></i> Cancel</a>
                     </div>
 
                 </div>

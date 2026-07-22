@@ -252,7 +252,7 @@
         /* Add page margins for consistent printing */
         @page {
             size: A4 portrait;
-            margin: 8mm;
+            margin: 10mm;
         }
         
         html, body {
@@ -268,6 +268,7 @@
         
         * {
             background-color: transparent !important;
+            box-sizing: border-box !important;
         }
         
         .main-wrap,
@@ -361,8 +362,9 @@
         }
     }
     
-    /* Hide GST Not Included invoice by default on screen */
-    #gstNotIncludedInvoice {
+    /* Hide GST Not Included and GST Included invoices by default on screen */
+    #gstNotIncludedInvoice,
+    #gstIncludedInvoice {
         display: none;
     }
 </style>
@@ -535,66 +537,58 @@
                                 </td>
                                 <td>{{ $productHsn }}</td>
                                 <td>₹ {{ number_format($item->price, 0) }}</td>
-                                <td style="color: #0066cc;">{{ $productGst }}% (₹{{ number_format($gstAmount, 0) }})</td>
-                                <td style="color: #0066cc;">{{ $productSgst }}% (₹{{ number_format($sgstAmount, 0) }})</td>
-                                <td style="color: #0066cc;">{{ $productIgst }}% (₹{{ number_format($igstAmount, 0) }})</td>
+                                <td style="color: #0066cc;">{{ $productGst }}% (₹{{ number_format($gstAmount, 2) }})</td>
+                                <td style="color: #0066cc;">{{ $productSgst }}% (₹{{ number_format($sgstAmount, 2) }})</td>
+                                <td style="color: #0066cc;">{{ $productIgst }}% (₹{{ number_format($igstAmount, 2) }})</td>
                                 <td>{{ $qty }}</td>
-                                <td>₹ {{ number_format($lineTotal, 0) }}</td>
+                                <td style="text-align: center;">₹ {{ number_format($lineTotal, 0) }}</td>
                             </tr>
                         @endforeach
                     </tbody>
                     <!-- Summary rows inside table for alignment -->
                     <tfoot>
-                        @if($viewTotalGst > 0)
+                        @if((float)$viewTotalGst > 0)
                         <tr>
-                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #ddd;">GST (CGST)</td>
+                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #ddd;">GST</td>
                             <td style="text-align: center; color: #dc3545; border: 1px solid #ddd;">₹ {{ number_format($viewTotalGst, 2) }}</td>
                         </tr>
                         @endif
-                        @if($viewTotalSgst > 0)
+                        @if((float)$viewTotalSgst > 0)
                         <tr>
                             <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #ddd;">SGST</td>
                             <td style="text-align: center; color: #dc3545; border: 1px solid #ddd;">₹ {{ number_format($viewTotalSgst, 2) }}</td>
                         </tr>
                         @endif
-                        @if($viewTotalIgst > 0)
+                        @if((float)$viewTotalIgst > 0)
                         <tr>
                             <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #ddd;">IGST</td>
                             <td style="text-align: center; color: #dc3545; border: 1px solid #ddd;">₹ {{ number_format($viewTotalIgst, 2) }}</td>
                         </tr>
                         @endif
+                        @if((float)($order->discount_amount ?? 0) > 0)
                         <tr>
-                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #ddd;">Shipping Charges</td>
-                            <td style="text-align: center; color: #dc3545; border: 1px solid #ddd;">
-                                @if(($order->shipping_amount ?? 0) == 0)
-                                    Free
-                                @else
-                                    ₹ {{ number_format($order->shipping_amount, 0) }}
-                                @endif
-                            </td>
-                        </tr>
-                        @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
-                        <tr>
-                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #ddd;">COD Charges</td>
-                            <td style="text-align: center; color: #dc3545; border: 1px solid #ddd;">
-                                @if(($order->cod_charge ?? 0) == 0)
-                                    Free
-                                @else
-                                    ₹ {{ number_format($order->cod_charge, 0) }}
-                                @endif
-                            </td>
-                        </tr>
-                        @endif
-                        @if(($order->discount_amount ?? 0) > 0)
-                        <tr>
-                            <td colspan="8" style="text-align: right; font-weight: 600; color: #28a745; border: 1px solid #ddd;">Coupon @if($order->coupon_code)({{ $order->coupon_code }})@endif</td>
+                            <td colspan="8" style="text-align: right; font-weight: 600; color: #28a745; border: 1px solid #ddd;">Coupon Applied @if($order->coupon_code)({{ $order->coupon_code }})@endif</td>
                             <td style="text-align: center; color: #28a745; border: 1px solid #ddd;">- ₹ {{ number_format($order->discount_amount, 2) }}</td>
                         </tr>
+                        @endif
+                        @if((float)($order->shipping_amount ?? 0) > 0)
+                        <tr>
+                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #ddd;">Shipping Charges</td>
+                            <td style="text-align: center; color: #dc3545; border: 1px solid #ddd;">₹ {{ number_format($order->shipping_amount, 0) }}</td>
+                        </tr>
+                        @endif
+                        @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
+                        @if((float)($order->cod_charge ?? 0) > 0)
+                        <tr>
+                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #ddd;">COD Charges</td>
+                            <td style="text-align: center; color: #dc3545; border: 1px solid #ddd;">₹ {{ number_format($order->cod_charge, 0) }}</td>
+                        </tr>
+                        @endif
                         @endif
                         @php $viewTotalTax = $viewTotalGst + $viewTotalSgst + $viewTotalIgst; @endphp
                         <tr>
                             <td colspan="8" style="text-align: right; font-weight: bold; font-size: 14px; color: #dc3545; border: 1px solid #ddd; background: #fff8f8;">TOTAL (Incl. GST)</td>
-                            <td style="text-align: center; font-weight: bold; font-size: 14px; color: #dc3545; border: 1px solid #ddd; background: #fff8f8;">₹ {{ number_format(($order->final_amount ?? $order->total_amount) + $viewTotalTax, 2) }}</td>
+                            <td style="text-align: center; font-weight: bold; font-size: 14px; color: #dc3545; border: 1px solid #ddd; background: #fff8f8;">₹ {{ number_format($order->final_amount ?? $order->total_amount, 2) }}</td>
                         </tr>
                     </tfoot>
                 </table>
@@ -743,44 +737,36 @@
                             </td>
                             <td>₹ {{ number_format($item->price, 0) }}</td>
                             <td>{{ $qty }}</td>
-                            <td>₹ {{ number_format($lineTotal, 0) }}</td>
+                            <td style="text-align: right; padding-right: 15px;">₹ {{ number_format($lineTotal, 0) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
             
             <!-- Summary -->
+            @if((float)($order->discount_amount ?? 0) > 0)
             <div class="ngi-summary-row">
-                <span class="label">Shipping Charges</span>
-                <span class="amount">
-                    @if(($order->shipping_amount ?? 0) == 0)
-                        Free
-                    @else
-                        ₹ {{ number_format($order->shipping_amount, 0) }}
-                    @endif
-                </span>
-            </div>
-            @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
-            <div class="ngi-summary-row">
-                <span class="label">COD Charges</span>
-                <span class="amount">
-                    @if(($order->cod_charge ?? 0) == 0)
-                        Free
-                    @else
-                        ₹ {{ number_format($order->cod_charge, 0) }}
-                    @endif
-                </span>
+                <span class="label" style="color: #28a745 !important;">Coupon Applied @if($order->coupon_code)({{ $order->coupon_code }})@endif</span>
+                <span class="amount" style="color: #28a745 !important; border-left: none; text-align: center; border-left: 1px solid #999;">- ₹ {{ number_format($order->discount_amount, 2) }}</span>
             </div>
             @endif
-            @if(($order->discount_amount ?? 0) > 0)
+            @if((float)($order->shipping_amount ?? 0) > 0)
             <div class="ngi-summary-row">
-                <span class="label" style="color: #28a745 !important;">Coupon @if($order->coupon_code)({{ $order->coupon_code }})@endif</span>
-                <span class="amount" style="color: #28a745 !important;">- ₹ {{ number_format($order->discount_amount, 2) }}</span>
+                <span class="label">Shipping Charges</span>
+                <span class="amount" style="text-align: center;">₹ {{ number_format($order->shipping_amount, 0) }}</span>
             </div>
+            @endif
+            @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
+            @if((float)($order->cod_charge ?? 0) > 0)
+            <div class="ngi-summary-row">
+                <span class="label">COD Charges</span>
+                <span class="amount" style="text-align: center;">₹ {{ number_format($order->cod_charge, 0) }}</span>
+            </div>
+            @endif
             @endif
             <div class="ngi-summary-row ngi-total-row">
                 <span class="label">TOTAL</span>
-                <span class="amount">₹ {{ number_format($order->final_amount ?? $order->total_amount, 2) }}</span>
+                <span class="amount" style="text-align: center;">₹ {{ number_format(($order->final_amount ?? $order->total_amount) - ($order->tax_amount ?? 0), 2) }}</span>
             </div>
             
             <!-- Footer -->
@@ -793,7 +779,6 @@
         <!-- GST Included Invoice (Hidden, shows only when printing GST Included) -->
         <div id="gstIncludedInvoice" class="order-view-container" style="padding: 25px;">
             <style>
-                #gstIncludedInvoice { display: none; }
                 #gstIncludedInvoice .gi-top-section { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 11px; }
                 #gstIncludedInvoice .gi-to-section { flex: 1; }
                 #gstIncludedInvoice .gi-to-label { color: #333; font-weight: bold; margin-bottom: 2px; }
@@ -956,11 +941,11 @@
                             </td>
                             <td>{{ $productHsn }}</td>
                             <td>₹{{ number_format($item->price, 0) }}</td>
-                            <td class="gst-highlight">{{ $productGst }}% (₹{{ number_format($gstAmount, 0) }})</td>
-                            <td class="gst-highlight">{{ $productSgst }}% (₹{{ number_format($sgstAmount, 0) }})</td>
-                            <td class="gst-highlight">{{ $productIgst }}% (₹{{ number_format($igstAmount, 0) }})</td>
+                            <td class="gst-highlight">{{ $productGst }}% (₹{{ number_format($gstAmount, 2) }})</td>
+                            <td class="gst-highlight">{{ $productSgst }}% (₹{{ number_format($sgstAmount, 2) }})</td>
+                            <td class="gst-highlight">{{ $productIgst }}% (₹{{ number_format($igstAmount, 2) }})</td>
                             <td>{{ $qty }}</td>
-                            <td>₹ {{ number_format($lineTotal, 0) }}</td>
+                            <td style="text-align: right; padding-right: 15px;">₹ {{ number_format($lineTotal, 0) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -968,7 +953,7 @@
                 <tfoot>
                     @if($totalGst > 0)
                     <tr>
-                        <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">GST (CGST)</td>
+                        <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">GST</td>
                         <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($totalGst, 2) }}</td>
                     </tr>
                     @endif
@@ -984,38 +969,30 @@
                         <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($totalIgst, 2) }}</td>
                     </tr>
                     @endif
-                    <tr>
-                        <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">Shipping Charges</td>
-                        <td style="text-align: center; color: #dc3545; border: 1px solid #999;">
-                            @if(($order->shipping_amount ?? 0) == 0)
-                                Free
-                            @else
-                                ₹ {{ number_format($order->shipping_amount, 0) }}
-                            @endif
-                        </td>
-                    </tr>
-                    @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
-                    <tr>
-                        <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">COD Charges</td>
-                        <td style="text-align: center; color: #dc3545; border: 1px solid #999;">
-                            @if(($order->cod_charge ?? 0) == 0)
-                                Free
-                            @else
-                                ₹ {{ number_format($order->cod_charge, 0) }}
-                            @endif
-                        </td>
-                    </tr>
-                    @endif
                     @if(($order->discount_amount ?? 0) > 0)
                     <tr>
-                        <td colspan="8" style="text-align: right; font-weight: 600; color: #28a745; border: 1px solid #999;">Coupon @if($order->coupon_code)({{ $order->coupon_code }})@endif</td>
+                        <td colspan="8" style="text-align: right; font-weight: 600; color: #28a745; border: 1px solid #999;">Coupon Applied @if($order->coupon_code)({{ $order->coupon_code }})@endif</td>
                         <td style="text-align: center; color: #28a745; border: 1px solid #999;">- ₹ {{ number_format($order->discount_amount, 2) }}</td>
                     </tr>
+                    @endif
+                    @if(($order->shipping_amount ?? 0) > 0)
+                    <tr>
+                        <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">Shipping Charges</td>
+                        <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($order->shipping_amount, 0) }}</td>
+                    </tr>
+                    @endif
+                    @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
+                    @if(($order->cod_charge ?? 0) > 0)
+                    <tr>
+                        <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">COD Charges</td>
+                        <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($order->cod_charge, 0) }}</td>
+                    </tr>
+                    @endif
                     @endif
                     @php $totalTax = $totalGst + $totalSgst + $totalIgst; @endphp
                     <tr>
                         <td colspan="8" style="text-align: right; font-weight: bold; font-size: 12px; color: #dc3545; border: 1px solid #999;">TOTAL (Incl. GST)</td>
-                        <td style="text-align: center; font-weight: bold; font-size: 12px; color: #dc3545; border: 1px solid #999;">₹ {{ number_format(($order->final_amount ?? $order->total_amount) + $totalTax, 2) }}</td>
+                        <td style="text-align: center; font-weight: bold; font-size: 12px; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($order->final_amount ?? $order->total_amount, 2) }}</td>
                     </tr>
                 </tfoot>
             </table>
@@ -1060,7 +1037,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i> Cancel</button>
                     <button type="submit" class="btn btn-primary" id="saveCommentsBtn">
                         <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                         Save Notes
@@ -1143,7 +1120,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i> Cancel</button>
                 <button type="button" class="btn btn-warning" id="addProductsBtn" disabled>
                     <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                     <i class="bi bi-plus-circle me-1"></i> Add Selected Products
@@ -1155,11 +1132,11 @@
 
 <!-- Print Options Modal -->
 <div class="modal fade" id="printOptionsModal" tabindex="-1" aria-labelledby="printOptionsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 320px;">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 360px;">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
             <div class="modal-body p-0">
                 <!-- Header Section -->
-                <div class="text-center py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="text-center py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                     <div class="mb-2">
                         <i class="bi bi-printer-fill text-white" style="font-size: 32px;"></i>
                     </div>
@@ -1168,13 +1145,13 @@
                 </div>
                 
                 <!-- Options Section -->
-                <div class="p-4">
-                    <button type="button" class="btn w-100 mb-3 py-3 d-flex align-items-center justify-content-center" id="printGstIncluded" 
+                <div class="d-flex flex-row justify-content-center align-items-center" style="padding: 12px; gap: 10px;">
+                    <button type="button" class="btn w-50 py-3 d-flex align-items-center justify-content-center" id="printGstIncluded" 
                         style="background: #f0fdf4; border: 2px solid #22c55e; border-radius: 10px; color: #166534; font-weight: 600; transition: all 0.2s;">
                         <i class="bi bi-receipt-cutoff me-2" style="font-size: 20px;"></i>
                         GST Included
                     </button>
-                    <button type="button" class="btn w-100 py-3 d-flex align-items-center justify-content-center" id="printGstNotIncluded"
+                    <button type="button" class="btn w-50 py-3 d-flex align-items-center justify-content-center" id="printGstNotIncluded"
                         style="background: #fefce8; border: 2px solid #eab308; border-radius: 10px; color: #854d0e; font-weight: 600; transition: all 0.2s;">
                         <i class="bi bi-receipt me-2" style="font-size: 20px;"></i>
                         GST Not Included
@@ -1182,10 +1159,8 @@
                 </div>
                 
                 <!-- Cancel Link -->
-                <div class="text-center pb-4">
-                    <button type="button" class="btn btn-link text-muted text-decoration-none" data-bs-dismiss="modal">
-                        Cancel
-                    </button>
+                <div class="text-center" style="padding-bottom: 12px;">
+                    <button type="button" class="btn btn-link text-muted text-decoration-none" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i> Cancel</button>
                 </div>
             </div>
         </div>

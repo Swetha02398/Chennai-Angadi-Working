@@ -8,9 +8,9 @@
         </div>
         <div>
              @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-edit'))
-             <button id="saveStock" class="btn btn-primary btn-sm rounded">Save Stock </button>
+             <button id="saveStock" class="btn btn-primary btn-sm rounded"><i class="bi bi-save me-1"></i> Save</button>
              @endif
-            <a href="{{ route('product.inventory.table') }}" class="btn btn-secondary btn-sm rounded">Back to Products</a>
+            <a href="{{ route('product.inventory.table') }}" class="btn btn-secondary btn-sm rounded"><i class="bi bi-arrow-left me-1"></i> Back to Products</a>
         </div>
     </div>
 
@@ -30,11 +30,13 @@
                         </select>
                     </div>
                     <div class="col-md-2 col-6">
-                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                        <button type="submit" class="btn btn-primary w-100">
+<i class="bi bi-search me-1"></i> Search</button>
                     </div>
                     @if($search || $status)
                     <div class="col-md-2 col-6">
-                        <a href="{{ route('product.inventory.table') }}" class="btn btn-secondary w-100">Clear</a>
+                        <a href="{{ route('product.inventory.table') }}" class="btn btn-secondary w-100">
+<i class="bi bi-eraser me-1"></i> Clear</a>
                     </div>
                     @endif
                 </div>

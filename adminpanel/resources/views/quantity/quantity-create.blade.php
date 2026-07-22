@@ -24,10 +24,8 @@
                 </div>
 
                 <div class="form-group mt-4">
-                    <button type="submit" class="btn btn-primary">
-                       Save
-                    </button>
-                     <a href="{{ route('quantity.table') }}" class="btn btn-secondary btn-sm">Back</a>
+                    <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Save</button>
+                     <a href="{{ route('quantity.table') }}" class="btn btn-secondary btn-sm"><i class="bi bi-arrow-left-circle me-1"></i> Back</a>
                 </div>
             </form>
         </div>

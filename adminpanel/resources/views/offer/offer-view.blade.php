@@ -93,9 +93,9 @@ if (!empty($offer->product_ids)) {
 
         <div class="mt-4">
             @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('offers-edit'))
-            <a href="{{ route('offer.edit', $offer->id) }}" class="btn btn-primary">Edit</a>
+            <a href="{{ route('offer.edit', $offer->id) }}" class="btn btn-primary"><i class="bi bi-pencil-square me-1"></i> Edit</a>
             @endif
-            <a href="{{ route('offer.table') }}" class="btn btn-secondary">Back</a>
+            <a href="{{ route('offer.table') }}" class="btn btn-secondary"><i class="bi bi-arrow-left-circle me-1"></i> Back</a>
         </div>
 
     </div>

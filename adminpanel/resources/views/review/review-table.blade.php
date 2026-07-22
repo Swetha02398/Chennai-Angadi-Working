@@ -51,12 +51,14 @@
                     </div>
 
                     <div class="col-md-2 col-6">
-                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                        <button type="submit" class="btn btn-primary w-100">
+<i class="bi bi-search me-1"></i> Search</button>
                     </div>
 
                     @if($search || $status)
                     <div class="col-md-2 col-6">
-                        <a href="{{ route('review.table') }}" class="btn btn-secondary w-100">Clear</a>
+                        <a href="{{ route('review.table') }}" class="btn btn-secondary w-100">
+<i class="bi bi-eraser me-1"></i> Clear</a>
                     </div>
                     @endif
                 </div>

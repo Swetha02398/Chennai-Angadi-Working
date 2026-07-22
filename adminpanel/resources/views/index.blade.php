@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 @section('content')
 @include('includes.alert')
             <section class="content-main">
@@ -49,164 +49,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="row">
-                    <div class="col-xl-8 col-lg-12">
-                        <div class="card mb-4">
-                            <article class="card-body">
-                                <h5 class="card-title">Sale statistics</h5>
-                                <canvas id="myChart" height="120px"></canvas>
-                            </article>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-5">
-                                <div class="card mb-4">
-                                    <article class="card-body">
-                                        <h5 class="card-title">New Members</h5>
-                                        <div class="new-member-list">
-                                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('assets/imgs/people/avatar-4.png') }}" alt="" class="avatar" />
-                                                    <div>
-                                                        <h6>Patric Adams</h6>
-                                                        <p class="text-muted font-xs">Sanfrancisco</p>
-                                                    </div>
-                                                </div>
-                                                <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a>
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('assets/imgs/people/avatar-2.png') }}" alt="" class="avatar" />
-                                                    <div>
-                                                        <h6>Dilan Specter</h6>
-                                                        <p class="text-muted font-xs">Sanfrancisco</p>
-                                                    </div>
-                                                </div>
-                                                <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a>
-                                            </div>
-                                            <div class="d-flex align-items-center justify-content-between mb-4">
-                                                <div class="d-flex align-items-center">
-                                                    <img src="{{ asset('assets/imgs/people/avatar-3.png') }}" alt="" class="avatar" />
-                                                    <div>
-                                                        <h6>Tomas Baker</h6>
-                                                        <p class="text-muted font-xs">Sanfrancisco</p>
-                                                    </div>
-                                                </div>
-                                                <a href="#" class="btn btn-xs"><i class="material-icons md-add"></i> Add</a>
-                                            </div>
-                                        </div>
-                                    </article>
-                                </div>
-                            </div>
-                            <div class="col-lg-7">
-                                <div class="card mb-4">
-                                    <article class="card-body">
-                                        <h5 class="card-title">Recent activities</h5>
-                                        <ul class="verti-timeline list-unstyled font-sm">
-                                            <li class="event-list">
-                                                <div class="event-timeline-dot">
-                                                    <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="me-3">
-                                                        <h6><span>Today</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div>Lorem ipsum dolor sit amet consectetur</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="event-list active">
-                                                <div class="event-timeline-dot">
-                                                    <i class="material-icons md-play_circle_outline font-xxl animation-fade-right"></i>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="me-3">
-                                                        <h6><span>17 May</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div>Debitis nesciunt voluptatum dicta reprehenderit</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="event-list">
-                                                <div class="event-timeline-dot">
-                                                    <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="me-3">
-                                                        <h6><span>13 May</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div>Accusamus voluptatibus voluptas.</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="event-list">
-                                                <div class="event-timeline-dot">
-                                                    <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="me-3">
-                                                        <h6><span>05 April</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div>At vero eos et accusamus et iusto odio dignissi</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li class="event-list">
-                                                <div class="event-timeline-dot">
-                                                    <i class="material-icons md-play_circle_outline font-xxl"></i>
-                                                </div>
-                                                <div class="media">
-                                                    <div class="me-3">
-                                                        <h6><span>26 Mar</span> <i class="material-icons md-trending_flat text-brand ml-15 d-inline-block"></i></h6>
-                                                    </div>
-                                                    <div class="media-body">
-                                                        <div>Responded to need “Volunteer Activities</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </article>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-4 col-lg-12">
-                        <div class="card mb-4">
-                            <article class="card-body">
-                                <h5 class="card-title">Revenue Base on Area</h5>
-                                <canvas id="myChart2" height="217"></canvas>
-                            </article>
-                        </div>
-                        <div class="card mb-4">
-                            <article class="card-body">
-                                <h5 class="card-title">Marketing Chanel</h5>
-                                <span class="text-muted font-xs">Facebook</span>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 15%">15%</div>
-                                </div>
-                                <span class="text-muted font-xs">Instagram</span>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 65%">65%</div>
-                                </div>
-                                <span class="text-muted font-xs">Google</span>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 51%">51%</div>
-                                </div>
-                                <span class="text-muted font-xs">Twitter</span>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 80%">80%</div>
-                                </div>
-                                <span class="text-muted font-xs">Other</span>
-                                <div class="progress mb-3">
-                                    <div class="progress-bar" role="progressbar" style="width: 80%">80%</div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                </div> -->
+              
                 <div class="card mb-4">
                     <header class="card-header">
                         <h4 class="card-title">Latest orders</h4>
@@ -270,16 +113,16 @@
                                             <td>₹{{ number_format($order->final_amount, 2) }}</td>
                                             <td class="text-center">
                                                 @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
-                                                    <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center" style="background-color:#ffc107;color:#000;border-radius:50px;width:80px;height:24px;font-size:12px;border:none;padding:0;">COD</button>
+                                                    <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center px-2" style="background-color:#ffc107;color:#000;border-radius:50px;height:24px;font-size:12px;border:none;padding:0;"><i class="bi bi-cash me-1"></i> COD</button>
                                                 @elseif($order->payment_status === 'paid')
-                                                    <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center" style="background-color:#28a745;color:#fff;border-radius:50px;width:80px;height:24px;font-size:12px;border:none;padding:0;">Paid</button>
+                                                    <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center px-2" style="background-color:#28a745;color:#fff;border-radius:50px;height:24px;font-size:12px;border:none;padding:0;"><i class="bi bi-check-circle me-1"></i> Paid</button>
                                                 @else
-                                                    <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center" style="background-color:#dc3545;color:#fff;border-radius:50px;width:80px;height:24px;font-size:12px;border:none;padding:0;">Not Paid</button>
+                                                    <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center px-2" style="background-color:#dc3545;color:#fff;border-radius:50px;height:24px;font-size:12px;border:none;padding:0;"><i class="bi bi-x-circle me-1"></i> Not Paid</button>
                                                 @endif
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    <i class="material-icons md-payment font-xxl text-muted me-2"></i>
+                                                    <i class="material-icons md-payment font-xxl text-muted "></i>
                                                     @php
                                                         $method = $order->payment_method ?? 'cash';
                                                         $methodLabel = match(strtolower($method)) {
@@ -293,7 +136,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                <button type="button" class="btn btn-xs btn-primary view-invoice-btn" data-order-id="{{ $order->id }}">View details</button>
+                                                <button type="button" class="btn btn-xs btn-primary view-invoice-btn d-inline-flex align-items-center justify-content-center" style="padding: 3px 7px; font-size: 11px;" data-order-id="{{ $order->id }}"><i class="bi bi-eye-fill me-1"></i> View </button>
                                             </td>
                                         </tr>
                                         @empty
@@ -465,65 +308,25 @@ function closeInvoiceModal() {
 
 function printInvoice() {
     let printContent = document.getElementById('invoicePrintContent') || document.getElementById('billingInvoicePrintContent');
-    if (!printContent) {
+    let printArea = document.getElementById('dashboardInvoicePrintArea');
+    if (!printContent || !printArea) {
         alert('Invoice content not loaded');
         return;
     }
     
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write('<html><head><title>Print Invoice</title>');
-    printWindow.document.write('<style>');
-    printWindow.document.write(`
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Arial', sans-serif; font-size: 11px; background: #fff; color: #000; padding: 10mm; font-weight: bold; }
-        .top-section { display: flex; justify-content: space-between; margin-bottom: 8px; }
-        .to-section { flex: 1; }
-        .to-label { color: #dc3545; font-weight: bold; margin-bottom: 2px; font-size: 12px; }
-        .customer-name { font-weight: bold; margin-bottom: 1px; font-size: 13px; color: #000; }
-        .address-line { line-height: 1.3; font-size: 11px; color: #000; }
-        .order-info-box { border-left: 1px dashed #000; padding-left: 15px; text-align: left; min-width: 120px; }
-        .order-info-box .order-id-label { font-size: 11px; color: #dc3545; font-weight: bold; }
-        .order-info-box .order-id { font-weight: bold; font-size: 12px; color: #dc3545; }
-        .order-info-box .state { font-size: 11px; margin-top: 3px; font-weight: bold; color: #000; }
-        .from-section { margin-bottom: 8px; font-size: 11px; padding-bottom: 6px; border-bottom: 1px dashed #000; color: #000; font-weight: bold; line-height: 1.4; }
-        .from-label { font-weight: bold; }
-        .from-company { color: #000; font-weight: bold; }
-        .header-section { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-        .logo-section { display: flex; flex-direction: row; align-items: center; gap: 5px; }
-        .logo-section img { height: 48px; width: auto; }
-        .title-section { text-align: center; flex: 1; }
-        .title-section .title { font-size: 18px; font-weight: bold; color: #000; text-transform: uppercase; }
-        .company-details { text-align: right; font-size: 11px; line-height: 1.4; }
-        .company-details .name { font-weight: bold; color: #000; font-size: 12px; }
-        .company-details .contact { color: #000; font-weight: bold; }
-        .items-table { width: 100%; border-collapse: collapse; margin-bottom: 0; border: 2px solid #000; }
-        .items-table th { background: #e8e8e8; border: 2px solid #000; padding: 4px 8px; text-align: left; font-weight: bold; font-size: 12px; color: #000; }
-        .items-table th.price-col, .items-table th.subtotal-col { text-align: right; }
-        .items-table th.qty-col { text-align: center; }
-        .items-table td { padding: 5px 8px; border: 1px solid #000; font-size: 12px; vertical-align: top; font-weight: bold; color: #000; }
-        .items-table td.sno-col { text-align: left; width: 35px; }
-        .items-table td.price-col { text-align: right; width: 75px; }
-        .items-table td.qty-col { text-align: center; width: 45px; }
-        .items-table td.subtotal-col { text-align: right; width: 90px; color: #000; }
-        .items-table .product-name { color: #000; }
-        .summary-container { display: flex; flex-direction: column; align-items: flex-end; margin-top: 0; width: 100%; }
-        .summary-row { display: flex; justify-content: space-between; width: 100%; font-size: 13px; border: 1px solid #000; border-top: 1px solid #000; }
-        .summary-row .label { text-align: left; font-weight: bold; color: #dc3545 !important; padding: 6px 10px; flex: 1; }
-        .summary-row .amount { text-align: right; font-weight: bold; color: #dc3545 !important; padding: 6px 10px; width: 100px; border-left: 1px solid #000; }
-        .summary-row.total { border: 2px solid #000; border-top: 2px solid #000; }
-        .summary-row.total .label { font-size: 14px; text-transform: uppercase; color: #dc3545 !important; }
-        .summary-row.total .amount { font-size: 16px; color: #dc3545 !important; border-left: 2px solid #000; }
-        .footer { text-align: center; margin-top: 15px; font-size: 10px; color: #000; line-height: 1.4; font-weight: bold; border-top: 1px dashed #000; padding-top: 8px; }
-        .footer a { color: #dc3545; text-decoration: none; font-weight: bold; }
-        .hide-on-print { display: none !important; }
-    `);
-    printWindow.document.write('</style></head><body>');
-    printWindow.document.write(printContent.innerHTML);
-    printWindow.document.close();
-    printWindow.onload = function() {
-        printWindow.print();
-        printWindow.close();
-    };
+    // Copy content to print wrapper at root body
+    printArea.innerHTML = printContent.outerHTML;
+    printArea.style.display = 'block';
+    
+    setTimeout(() => {
+        window.print();
+        
+        // Hide print area after printing
+        setTimeout(() => {
+            printArea.style.display = 'none';
+            printArea.innerHTML = '';
+        }, 500);
+    }, 100);
 }
 </script>
 @endpush
@@ -547,27 +350,66 @@ function printInvoice() {
 #invoiceModal .modal-footer {
     border-top: 1px solid #eee;
 }
+
+@media print {
+    @page { size: portrait; margin: 8mm; }
+    
+    body > *:not(#dashboardInvoicePrintArea):not(.main-wrap), 
+    .main-wrap > *:not(#dashboardInvoicePrintArea), 
+    .modal, .modal-backdrop {
+        display: none !important;
+    }
+    
+    .main-wrap {
+        display: block !important;
+        position: relative !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        height: auto !important;
+    }
+    
+    #dashboardInvoicePrintArea {
+        display: block !important;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+}
 </style>
+
+<!-- Hidden print area for dashboard modal invoices -->
+<div id="dashboardInvoicePrintArea" style="display: none;"></div>
 
 <!-- Invoice Modal -->
 <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 500px;">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header py-2" style="background: #f8f9fa;">
                 <h6 class="modal-title" id="invoiceModalLabel">Invoice Details</h6>
                 <button type="button" class="btn-close btn-close-sm" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body p-2" id="invoiceModalBody" style="max-height: 60vh; overflow-y: auto;">
+            <div class="modal-body p-2" id="invoiceModalBody" style="max-height: 70vh; overflow-y: auto;">
                 <div class="text-center py-4">
                     <i class="material-icons md-autorenew spin"></i> Loading...
                 </div>
             </div>
-            <div class="modal-footer py-2">
-                <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-sm btn-primary" onclick="printInvoice()"><i class="material-icons md-print" style="font-size: 14px; vertical-align: middle;"></i> Print</button>
-            </div>
+<div class="modal-footer py-2 d-flex justify-content-end gap-2 w-100">
+    <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">
+       <i class="bi bi-x-circle me-1"></i> Close
+    </button>
+
+    <button type="button" class="btn btn-sm btn-primary" onclick="printInvoice()">
+        <i class="material-icons md-print" style="font-size:14px; vertical-align:middle;"></i>
+        Print
+    </button>
+</div>
         </div>
     </div>
 </div>
 
  @endsection
+

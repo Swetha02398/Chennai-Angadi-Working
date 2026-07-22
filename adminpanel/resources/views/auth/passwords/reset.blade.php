@@ -4,7 +4,7 @@
     @include('includes.alert')
     <section class="content-main">
         <div class="card mx-auto card-login">
-            <div class="card-body">
+            <div class="card-body" style="padding: 15px;">
                 <h4 class="card-title mb-4 text-center">Reset Password</h4>
                 <form method="POST" action="{{ route('password.update') }}" id="resetPasswordForm">
                     @csrf
@@ -25,7 +25,7 @@
                             placeholder="Confirm Password" type="password" required />
                         <span class="text-danger" id="passwordError" style="display: none;">Password does not match.</span>
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-0">
                         <button type="submit" class="btn btn-primary w-100">Reset Password</button>
                     </div>
                 </form>

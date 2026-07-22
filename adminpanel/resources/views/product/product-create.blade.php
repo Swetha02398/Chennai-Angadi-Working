@@ -282,7 +282,7 @@
                                     <tr>
                                         <td><input type="text" name="specifications[0][key]" class="form-control" placeholder="e.g. Height"></td>
                                         <td><input type="text" name="specifications[0][value]" class="form-control" placeholder="e.g. 10cm"></td>
-                                        <td><button type="button" class="btn btn-success addSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button></td>
+                                        <td><button type="button" class="btn btn-success addSpecRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-plus-circle me-1"></i> Add</button></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -331,9 +331,9 @@
                                                 </td>
                                                 <td>
                                                     @if($index == 0)
-                                                        <button type="button" class="btn btn-success addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button>
+                                                        <button type="button" class="btn btn-success addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-plus-circle me-1"></i> Add</button>
                                                     @else
-                                                        <button type="button" class="btn btn-danger removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">- Remove</button>
+                                                        <button type="button" class="btn btn-danger removeRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-dash-circle me-1"></i> Remove</button>
                                                     @endif
                                                 </td>
                                             </tr>
@@ -353,7 +353,7 @@
                                             <td><input type="number" step="0.01" name="variants[0][sell_price]"
                                                     class="form-control"></td>
                                             <td><input type="number" name="variants[0][stock]" class="form-control"></td>
-                                            <td><button type="button" class="btn btn-success addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;">+ Add</button></td>
+                                            <td><button type="button" class="btn btn-success addRow" style="width: 95px; height: 34px; border-radius: 6px; padding: 0; font-size: 13px;"><i class="bi bi-plus-circle me-1"></i> Add</button></td>
                                         </tr>
                                     @endif
                                 </tbody>
@@ -391,8 +391,8 @@
                         </div>
 
                         <div class="mt-4">
-                            <button class="btn btn-primary px-4">Save Product</button>
-                            <a href="{{ route('product.table') }}" class="btn btn-secondary px-4">Cancel</a>
+                            <button class="btn btn-primary px-4"><i class="bi bi-save me-1"></i> Save</button>
+                            <a href="{{ route('product.table') }}" class="btn btn-secondary px-4"><i class="bi bi-x-circle me-1"></i> Cancel</a>
                         </div>
 
                     </form>

@@ -10,8 +10,7 @@
         <div>
             @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('roles-create'))
             <a href="{{ route('admin.roles.create') }}" class="btn btn-primary">
-                <i class="material-icons md-plus"></i> Create New Role
-            </a>
+<i class="bi bi-plus-circle me-1"></i> Add New</a>
             @endif
         </div>
     </div>
@@ -31,11 +30,13 @@
               </select>
             </div>
             <div class="col-md-2 col-6">
-              <button type="submit" class="btn btn-primary w-100">Search</button>
+              <button type="submit" class="btn btn-primary w-100">
+<i class="bi bi-search me-1"></i> Search</button>
             </div>
             @if((isset($search) && $search) || (isset($status) && $status !== ''))
               <div class="col-md-2 col-6">
-                <a href="{{ route('admin.roles.table') }}" class="btn btn-secondary w-100">Clear</a>
+                <a href="{{ route('admin.roles.table') }}" class="btn btn-secondary w-100">
+<i class="bi bi-eraser me-1"></i> Clear</a>
               </div>
             @endif
           </div>
@@ -61,14 +62,14 @@
                         <tr>
                             <td>{{ ($roles->currentPage() - 1) * $roles->perPage() + $loop->iteration }}</td>
                             <td>
-                                <span class="badge bg-primary">{{ $role->name }}</span>
+                                <span class="badge bg-primary"><i class="bi bi-shield-check me-1"></i> {{ $role->name }}</span>
                             </td>
                             <td>{{ $role->description ?? '-' }}</td>
                             <td>
-                                <span class="badge bg-info">{{ $role->permissions_count }} permissions</span>
+                                <span class="badge bg-info"><i class="bi bi-key me-1"></i> {{ $role->permissions_count }} permissions</span>
                             </td>
                             <td>
-                                <span class="badge bg-secondary">{{ $role->users_count }} users</span>
+                                <span class="badge bg-secondary"><i class="bi bi-people me-1"></i> {{ $role->users_count }} users</span>
                             </td>
                             <td>{{ $role->created_at->format('d M Y') }}</td>
                             <td>
@@ -78,16 +79,20 @@
                                     @csrf
                                     @method('PATCH')
                                     @if($role->status == 1)
-                                        <button type="submit" class="badge rounded-pill bg-success">Active</button>
+                                        <button type="submit" class="badge rounded-pill bg-success">
+<i class="bi bi-check-circle me-1"></i> Active</button>
                                     @else
-                                        <button type="submit" class="badge rounded-pill bg-danger">Inactive</button>
+                                        <button type="submit" class="badge rounded-pill bg-danger">
+<i class="bi bi-x-circle me-1"></i> Inactive</button>
                                     @endif
                                 </form>
                                 @else
                                     @if($role->status == 1)
-                                        <span class="badge rounded-pill bg-success">Active</span>
+                                        <span class="badge rounded-pill bg-success">
+<i class="bi bi-check-circle me-1"></i> Active</span>
                                     @else
-                                        <span class="badge rounded-pill bg-danger">Inactive</span>
+                                        <span class="badge rounded-pill bg-danger">
+<i class="bi bi-x-circle me-1"></i> Inactive</span>
                                     @endif
                                 @endif
                             </td>
@@ -111,7 +116,7 @@
                         <tr>
                             <td colspan="8" class="text-center py-4">
                                 <p class="text-muted mb-0">No roles created yet.</p>
-                                <a href="{{ route('admin.roles.create') }}" class="btn btn-sm btn-primary mt-2">Create First Role</a>
+                                <a href="{{ route('admin.roles.create') }}" class="btn btn-sm btn-primary mt-2"><i class="bi bi-save me-1"></i> Create</a>
                             </td>
                         </tr>
                         @endforelse

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset OTP</title>
+    <title>Password Reset Code</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -101,7 +101,7 @@
             <div class="greeting">Hello, {{ $customerName }}!</div>
             <div class="message">
                 You are receiving this email because we received a password reset request for your account. 
-                Please use the following OTP (One-Time Password) to proceed:
+                Please use the following verification code to proceed:
             </div>
 
             <div class="otp-container">
@@ -109,7 +109,7 @@
             </div>
 
             <div class="expiry-note">
-                This OTP is valid for 15 minutes. If you did not request a password reset, no further action is required.
+                This verification code is valid for 15 minutes. If you did not request a password reset, no further action is required.
             </div>
         </div>
 

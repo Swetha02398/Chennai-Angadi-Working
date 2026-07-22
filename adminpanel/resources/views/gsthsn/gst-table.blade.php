@@ -12,7 +12,8 @@
         </div>
         <div>
             @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('gsthsn-create'))
-            <a href="{{ route('gsthsn.create') }}" class="btn btn-primary btn-sm rounded">+ Add GST</a>
+            <a href="{{ route('gsthsn.create') }}" class="btn btn-primary btn-sm rounded">
+<i class="bi bi-plus-circle me-1"></i> Add New</a>
             @endif
         </div>
     </div>
@@ -31,11 +32,13 @@
                         </select>
                     </div>
                     <div class="col-md-2 col-6">
-                        <button type="submit" class="btn btn-primary w-100">Search</button>
+                        <button type="submit" class="btn btn-primary w-100">
+<i class="bi bi-search me-1"></i> Search</button>
                     </div>
                     @if($search || $status)
                     <div class="col-md-2 col-6">
-                        <a href="{{ route('gsthsn.table') }}" class="btn btn-secondary w-100">Clear</a>
+                        <a href="{{ route('gsthsn.table') }}" class="btn btn-secondary w-100">
+<i class="bi bi-eraser me-1"></i> Clear</a>
                     </div>
                     @endif
                 </div>

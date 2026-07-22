@@ -11,7 +11,7 @@
             <h2>Billing Orders</h2>
             @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('billing-create'))
             <a href="{{ route('admin.billing.create') }}?new=1" class="btn btn-primary">
-                New Billing
+                <i class="bi bi-plus-circle me-1"></i> Add New
             </a>
             @endif
         </div>
@@ -48,7 +48,7 @@
                         <select id="billingFilterOrderStatus" class="form-select">
                             <option value="">All Status</option>
                             <option value="confirmed" {{ request('status') == 'confirmed' ? 'selected' : '' }}>Confirmed</option>
-                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Hold</option>
                         </select>
                     </div>
 
@@ -64,10 +64,10 @@
                     <div class="col-md-3 col-12">
                         <div class="d-flex gap-2">
                             <button type="button" id="billingSearchBtn" class="btn btn-primary w-100">
-                                Search
+                                <i class="bi bi-search me-1"></i> Search
                             </button>
                             <button type="button" id="billingClearFilters" class="btn btn-secondary w-100">
-                                Clear
+                                <i class="bi bi-eraser me-1"></i> Clear
                             </button>
                         </div>
                     </div>
@@ -134,7 +134,7 @@
 
                                     <td>
                                         <span class="badge {{ $order->customer_type === 'registered' ? 'bg-info' : 'bg-secondary' }}">
-                                            {{ ucfirst($order->customer_type) }}
+                                            <i class="bi bi-{{ $order->customer_type === 'registered' ? 'person-check' : 'person' }} me-1"></i> {{ ucfirst($order->customer_type) }}
                                         </span>
                                     </td>
 
@@ -154,35 +154,63 @@
 
                                     <td>
                                         @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
-                                            <span class="badge bg-warning text-dark">COD</span>
+                                            @php
+                                                $paymentClass = 'bg-warning text-dark';
+                                                $paymentLabel = 'COD';
+                                                $paymentIcon = '<i class="bi bi-cash me-1"></i>';
+                                            @endphp
                                         @elseif($order->payment_status === 'paid')
-                                            <span class="badge bg-success">Paid</span>
+                                            @php
+                                                $paymentClass = 'bg-success text-white';
+                                                $paymentLabel = 'Paid';
+                                                $paymentIcon = '<i class="bi bi-check-circle me-1"></i>';
+                                            @endphp
                                         @else
-                                            <span class="badge bg-danger">Not Paid</span>
+                                            @php
+                                                $paymentClass = 'bg-danger text-white';
+                                                $paymentLabel = 'Not Paid';
+                                                $paymentIcon = '<i class="bi bi-x-circle me-1"></i>';
+                                            @endphp
                                         @endif
+                                        <button class="btn btn-sm badge {{ $paymentClass }} payment-status-toggle" type="button" 
+                                            id="paymentStatusBtn{{ $order->id }}" 
+                                            data-order-id="{{ $order->id }}" 
+                                            data-current-status="{{ $paymentLabel }}">
+                                            {!! $paymentIcon !!} {{ $paymentLabel }}
+                                        </button>
                                     </td>
 
                                     <td>
                                         @php
                                             $statusColors = [
                                                 'confirmed' => 'success',
-                                                'pending' => 'warning',
+                                                'pending' => 'warning text-dark',
+                                            ];
+                                            $statusIcons = [
+                                                'confirmed' => '<i class="bi bi-check2-circle me-1"></i>',
+                                                'pending' => '<i class="bi bi-clock me-1"></i>',
                                             ];
                                         @endphp
 
                                         <span class="badge bg-{{ $statusColors[$order->status] ?? 'secondary' }}">
-                                            {{ ucfirst($order->status) }}
+                                            {!! $statusIcons[$order->status] ?? '' !!} {{ ucfirst($order->status) }}
                                         </span>
                                     </td>
 
                                     <td>
-                                        <div class="d-flex gap-1">
+                                        <div class="d-flex gap-2">
+                                            @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('billing-edit'))
+                                            <a href="{{ route('admin.billing.edit', $order->id) }}" class="btn btn-sm btn-warning d-inline-flex align-items-center justify-content-center" title="Edit Order">
+                                                <i class="bi bi-pencil-square me-1"></i> Edit
+                                            </a>
+                                            @endif
+                                            
                                             <button type="button" 
                                                 class="btn btn-sm btn-info view-billing-invoice-btn"
                                                 data-order-id="{{ $order->id }}"
                                                 data-order-number="{{ $order->order_number }}"
                                                 title="View Invoice">
-                                                <i class="bi bi-printer-fill"> Print</i>
+                                                <i class="bi bi-printer-fill me-1"></i> Print
                                             </button>
 
                                             @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('billing-delete'))
@@ -194,7 +222,6 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button class="btn btn-sm btn-danger btn-action-col d-inline-flex align-items-center justify-content-center "><i class="bi bi-trash me-1"></i> Delete</button>
-                                            </form>
                                             @endif
                                         </div>
                                     </td>
@@ -286,7 +313,7 @@
                     <p class="mt-2">Loading invoice...</p>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer gap-3">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
                     <i class="bi bi-x-lg me-1"></i>Close
                 </button>
@@ -300,11 +327,11 @@
 
 <!-- Billing Print Options Modal -->
 <div class="modal fade" id="billingPrintOptionsModal" tabindex="-1" aria-labelledby="billingPrintOptionsModalLabel" aria-hidden="true" style="z-index: 10060 !important;">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 320px; z-index: 10061 !important;">
+    <div class="modal-dialog modal-dialog-centered" style="max-width: 360px; z-index: 10061 !important;">
         <div class="modal-content border-0 shadow-lg" style="border-radius: 12px; overflow: hidden;">
             <div class="modal-body p-0">
                 <!-- Header Section -->
-                <div class="text-center py-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <div class="text-center py-3" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                     <div class="mb-2">
                         <i class="bi bi-printer-fill text-white" style="font-size: 32px;"></i>
                     </div>
@@ -313,13 +340,13 @@
                 </div>
                 
                 <!-- Options Section -->
-                <div class="p-4">
-                    <button type="button" class="btn w-100 mb-3 py-3 d-flex align-items-center justify-content-center" id="billingPrintGstIncluded" 
+                <div class="d-flex flex-row justify-content-center align-items-center" style="padding: 12px; gap: 10px;">
+                    <button type="button" class="btn w-50 py-3 d-flex align-items-center justify-content-center" id="billingPrintGstIncluded" 
                         style="background: #f0fdf4; border: 2px solid #22c55e; border-radius: 10px; color: #166534; font-weight: 600; transition: all 0.2s;">
                         <i class="bi bi-receipt-cutoff me-2" style="font-size: 20px;"></i>
                         GST Included
                     </button>
-                    <button type="button" class="btn w-100 py-3 d-flex align-items-center justify-content-center" id="billingPrintGstNotIncluded"
+                    <button type="button" class="btn w-50 py-3 d-flex align-items-center justify-content-center" id="billingPrintGstNotIncluded"
                         style="background: #fefce8; border: 2px solid #eab308; border-radius: 10px; color: #854d0e; font-weight: 600; transition: all 0.2s;">
                         <i class="bi bi-receipt me-2" style="font-size: 20px;"></i>
                         GST Not Included
@@ -327,10 +354,8 @@
                 </div>
                 
                 <!-- Cancel Link -->
-                <div class="text-center pb-4">
-                    <button type="button" class="btn btn-link text-muted text-decoration-none" data-bs-dismiss="modal">
-                        Cancel
-                    </button>
+                <div class="text-center" style="padding-bottom: 12px;">
+                    <button type="button" class="btn btn-link text-muted text-decoration-none" data-bs-dismiss="modal"><i class="bi bi-x-circle me-1"></i> Cancel</button>
                 </div>
             </div>
         </div>
@@ -372,7 +397,7 @@
 }
 
 @media print {
-    @page { size: A4 portrait; margin: 0; }
+    @page { size: A4 portrait; margin: 10mm; }
     
     html, body { 
         height: auto !important; 
@@ -380,6 +405,10 @@
         padding: 0 !important; 
         overflow: visible !important;
         background: #fff !important;
+    }
+    
+    * {
+        box-sizing: border-box !important;
     }
 
     /* Hide everything except print area */
@@ -504,6 +533,87 @@ document.addEventListener('DOMContentLoaded', function() {
             window.location.href = "{{ route('billing.table') }}";
         });
     }
+
+    // ===== PAYMENT STATUS TOGGLE FUNCTIONALITY (Event Delegation) =====
+    document.addEventListener('click', function(e) {
+        const target = e.target.closest('.payment-status-toggle');
+        if (!target) return;
+        
+        e.preventDefault();
+        const orderId = target.dataset.orderId;
+        const currentStatus = target.dataset.currentStatus;
+        
+        // Toggle Logic: 
+        // - If Paid -> change to Not Paid
+        // - If COD or Not Paid -> change to Paid
+        let newStatus = 'Paid';
+        if (currentStatus === 'Paid') {
+            newStatus = 'Not Paid';
+        }
+        
+        const btn = target;
+        
+        console.log('Payment status toggle triggered:', { orderId, currentStatus, newStatus });
+        
+        // Show loading state
+        const originalText = btn.textContent;
+        const originalClass = btn.className;
+        
+        btn.textContent = 'Updating...';
+        btn.disabled = true;
+
+        const url = "{{ route('orders.payment-status.update', ['id' => ':id']) }}".replace(':id', orderId);
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                'Accept': 'application/json'
+            },
+            body: JSON.stringify({ payment_status: newStatus })
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw err; }).catch(() => {
+                    throw new Error('Network response was not ok: ' + response.status);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.success) {
+                // Update button content and state
+                btn.innerHTML = (newStatus === 'Paid' ? '<i class="bi bi-check-circle me-1"></i> ' : (newStatus === 'COD' ? '<i class="bi bi-cash me-1"></i> ' : '<i class="bi bi-x-circle me-1"></i> ')) + newStatus;
+                btn.dataset.currentStatus = newStatus;
+                
+                // Update classes
+                btn.classList.remove('bg-success', 'bg-warning', 'bg-danger', 'text-dark', 'text-white');
+                if (newStatus === 'Paid') {
+                    btn.classList.add('bg-success', 'text-white');
+                } else if (newStatus === 'COD') {
+                    btn.classList.add('bg-warning', 'text-dark');
+                } else {
+                    btn.classList.add('bg-danger', 'text-white');
+                }
+                
+                if (typeof toastr !== 'undefined') toastr.success(data.message);
+                else console.log('Update success:', data.message);
+            } else {
+                alert('Error: ' + data.message);
+                btn.textContent = originalText;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Update failed: ' + (error.message || error));
+            btn.textContent = originalText;
+            btn.className = originalClass;
+        })
+        .finally(() => {
+            btn.disabled = false;
+        });
+    });
 
     // ===== BILLING INVOICE MODAL FUNCTIONALITY =====
     const billingInvoiceModal = new bootstrap.Modal(document.getElementById('billingInvoiceModal'));

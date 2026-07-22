@@ -42,7 +42,7 @@
                 <label>Slider Images (Multiple) *</label>
                 <input type="file" name="image[]" class="form-control" multiple accept="image/*">
                 <small id="imageError" class="text-danger d-none">At least one image is required.</small>
-                <small class="text-muted">Supported formats: JPEG, PNG, JPG, WebP (Max 2MB each)</small>
+                <small class="text-muted">Supported formats: JPEG, PNG, JPG, WebP (Max 2MB each) | Recommended Size: 1422x1106 px</small>
             </div>
 
             <div class="col-md-12">
@@ -54,8 +54,8 @@
 
         </div>
 
-        <button type="submit" class="btn btn-primary">Save Slider</button>
-        <a href="{{ route('slider.table') }}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary"><i class="bi bi-save me-1"></i> Save</button>
+        <a href="{{ route('slider.table') }}" class="btn btn-secondary"><i class="bi bi-x-circle me-1"></i> Cancel</a>
 
     </form>
 
