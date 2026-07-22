@@ -7,11 +7,14 @@
 @section('content')
     @include('includes.alert')
     <main class="main">
+        <link rel="stylesheet" href="{{ asset('assets/css/slider-fix.css') }}">
+        <script src="{{ asset('assets/js/slider-fix.js') }}"></script>
         <style>
             /* Desktop Hero Banner ( > 768px ) */
             @media (min-width: 769px) {
-                .home-slide-cover .container { 
+                .home-slider .container { 
                     max-width: 1600px !important; 
+                    width: 100% !important;
                     padding: 0 !important;
                 }
 
@@ -28,12 +31,15 @@
                 .hero-slider-1 .slick-slide,
                 .hero-slider-1 .slick-slide > div,
                 .hero-slider-1 .single-hero-slider {
-                    height: 290px !important;
+                    height: auto !important;
+                    min-height: unset !important;
+                    max-height: none !important;
                     box-sizing: border-box !important;
                 }
                 
                 .hero-slider-1 .slick-list,
                 .hero-slider-1 .slick-track {
+                    height: auto !important;
                     box-sizing: border-box !important;
                     /* Allow slick JS to natively assign inline pixel-heights to track without !important crushing it */
                 }
@@ -44,19 +50,23 @@
 
                 .hero-slider-1 .single-hero-slider {
                     margin: 0 !important;
+                    height: 450px !important;
                     overflow: hidden !important;
                     background: none !important;
                     display: flex;
                     align-items: center;
                     justify-content: center;
+                    border-radius: 0 !important;
                 }
                 
                 .hero-slider-1 .single-hero-slider img.hero-responsive-img {
-                    width: 100%;
-                    height: 290px !important;
+                    width: 100% !important;
+                    height: 450px !important;
                     object-fit: cover !important;
-                    max-width: 100%;
+                    max-width: 100% !important;
                     display: block;
+                    border-radius: 0 !important;
+                    margin: 0 auto !important;
                 }
 
                 /* Dots placement inside banner in desktop */
@@ -304,7 +314,7 @@
                 }
                 
                 .hero-slider-1 .single-hero-slider img.hero-responsive-img {
-                    width: 100%;
+                    width: 100% !important;
                     height: 250px !important;
                     object-fit: cover !important;
                     display: block;

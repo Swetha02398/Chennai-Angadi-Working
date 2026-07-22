@@ -338,7 +338,7 @@
                             <div class="product-price-display-<?php echo e($product->id); ?>" style="font-size: 15px; font-weight: 600;">
                                 <?php if($originalPrice && $originalPrice > $currentPrice): ?>
                                     <span class="product-mrp-display-<?php echo e($product->id); ?>"
-                                        style="text-decoration: line-through; color: #ADADAD; font-size: 15px; font-weight: 600; margin-right: 10px;">
+                                        style="text-decoration: line-through; color: #ADADAD; margin-right: 10px;">
                                         ₹<?php echo e(number_format($originalPrice, 0)); ?>
 
                                     </span>
@@ -353,20 +353,19 @@
                         </div>
 
                         
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto;">
+                        <div class="product-bottom-action" style="display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; width: 100%;">
                             
-                            <div style="display: flex; align-items: center;" class="col-6 pe-1">
+                            <div class="qty-container" style="display: flex; align-items: center; flex: 1; min-width: 0;">
                                 <label class="qty-label">Qty:</label>
                                 <input type="number" class="qty-input product-qty-<?php echo e($product->id); ?>" value="1" min="1" <?php echo e($firstVariantStock <= 0 ? 'disabled' : ''); ?>>
                             </div>
 
                             
-                            <div class="add-cart col-6 ps-1" style="<?php echo e($firstVariantStock <= 0 ? 'display: none !important;' : ''); ?>">
-                                <a href="javascript:void(0)" class="add col-12 add-to-cart-btn-<?php echo e($product->id); ?>"
+                            <div class="add-cart" style="flex: 1; min-width: 0; <?php echo e($firstVariantStock <= 0 ? 'display: none !important;' : ''); ?>">
+                                <a href="javascript:void(0)" class="add add-to-cart-btn-<?php echo e($product->id); ?>"
                                     data-product-id="<?php echo e($product->id); ?>" data-price="<?php echo e($currentPrice); ?>"
                                     data-stock="<?php echo e($firstVariantStock); ?>"
-                                    style="justify-content:center;display: inline-flex; align-items: center; white-space: nowrap; padding: 7px 18px; font-size: 13px; font-weight: 600;">
+                                    style="display: flex; justify-content: center; align-items: center; white-space: nowrap; width: 100%; font-weight: 600;">
                                     <i class="fi-rs-shopping-cart mr-5"></i>ADD
                                 </a>
                             </div>

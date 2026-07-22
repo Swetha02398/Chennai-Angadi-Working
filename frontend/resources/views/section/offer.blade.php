@@ -15,7 +15,7 @@
                 <div class="row">
                             @if($coupons->count() > 0)
                                 @foreach($coupons as $coupon)
-                                    <div class="col-lg-6 col-md-6 col-6 mb-30">
+                                    <div class="col-12 col-md-6 col-lg-6 mb-30">
                                         <div class="coupon-card">
                                             <table class="table table-bordered coupon-table" style="margin-bottom: 0;border:2px solid #3BB77E;">
                                             <tbody>

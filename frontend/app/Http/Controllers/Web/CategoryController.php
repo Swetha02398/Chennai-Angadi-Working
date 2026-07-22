@@ -23,7 +23,22 @@ class CategoryController extends Controller
         // Section view ku pass pannrom
         return view('section.Category', compact('categories'));
     }
+    public function resolveSlug($slug)
+    {
+        if (MainCategory::where('slug', $slug)->exists()) {
+            return $this->products($slug);
+        }
 
+        if (SubCategory::where('slug', $slug)->exists()) {
+            return $this->subcategoryProducts($slug);
+        }
+
+        if (ChildCategory::where('slug', $slug)->exists()) {
+            return $this->childcategoryProducts($slug);
+        }
+
+        abort(404);
+    }
 
     // index category
     public function byCategory($id)

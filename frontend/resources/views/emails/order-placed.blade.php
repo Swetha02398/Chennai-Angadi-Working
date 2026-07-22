@@ -196,7 +196,7 @@
             <table class="product-table">
                 <thead>
                     <tr>
-                        <th style="width: 50px;">S#</th>
+                        <th style="width: 50px;">S.No</th>
                         <th>Product name</th>
                         <th class="text-right">Price</th>
                         <th class="text-right" style="width: 50px;">Qty</th>
@@ -240,11 +240,13 @@
                     </td>
                 </tr>
 
+                @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
                 @if($order->cod_charge > 0)
                     <tr>
                         <td class="text-right">COD Charge :</td>
                         <td class="text-right">Rs. {{ number_format($order->cod_charge, 2) }}</td>
                     </tr>
+                @endif
                 @endif
 
                 <tr>

@@ -115,7 +115,7 @@ class OrderController extends Controller
         $order = Order::with(['customer', 'items.product', 'items.variant.quantity'])
             ->findOrFail($id);
 
-        return view('order.order-invoice', compact('order'));
+        return view('order.billing-invoice', compact('order'));
     }
 
     /**

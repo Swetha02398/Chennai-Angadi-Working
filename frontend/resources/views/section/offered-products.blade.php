@@ -1,18 +1,18 @@
-<section class="pb-5">
+<section class="pt-5 pb-2">
     <div class="container">
         <div class="section-title wow animate__animated animate__fadeIn">
             <h3>Offered Products</h3>
         </div>
 
         @forelse($offers as $index => $offer)
-            <div class="row mb-5">
+            <div class="row mb-3">
                 <!-- Banner -->
                 <div class="col-lg-2 offer-banner-col">
                     <div class="banner-img style-2 banner-glass"
                         style="background-image:url('{{ env('ADMIN_ASSET_URL') }}/offers/{{ $offer->banner_image }}');
                                                                                                         width:100%; height:370px; object-fit:cover; border-radius:8px;">
                         <div class="banner-text">
-                            <h2 class="mb-100">{{ $offer->title }}</h2>
+                            <h2>{{ $offer->title }}</h2>
                             <a href="{{ route('shop') }}" class="btn btn-xs">Shop Now <i
                                     class="fi-rs-arrow-small-right"></i></a>
                         </div>
@@ -135,7 +135,7 @@
                                                     <div class="offer-price-display-{{ $product->id }}" style="font-size: 15px; font-weight: 600;">
                                                         @if($firstMrp > $firstOfferPrice)
                                                             <span class="offer-mrp-display-{{ $product->id }}"
-                                                                style="text-decoration: line-through; color: #ADADAD; font-size: 13px; font-weight: 400; margin-right: 6px;">
+                                                                style="text-decoration: line-through; color: #ADADAD; margin-right: 6px;">
                                                                 ₹{{ number_format($firstMrp, 0) }}
                                                             </span>
                                                         @else
@@ -152,7 +152,7 @@
                                                 <div class="product-price" style="text-align: center; margin-bottom: 10px;">
                                                     <div style="font-size: 15px; font-weight: 600;">
                                                         @if($product->original_price && $product->original_price > $product->final_price)
-                                                            <span style="text-decoration: line-through; color: #ADADAD; font-size: 13px; font-weight: 400; margin-right: 6px;">
+                                                            <span style="text-decoration: line-through; color: #ADADAD; margin-right: 6px;">
                                                                 ₹{{ number_format($product->original_price, 0) }}
                                                             </span>
                                                         @endif
@@ -162,20 +162,19 @@
                                             @endif
 
                                             {{-- Bottom Row: Qty + ADD Button --}}
-                                            <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto;">
+                                            <div class="product-bottom-action" style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; width: 100%;">
                                                 {{-- Quantity Input --}}
-                                                <div style="display: flex; align-items: center;" class="col-6 pe-1">
+                                                <div class="qty-container" style="display: flex; align-items: center; flex: 1; min-width: 0;">
                                                     <label class="qty-label">Qty:</label>
                                                     <input type="number" class="qty-input offer-product-qty-{{ $product->id }}" value="1" min="1" {{ $firstVariantStock <= 0 ? 'disabled' : '' }}>
                                                 </div>
 
                                                 {{-- Add to Cart Button --}}
-                                                <div class="add-cart col-6 ps-1" style="{{ $firstVariantStock <= 0 ? 'display: none !important;' : '' }}">
+                                                <div class="add-cart" style="flex: 1; min-width: 0; {{ $firstVariantStock <= 0 ? 'display: none !important;' : '' }}">
                                                     <a href="javascript:void(0)" class="add col-12 offer-add-to-cart-btn-{{ $product->id }}"
                                                         data-product-id="{{ $product->id }}"
                                                         data-price="{{ $product->variants->count() > 0 ? $firstOfferPrice : $product->final_price }}"
-                                                        data-stock="{{ $firstVariantStock }}"
-                                                        style="display: inline-flex; justify-content:center; align-items: center; white-space: nowrap; padding: 7px 18px; font-size: 13px; font-weight: 600;">
+                                                        data-stock="{{ $firstVariantStock }}">
                                                         <i class="fi-rs-shopping-cart mr-5"></i>ADD
                                                     </a>
                                                 </div>
@@ -220,6 +219,9 @@
         overflow: hidden;
         background-size: cover;
         background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     /* Glass / Light Blur Layer */
@@ -372,6 +374,36 @@
             -2px -2px 8px rgba(0, 0, 0, 0.4);
         font-weight: 700;
         letter-spacing: 0.3px;
+    }
+
+    /* Center banner text over glass layer — covers full banner area.
+       Overrides theme's .banner-img.style-2 .banner-text { top:50px; transform:none }
+       and base .banner-img .banner-text { top:50%; transform:translateY(-50%); padding:0 50px } */
+    .banner-glass .banner-text {
+        position: absolute !important;
+        inset: 0 !important;
+        top: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        bottom: 0 !important;
+        transform: none !important;
+        z-index: 2;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center;
+        padding: 20px !important;
+    }
+
+    .banner-glass .banner-text h2,
+    .banner-glass .banner-text h4 {
+        margin: 0 0 12px !important;
+        min-height: unset !important;
+    }
+
+    .banner-glass .banner-text .btn {
+        margin-top: 10px;
     }
 
     /* Center product price on all screen sizes */

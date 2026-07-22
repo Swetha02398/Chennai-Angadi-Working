@@ -42,12 +42,10 @@ Route::get('/logout', [DashController::class, 'logout'])->name('logout');
 
 // 👇 Category show route (same controller)
 Route::get('/ajax/categories', [CategoryController::class, 'ajaxList'])->name('ajax.categories');
-// Category products loop route
-Route::get('/category/{slug}', [CategoryController::class, 'products'])->name('category.products');
-// Subcategory products loop route
-Route::get('/subcategory/{slug}', [CategoryController::class, 'subcategoryProducts'])->name('subcategory.products');
-// Child category products route
-Route::get('/childcategory/{slug}', [CategoryController::class, 'childcategoryProducts'])->name('childcategory.products');
+// Category 301 Redirects
+Route::get('/category/{slug}', function($slug) { return redirect('/' . $slug, 301); });
+Route::get('/subcategory/{slug}', function($slug) { return redirect('/' . $slug, 301); });
+Route::get('/childcategory/{slug}', function($slug) { return redirect('/' . $slug, 301); });
 // Quick view route
 Route::get('/product/quick-view/{id}', [ProductController::class, 'quickView'])->name('product.quickview');
 
@@ -159,3 +157,8 @@ Route::get('/test-mail', function () {
         return 'Mail Failed: ' . $e->getMessage();
     }
 });
+
+// Dynamic route for categories, subcategories, and childcategories (MUST BE AT THE VERY END)
+Route::get('/{slug}', [App\Http\Controllers\Web\CategoryController::class, 'resolveSlug'])->name('category.products');
+Route::get('/{slug}', [App\Http\Controllers\Web\CategoryController::class, 'resolveSlug'])->name('subcategory.products');
+Route::get('/{slug}', [App\Http\Controllers\Web\CategoryController::class, 'resolveSlug'])->name('childcategory.products');

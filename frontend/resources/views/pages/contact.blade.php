@@ -34,31 +34,33 @@
 
                         <form class="contact-form-style mt-2" id="contact-form" action="{{ route('pages.contact.store') }}" method="post" novalidate>
                             @csrf
-                            <div class="row m-0 p-0">
-                                <div class="col-lg-6 col-xs-12 p-0 mb-3">
+                            <div class="row">
+                                <div class="col-lg-6 col-xs-12 mb-3">
                                     <input name="name" id="name" class="form-control mb-1" placeholder="Name" type="text" value="{{ old('name') }}" required />
                                     <small class="text-danger d-none" id="nameError">Name is required</small>
                                     @error('name') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
-                                <div class="col-lg-6 col-xs-12 p-0 mb-3">
+                                <div class="col-lg-6 col-xs-12 mb-3">
                                     <input name="email" id="email" class="form-control mb-1" placeholder="Your Email" type="email" value="{{ old('email') }}" required />   
                                     <small class="text-danger d-none" id="emailError">Email is required</small>
                                     @error('email') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
-                                <div class="col-lg-12 col-xs-12 p-0 mb-3">
+                                <div class="col-lg-12 col-xs-12 mb-3">
                                     <input name="telephone" id="telephone" class="form-control mb-1" placeholder="Mobile Number" type="text" value="{{ old('telephone') }}" required minlength="10" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
                                     <small class="text-danger d-none" id="telephoneError">Mobile number must be 10 digits</small>
                                     @error('telephone') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
                             </div>
-                            <div class="row m-0 p-0">
-                                <div class="col-12 p-0 mb-3">
+                            <div class="row">
+                                <div class="col-12 mb-3">
                                     <textarea style="height:150px;" name="message" id="message" class="form-control mb-1" placeholder="Message" required>{{ old('message') }}</textarea>                                    
                                     <small class="text-danger d-none" id="messageError">Message is required</small>
                                     @error('message') <small class="text-danger">{{ $message }}</small> @enderror
                                 </div>
-                                <button class="submit submit-auto-width col-xs-12 mb-2" type="submit"><img src="{{ asset('assets/imgs/theme/icons/icon-email-2.svg') }} "
+                                <div class="col-12">
+                                <button class="submit submit-auto-width w-100 mb-2" type="submit"><img src="{{ asset('assets/imgs/theme/icons/icon-email-2.svg') }} "
                                     alt="" /> Send message</button>
+                                </div>
                                 </div>
                         </form>
                         <script>

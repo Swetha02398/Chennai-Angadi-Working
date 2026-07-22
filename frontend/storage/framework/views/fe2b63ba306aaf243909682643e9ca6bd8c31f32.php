@@ -7,7 +7,159 @@
 <?php $__env->startSection('content'); ?>
     <?php echo $__env->make('includes.alert', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
     <main class="main">
+        <link rel="stylesheet" href="<?php echo e(asset('assets/css/slider-fix.css')); ?>">
+        <script src="<?php echo e(asset('assets/js/slider-fix.js')); ?>"></script>
         <style>
+            /* Desktop Hero Banner ( > 768px ) */
+            @media (min-width: 769px) {
+                .home-slider .container { 
+                    max-width: 1600px !important; 
+                    width: 100% !important;
+                    padding: 0 !important;
+                }
+
+                .home-slide-cover,
+                .hero-slider-1 {
+                    max-width: 1600px !important;
+                    margin: 0 auto !important; /* Centered horizontally */
+                    padding-bottom: 0 !important;
+                    box-sizing: border-box !important;
+                    display: block;
+                }
+                
+                .hero-slider-1,
+                .hero-slider-1 .slick-slide,
+                .hero-slider-1 .slick-slide > div,
+                .hero-slider-1 .single-hero-slider {
+                    height: auto !important;
+                    min-height: unset !important;
+                    max-height: none !important;
+                    box-sizing: border-box !important;
+                }
+                
+                .hero-slider-1 .slick-list,
+                .hero-slider-1 .slick-track {
+                    height: auto !important;
+                    box-sizing: border-box !important;
+                    /* Allow slick JS to natively assign inline pixel-heights to track without !important crushing it */
+                }
+                
+                .hero-slider-1 {
+                    position: relative !important;
+                }
+
+                .hero-slider-1 .single-hero-slider {
+                    margin: 0 !important;
+                    height: 450px !important;
+                    overflow: hidden !important;
+                    background: none !important;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 0 !important;
+                }
+                
+                .hero-slider-1 .single-hero-slider img.hero-responsive-img {
+                    width: 100% !important;
+                    height: 450px !important;
+                    object-fit: cover !important;
+                    max-width: 100% !important;
+                    display: block;
+                    border-radius: 0 !important;
+                    margin: 0 auto !important;
+                }
+
+                /* Dots placement inside banner in desktop */
+                .dot-style-1 .slick-dots,
+                .dot-style-1-position-1 .slick-dots {
+                    bottom: 15px !important;
+                    z-index: 20 !important;
+                }
+
+                .slider-center-arrow {
+                    position: absolute !important;
+                    top: 50% !important;
+                    transform: translateY(-50%) !important;
+                    z-index: 20 !important;
+                    width: 40px !important;
+                    height: 40px !important;
+                    background: rgba(255, 255, 255, 0.8) !important;
+                    border: 1.5px solid #3BB77E !important;
+                    border-radius: 50% !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    color: #3BB77E !important;
+                    cursor: pointer !important;
+                    transition: all 0.3s ease !important;
+                }
+                
+                .slider-center-arrow i {
+                    font-size: 18px !important;
+                    color: inherit !important;
+                    line-height: 1 !important;
+                    margin: 0 !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                }
+
+                .slider-center-arrow.slider-prev {
+                    left: 20px !important; 
+                }
+                
+                .slider-center-arrow.slider-next {
+                    right: 20px !important;
+                }
+
+                .slider-center-arrow:hover {
+                    background: #3BB77E !important;
+                    color: #fff !important;
+                }
+            }
+
+            /* Global styling for numeric dots */
+            .hero-slider-1 .slick-dots {
+                display: flex !important;
+                justify-content: center !important;
+                align-items: center !important;
+                gap: 8px !important;
+                list-style: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+            .hero-slider-1 .slick-dots li {
+                width: auto !important;
+                height: auto !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+
+            .hero-slider-1 .slick-dots li .number-dot {
+                width: 10px !important;
+                height: 10px !important;
+                border-radius: 50% !important;
+                background-color: rgba(255, 255, 255, 0.7) !important;
+                border: none !important;
+                color: transparent !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                font-size: 0 !important;
+                cursor: pointer !important;
+                transition: all 0.3s ease !important;
+            }
+
+            .hero-slider-1 .slick-dots li.slick-active .number-dot {
+                background-color: #3BB77E !important;
+            }
+
+            /* Hide default dot button texts */
+            .hero-slider-1 .slick-dots li button {
+                display: none !important;
+            }
+
             /* Category Tabs Scrollable Styles */
             .category-tabs-wrapper {
                 display: flex;
@@ -39,9 +191,9 @@
             }
 
             .category-nav-arrow {
-                width: 35px;
-                height: 35px;
-                border: 1px solid #3BB77E;
+                width: 22px;
+                height: 22px;
+                border: 1.5px solid #3BB77E;
                 background: #fff;
                 border-radius: 50%;
                 display: flex;
@@ -51,6 +203,8 @@
                 transition: all 0.3s ease;
                 color: #3BB77E;
                 flex-shrink: 0;
+                align-self: center;
+                margin-top: 0 !important;
             }
 
             .category-nav-arrow:hover {
@@ -64,21 +218,26 @@
             }
 
             .category-nav-arrow i {
-                font-size: 14px;
+                font-size: 10px;
+                font-weight: bold;
+                line-height: 1;
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
 
             @media (max-width: 768px) {
                 .category-tabs-container {
-                    max-width: calc(100% - 70px);
+                    max-width: calc(100% - 50px);
                 }
 
                 .category-nav-arrow {
-                    width: 30px;
-                    height: 30px;
+                    width: 20px;
+                    height: 20px;
                 }
 
                 .category-nav-arrow i {
-                    font-size: 12px;
+                    font-size: 9px;
                 }
             }
 
@@ -95,11 +254,135 @@
                 text-align: left;
             }
 
+            /* Mobile Banner - Show full image without cropping */
+            @media (max-width: 768px) {
+                .home-slider { 
+                    margin-bottom: 0 !important; 
+                    padding-bottom: 0 !important;
+                    height: auto !important;
+                }
+                .home-slide-cover { 
+                    margin-top: 0 !important; 
+                    margin-bottom: 0 !important; 
+                    padding-bottom: 0 !important;
+                    height: auto !important;
+                }
+
+                /* Strict 250px dimensions for Mobile Hero Slider */
+                .home-slider .container {
+                    padding-left: 0 !important;
+                    padding-right: 0 !important;
+                }
+                .hero-slider-1 {
+                    display: block;
+                    position: relative !important;
+                    height: auto !important;
+                    margin-top: 11px !important;
+                    margin-bottom: 0 !important;
+                    padding-left: 11px !important;
+                    padding-right: 11px !important;
+                    padding-bottom: 0px !important; /* remove padding */
+                    box-sizing: border-box !important;
+                }
+
+                /* Lock slick internals and apply border-box to override slick JS content-box */
+                .hero-slider-1 .slick-slide,
+                .hero-slider-1 .single-hero-slider {
+                    box-sizing: border-box !important;
+                }
+                
+                .hero-slider-1 .slick-list,
+                .hero-slider-1 .slick-track {
+                    box-sizing: border-box !important;
+                    /* Do not force height auto important on the track so slick JS can calculate bounds properly */
+                }
+                
+                .hero-slider-1 .slick-slide > div {
+                    height: 250px !important;
+                }
+
+                /* Mobile hero slide element styles */
+                .hero-slider-1 .single-hero-slider {
+                    height: 250px !important;
+                    overflow: hidden !important; /* Hide image overflow if any */
+                    margin-bottom: 0 !important;
+                    background: none !important;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 10px !important;
+                }
+                
+                .hero-slider-1 .single-hero-slider img.hero-responsive-img {
+                    width: 100% !important;
+                    height: 250px !important;
+                    object-fit: cover !important;
+                    display: block;
+                }
+
+                /* Push dots inside the banner padding, remove bottom gap, size down to fit */
+                .dot-style-1 .slick-dots,
+                .dot-style-1-position-1 .slick-dots {
+                    bottom: 15px !important;
+                    height: 10px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                    z-index: 20 !important;
+                }
+
+                /* Hide arrows on mobile */
+                .slider-center-arrow {
+                    display: none !important;
+                }
+
+                /* Standard dots on mobile */
+                .hero-slider-1 .slick-dots li {
+                    margin: 0 !important;
+                    width: auto !important;
+                    height: auto !important;
+                }
+                .hero-slider-1 .slick-dots li .number-dot {
+                    width: 8px !important;
+                    height: 8px !important;
+                    font-size: 0 !important; /* Hide number */
+                    color: transparent !important;
+                    background-color: rgba(255, 255, 255, 0.7) !important;
+                    border: none !important;
+                    border-radius: 50% !important;
+                }
+                .hero-slider-1 .slick-dots li.slick-active .number-dot {
+                    background-color: #3BB77E !important;
+                }
+
+                /* Hide dots if only 1 slide exists */
+                .hero-slider-1.single-slide .slick-dots {
+                    display: none !important;
+                }
+
+                /* Our Products - vertically center arrows with tab text */
+                .category-tabs-wrapper {
+                    align-items: center !important;
+                }
+
+                .category-nav-arrow {
+                    align-self: center !important;
+                    margin-top: 0 !important;
+                    flex-shrink: 0;
+                }
+
+                .category-tabs-container #categoryTabs .nav-item .nav-link {
+                    display: flex;
+                    align-items: center;
+                    height: 100%;
+                }
+            }
+
         </style>
         <section class="home-slider position-relative mb-10">
             <div class="container">
                 <div class="home-slide-cover mt-10">
-                    <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1">
+                    <div class="hero-slider-1 style-4 dot-style-1 dot-style-1-position-1 <?php echo e(($topSliders ?? collect([]))->count() <= 1 ? 'single-slide' : ''); ?>">
                         <?php if($topSliders->count() > 0): ?>
                             <?php $__currentLoopData = $topSliders; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $slider): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <?php
@@ -109,8 +392,8 @@
                                     $topImg = ltrim($topImg, '/');
                                     $adminUrl = rtrim(config('app.admin_asset_url'), '/');
                                 ?>
-                                <div class="single-hero-slider single-animation-wrap"
-                                    style="background-image: url('<?php echo e($adminUrl); ?>/<?php echo e($topImg); ?>'); background-size: cover; background-position: center;">
+                                <div class="single-hero-slider single-animation-wrap">
+                                    <img src="<?php echo e($adminUrl); ?>/<?php echo e($topImg); ?>" class="hero-responsive-img" alt="Promotional Banner" loading="eager">
                                     <!-- <div class="slider-content">
                                         <?php if($slider->title_text): ?>
                                             <?php echo $slider->title_text; ?>
@@ -152,7 +435,7 @@
         </section>
         <!--End hero slider-->
         <!-- Featured Categories -->
-        <section class="popular-categories pt-5">
+        <section class="popular-categories pt-5 mt-2">
             <div class="container wow animate__animated animate__fadeIn">
                 <div class="section-title">
                     <div class="title">

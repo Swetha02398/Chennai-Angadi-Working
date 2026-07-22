@@ -57,27 +57,30 @@
         font-size: 12px;
     }
 
+    #carausel-10-columns-arrows {
+        display: flex !important;
+        justify-content: space-between !important;
+        width: calc(100% + 40px) !important;
+        position: absolute !important;
+        top: 40% !important; /* Lower: aligns with image center-bottom boundary */
+        transform: translateY(-50%) !important;
+        z-index: 10 !important;
+        pointer-events: none !important;
+        left: -20px !important;
+    }
+
+    #carausel-10-columns-arrows .slider-btn {
+        position: relative !important;
+        left: auto !important;
+        right: auto !important;
+        pointer-events: auto !important;
+        margin: 0 !important;
+    }
+
     @media (max-width: 768px) {
         #carausel-10-columns-arrows {
-            display: flex !important;
-            justify-content: space-between !important;
-            width: 100% !important;
-            position: absolute !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            z-index: 10 !important;
-            pointer-events: none !important;
-            left: 0 !important;
-            right: 0 !important;
-            padding: 0 10px;
-        }
-
-        #carausel-10-columns-arrows .slider-btn {
-            position: relative !important;
-            left: auto !important;
-            right: auto !important;
-            pointer-events: auto !important;
-            margin: 0 !important;
+            width: calc(100% + 20px) !important;
+            left: -10px !important;
         }
     }
 </style>
@@ -88,7 +91,7 @@
             <div class="card-2 bg-{{ ($loop->index % 6) + 9 }} wow animate__animated animate__fadeInUp"
                 data-wow-delay=".{{ $loop->iteration }}s">
                 <figure class="img-hover-scale overflow-hidden">
-                    <a href="{{ route('category.products', $category->slug) }}">
+                    <a href="{{ url('/' . $category->slug) }}">
                         <img src="{{ config('app.admin_asset_url') }}/maincategory/{{ basename($category->image) }}"
                             alt="{{ $category->name }}"
                             onerror="this.src='{{ asset('assets/imgs/theme/icons/category-1.svg') }}'" />
@@ -96,7 +99,7 @@
                 </figure>
 
                 <h6>
-                    <a href="{{ route('category.products', $category->slug) }}">{{ $category->name }}</a>
+                    <a href="{{ url('/' . $category->slug) }}">{{ $category->name }}</a>
                 </h6>
 
                 <span>{{ $category->products_count }} Available</span>

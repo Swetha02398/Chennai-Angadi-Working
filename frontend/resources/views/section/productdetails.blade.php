@@ -50,10 +50,13 @@
         /* 🟩 THUMBNAIL SLIDER - MAX 4 VISIBLE, NO SCROLLBAR, SIDE ARROWS */
         .custom-thumbnails-wrapper {
             position: relative;
-            /* Max width: 4 thumbnails (80px each) + 3 gaps (10px) + padding for arrows */
-            max-width: 390px;
+            /* Adaptive width based on number of thumbnails */
+            max-width: 100%;
+            width: fit-content;
             margin: 0 auto;
-            padding: 0 45px;
+            /* 36px is the width of the arrow. Adding 3mm gap. */
+            padding-left: calc(36px + 3mm);
+            padding-right: calc(36px + 3mm);
             /* Space for side arrows */
         }
 
@@ -527,7 +530,7 @@
                     <a href="{{ route('index') }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                     @if($product->category)
                         <span></span>
-                        <a href="{{ route('category.products', $product->category->slug) }}">{{ $product->category->name }}</a>
+                        <a href="{{ url('/' . $product->category->slug) }}">{{ $product->category->name }}</a>
                     @endif
                     <span></span> {{ $product->productname }}
                 </div>
@@ -1137,7 +1140,7 @@
                                                 @php
                                                     $sidebarCatImage = str_replace('uploads/', '', $cat->image);
                                                 @endphp
-                                                <a href="{{ route('category.products', $cat->slug) }}">
+                                                <a href="{{ url('/' . $cat->slug) }}">
                                                     <img src="{{ env('ADMIN_ASSET_URL') }}/{{ $sidebarCatImage }}"
                                                         alt="{{ $cat->name }}"
                                                         style="width: 30px; height: 30px; object-fit: cover;">

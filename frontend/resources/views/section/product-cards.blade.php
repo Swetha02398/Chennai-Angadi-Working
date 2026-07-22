@@ -128,7 +128,7 @@
                             style="font-size: 15px; font-weight: 600;">
                             @if($originalPrice && $originalPrice > $currentPrice)
                                 <span class="product-mrp-display-{{ $product->id }}"
-                                    style="text-decoration: line-through; color: #ADADAD; font-size: 18px; font-weight: 400; margin-right: 6px;">
+                                    style="text-decoration: line-through; color: #ADADAD; margin-right: 6px;">
                                     ₹{{ number_format($originalPrice, 0) }}
                                 </span>
                             @else
@@ -142,20 +142,19 @@
                     </div>
 
                     {{-- Bottom Row: Qty + ADD Button --}}
-                    <div
-                        style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: auto;">
+                    <div class="product-bottom-action"
+                        style="display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-top: auto; width: 100%;">
                         {{-- Quantity Input --}}
-                        <div style="display: flex; align-items: center;" class="col-6 pe-1">
+                        <div class="qty-container" style="display: flex; align-items: center; flex: 1; min-width: 0;">
                             <label class="qty-label">Qty:</label>
                             <input type="number" class="qty-input product-qty-{{ $product->id }}" value="1" min="1" {{ $firstVariantStock <= 0 ? 'disabled' : '' }}>
                         </div>
 
                         {{-- Add to Cart Button --}}
-                        <div class="add-cart col-6 ps-1" style="{{ $firstVariantStock <= 0 ? 'display: none !important;' : '' }}">
+                        <div class="add-cart" style="flex: 1; min-width: 0; {{ $firstVariantStock <= 0 ? 'display: none !important;' : '' }}">
                             <a href="javascript:void(0)" class="add col-12 add-to-cart-btn-{{ $product->id }}"
                                 data-product-id="{{ $product->id }}" data-price="{{ $currentPrice }}"
-                                data-stock="{{ $firstVariantStock }}"
-                                style="display:flex; justify-content:center; align-items: center; white-space: nowrap; padding: 7px 18px; font-size: 13px; font-weight: 600;">
+                                data-stock="{{ $firstVariantStock }}">
                                 <i class="fi-rs-shopping-cart mr-5"></i>ADD
                             </a>
                         </div>

@@ -393,7 +393,7 @@
                                         <i class="bi bi-check2-square me-1"></i> Select to Delete
                                     </button>
                                     <button type="button" id="deleteSelectedBtn" class="btn btn-sm btn-danger d-none" onclick="deleteSelectedImages({{ $product->id }})">
-                                        <i class="bi bi-trash me-1"></i> Delete Selected (<span id="selectedCount">0</span>)
+                                        <i class="bi bi-trash me-1"></i> Delete  (<span id="selectedCount">0</span>)
                                     </button>
                                 </div>
                                 @endif

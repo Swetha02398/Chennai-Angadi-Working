@@ -1,76 +1,64 @@
 <footer class="main">
-    <section class="featured pt-3">
+    <section class="featured pt-4 pb-1 mb-0">
         <div class="container">
             <div class="row">
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6 mb-md-4 mb-xl-0">
-                    <div class="banner-left-icon d-flex align-items-center wow animate_animated animate_fadeInUp"
+                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6 mb-3">
+                    <div class="banner-left-icon d-flex align-items-center h-100 wow animate_animated animate_fadeInUp"
                         data-wow-delay="0">
                         <div class="banner-icon">
-                            <img src="{{ asset('assets/imgs/theme/icons/icon-1.svg') }} " alt="" />
+                            <img src="{{ asset('assets/imgs/theme/icons/icon-3.svg') }} " alt="Premium Quality" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title">Best prices & offers</h3>
-                            <p>Orders $50 or more</p>
+                            <h3 class="icon-box-title">Premium Quality</h3>
+                            <p>Authentic & Fresh Products</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
-                    <div class="banner-left-icon d-flex align-items-center wow animate_animated animate_fadeInUp"
+                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6 mb-3">
+                    <div class="banner-left-icon d-flex align-items-center h-100 wow animate_animated animate_fadeInUp"
                         data-wow-delay=".1s">
                         <div class="banner-icon">
-                            <img src="{{ asset('assets/imgs/theme/icons/icon-2.svg') }} " alt="" />
+                            <img src="{{ asset('assets/imgs/theme/icons/icon-6.svg') }} " alt="Pan India Delivery" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title">Free delivery</h3>
-                            <p>24/7 amazing services</p>
+                            <h3 class="icon-box-title">Pan India Delivery</h3>
+                            <p>Fast Shipping Across India</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
-                    <div class="banner-left-icon d-flex align-items-center wow animate_animated animate_fadeInUp"
+                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6 mb-3">
+                    <div class="banner-left-icon d-flex align-items-center h-100 wow animate_animated animate_fadeInUp"
                         data-wow-delay=".2s">
                         <div class="banner-icon">
-                            <img src="{{ asset('assets/imgs/theme/icons/icon-3.svg') }} " alt="" />
+                            <img src="{{ asset('assets/imgs/theme/icons/icon-1.svg') }} " alt="Exclusive Offers" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title">Great daily deal</h3>
-                            <p>When you sign up</p>
+                            <h3 class="icon-box-title">Exclusive Offers</h3>
+                            <p>Save More Every Day</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
-                    <div class="banner-left-icon d-flex align-items-center wow animate_animated animate_fadeInUp"
+                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6 mb-3">
+                    <div class="banner-left-icon d-flex align-items-center h-100 wow animate_animated animate_fadeInUp"
                         data-wow-delay=".3s">
                         <div class="banner-icon">
-                            <img src="{{ asset('assets/imgs/theme/icons/icon-4.svg') }} " alt="" />
+                            <img src="{{ asset('assets/imgs/theme/icons/icon-4.svg') }} " alt="Traditional Products" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title">Wide assortment</h3>
-                            <p>Mega Discounts</p>
+                            <h3 class="icon-box-title">500+ Traditional Products</h3>
+                            <p>Authentic Sweets, Snacks & Toys</p>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6">
-                    <div class="banner-left-icon d-flex align-items-center wow animate_animated animate_fadeInUp"
+                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6 mb-3">
+                    <div class="banner-left-icon d-flex align-items-center h-100 wow animate_animated animate_fadeInUp"
                         data-wow-delay=".4s">
                         <div class="banner-icon">
-                            <img src="{{ asset('assets/imgs/theme/icons/icon-5.svg') }} " alt="" />
+                            <img src="{{ asset('assets/imgs/theme/icons/icon-2.svg') }} " alt="Happy Customers" />
                         </div>
                         <div class="banner-text">
-                            <h3 class="icon-box-title">Easy returns</h3>
-                            <p>Within 30 days</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-1-5 col-md-4 col-12 col-sm-6 d-xl-none">
-                    <div class="banner-left-icon d-flex align-items-center wow animate_animated animate_fadeInUp"
-                        data-wow-delay=".5s">
-                        <div class="banner-icon">
-                            <img src="{{ asset('assets/imgs/theme/icons/icon-6.svg') }} " alt="" />
-                        </div>
-                        <div class="banner-text">
-                            <h3 class="icon-box-title">Safe delivery</h3>
-                            <p>Within 30 days</p>
+                            <h3 class="icon-box-title">50K+ Happy Customers</h3>
+                            <p>Serving Families Across India</p>
                         </div>
                     </div>
                 </div>
@@ -101,7 +89,7 @@
                                     alt="" /><strong>Email:</strong><span><a
                                         href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a></span></li>
                             <li><img src="{{ asset('assets/imgs/theme/icons/icon-clock.svg') }} "
-                                    alt="" /><strong>Hours:</strong><span>10:00 - 18:00, Mon - Sat</span></li>
+                                    alt="" /><strong>Hours:</strong><span>10:00 AM - 7:00 PM, Mon - Sat</span></li>
                         </ul>
                     </div>
                 </div>
@@ -133,7 +121,7 @@
                     <ul class="footer-list mb-sm-5 mb-md-0">
                         @isset($popularCategories)
                             @foreach($popularCategories as $popCat)
-                                <li><a href="{{ route('category.products', $popCat->slug) }}">{{ $popCat->name }}</a></li>
+                                <li><a href="{{ url('/' . $popCat->slug) }}">{{ $popCat->name }}</a></li>
                             @endforeach
                         @endisset
                     </ul>
@@ -141,10 +129,12 @@
                 <div class="footer-link-widget widget-install-app col wow animate_animated animate_fadeInUp"
                     data-wow-delay=".5s">
                     <div class="row mb-3">
-                          <img class="col-6"
-                                src="{{ asset('assets/imgs/images/google-play-1.svg') }}" alt="" />  
-                          <img class="col-6"
-                                src="{{ asset('assets/imgs/images/ios.png') }}" alt="" />  
+                          <a href="https://play.google.com/store/apps" class="col-6" target="_blank" rel="noopener noreferrer">
+                              <img src="{{ asset('assets/imgs/images/google-play-1.svg') }}" alt="" />  
+                          </a>
+                          <a href="https://www.apple.com/app-store/" class="col-6" target="_blank" rel="noopener noreferrer">
+                              <img src="{{ asset('assets/imgs/images/ios.png') }}" alt="" />  
+                          </a>
                     </div>
                     <div class="row mb-3">
                           <img class="col-8"
@@ -193,8 +183,7 @@
                             alt="" /></a> -->
                     <a href="https://www.youtube.com/@chennaiangadi" target="_blank"><img
                             src="{{ asset('assets/imgs/theme/icons/icon-youtube-white.svg') }} " alt="" /></a>
-                    <a href="https://wa.me/919094676665" target="_blank"><img
-                            src="{{ asset('assets/imgs/theme/icons/icon-whatsapp-white.svg') }} " alt="WhatsApp" style="width: 22px; max-width: 22px; vertical-align: middle; margin-left:2px; transform: scale(1.1);" /></a>
+
                 </div>
 
             </div>

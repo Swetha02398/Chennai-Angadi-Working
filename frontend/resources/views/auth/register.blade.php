@@ -17,16 +17,16 @@
                         <div class="row">
                             <div class="col-lg-6 col-md-8">
                                 <div class="login_wrap widget-taber-content background-white">
-                                    <div class="padding_eight_all bg-white">
+                                    <div class="p-4 bg-white">
                                         <div class="heading_s1">
-                                            <h1 class="mb-5">Create an Account</h1>
-                                            <p class="mb-30">Already have an account? <a href=" {{ route('login') }}">Login</a></p>
+                                            <h1 class="mb-2">Create an Account</h1>
+                                            <p class="mb-10">Already have an account? <a href=" {{ route('login') }}">Login</a></p>
                                         </div>
                                         <form method="POST" action="{{ route('store') }}" id="register-form" novalidate>
     @csrf
 
     <!-- Username -->
-    <div class="form-group mb-3">
+    <div class="form-group mb-2">
         <input type="text" name="username" id="username" placeholder="Username" value="{{ old('username') }}" class="form-control @error('username') is-invalid @enderror" required />
         <small class="text-danger d-none" id="usernameError">Username is required</small>
         @error('username')
@@ -35,7 +35,7 @@
     </div>
 
     <!-- Email -->
-    <div class="form-group mb-3">
+    <div class="form-group mb-2">
         <input type="email" name="email" id="email" placeholder="Email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" required />
         <small class="text-danger d-none" id="emailError">Email is required</small>
         @error('email')
@@ -44,7 +44,7 @@
     </div>
 
     <!-- Password -->
-    <div class="form-group mb-3">
+    <div class="form-group mb-2">
         <input type="password" name="password" id="password" placeholder="Password" class="form-control @error('password') is-invalid @enderror" required />
         <small class="text-danger d-none" id="passwordError">Password is required</small>
         @error('password')
@@ -53,7 +53,7 @@
     </div>
 
     <!-- Confirm Password -->
-    <div class="form-group mb-3">
+    <div class="form-group mb-2">
         <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Confirm Password" class="form-control @error('password_confirmation') is-invalid @enderror" required />
         <small class="text-danger d-none" id="password_confirmationError">Confirmation is required</small>
         @error('password_confirmation')
@@ -62,7 +62,7 @@
     </div>
 
     <!-- Mobile -->
-    <div class="form-group mb-3">
+    <div class="form-group mb-2">
         <input type="tel" name="mobilenumber" id="mobilenumber" placeholder="Mobile Number" value="{{ old('mobilenumber') }}" class="form-control @error('mobilenumber') is-invalid @enderror" required maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')" />
         <small class="text-danger d-none" id="mobilenumberError">Mobile number must be 10 digits</small>
         @error('mobilenumber')
@@ -71,7 +71,7 @@
     </div>
 
     <!-- Terms -->
-    <div class="login_footer form-group mb-30">
+    <div class="login_footer form-group mb-20">
         <div class="chek-form">
             <div class="custome-checkbox">
                 <input class="form-check-input" type="checkbox" name="agree" id="agree" required />
@@ -87,7 +87,7 @@
     </div>
 
     <!-- Submit -->
-    <div class="form-group mb-30">
+    <div class="form-group mb-20">
         <button type="submit" class="btn btn-fill-out btn-block hover-up font-weight-bold">
              Register
         </button>

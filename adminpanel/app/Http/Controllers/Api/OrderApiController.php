@@ -411,21 +411,23 @@ class OrderApiController extends Controller
                 'message'  => 'Order placed via Application',
             ]);
 
-            // Dispatch OrderPlaced event for invoice email (COD orders confirmed immediately)
+            // Dispatch OrderPlaced event and Admin Mail in background (COD orders confirmed immediately)
             if ($paymentMethod === 'cod') {
-                event(new \App\Events\OrderPlaced($order));
-                
-                // Send Admin Notification Email for COD
-                try {
-                    $adminEmail = config('app.admin_email') 
-                        ?? User::where('role', 'superadmin')->value('email') 
-                        ?? User::where('role', 'admin')->value('email')
-                        ?? 'care@chennaiangadi.com';
-                        
-                    Mail::to($adminEmail)->send(new AdminOrderNotification($order));
-                } catch (\Exception $adminEmailError) {
-                    Log::error('Admin order notification email failed via API (COD): ' . $adminEmailError->getMessage());
-                }
+                dispatch(function () use ($order) {
+                    event(new \App\Events\OrderPlaced($order));
+                    
+                    // Send Admin Notification Email for COD
+                    try {
+                        $adminEmail = config('app.admin_email') 
+                            ?? \App\Models\User::where('role', 'superadmin')->value('email') 
+                            ?? \App\Models\User::where('role', 'admin')->value('email')
+                            ?? 'care@chennaiangadi.com';
+                            
+                        \Mail::to($adminEmail)->send(new \App\Mail\AdminOrderNotification($order));
+                    } catch (\Exception $adminEmailError) {
+                        Log::error('Admin order notification email failed via API (COD): ' . $adminEmailError->getMessage());
+                    }
+                })->afterResponse();
             }
 
             Log::info('Order created via API', [
@@ -555,20 +557,21 @@ class OrderApiController extends Controller
                 'razorpay_payment_id' => $request->razorpay_payment_id,
             ]);
 
-            // Dispatch OrderPlaced event for invoice email
-            event(new \App\Events\OrderPlaced($order));
+            // Dispatch OrderPlaced event and Admin Mail in background for Online Success
+            dispatch(function () use ($order) {
+                event(new \App\Events\OrderPlaced($order));
 
-            // Send Admin Notification Email for Online Success
-            try {
-                $adminEmail = config('app.admin_email') 
-                    ?? User::where('role', 'superadmin')->value('email') 
-                    ?? User::where('role', 'admin')->value('email')
-                    ?? 'care@chennaiangadi.com';
-                    
-                Mail::to($adminEmail)->send(new AdminOrderNotification($order));
-            } catch (\Exception $adminEmailError) {
-                Log::error('Admin order notification email failed via API (Online): ' . $adminEmailError->getMessage());
-            }
+                try {
+                    $adminEmail = config('app.admin_email') 
+                        ?? \App\Models\User::where('role', 'superadmin')->value('email') 
+                        ?? \App\Models\User::where('role', 'admin')->value('email')
+                        ?? 'care@chennaiangadi.com';
+                        
+                    \Mail::to($adminEmail)->send(new \App\Mail\AdminOrderNotification($order));
+                } catch (\Exception $adminEmailError) {
+                    Log::error('Admin order notification email failed via API (Online): ' . $adminEmailError->getMessage());
+                }
+            })->afterResponse();
 
             Log::info('Razorpay payment verified via API', [
                 'order_id'           => $order->id,

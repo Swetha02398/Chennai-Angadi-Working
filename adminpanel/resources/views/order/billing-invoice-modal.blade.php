@@ -2,6 +2,11 @@
 <style>
     .invoice-print-content { font-family: 'Arial', sans-serif; background: #fff; color: #000; padding: 15px; }
     .invoice-print-content * { margin: 0; padding: 0; box-sizing: border-box; }
+    @media print {
+        @page { margin: 5mm; }
+        html, body { background: #fff; margin: 0 !important; padding: 0 !important; width: 100%; height: auto !important; }
+        .invoice-print-content { padding: 0 !important; margin: 0 !important; width: 100% !important; max-width: none !important; border: none !important; }
+    }
     
     /* GST Included Styles (gi-) */
     .gi-top-section { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 11px; }
@@ -26,7 +31,7 @@
     .gi-table td { border: 1px solid #999; padding: 5px 4px; font-size: 10px; text-align: center; white-space: nowrap; }
     .gi-table td.product-name { text-align: left; white-space: normal; }
     .gi-summary-row { display: flex; justify-content: space-between; border: 1px solid #999; border-top: none; font-size: 11px; }
-    .gi-summary-row .label { padding: 6px 8px; flex: 1; font-weight: 600; color: #dc3545; }
+    .gi-summary-row .label { padding: 6px 8px; flex: 1; font-weight: 600; color: #dc3545; text-align: right; }
     .gi-summary-row .amount { padding: 6px 8px; width: 80px; text-align: right; border-left: 1px solid #999; color: #dc3545; }
     .gi-total-row { font-size: 12px; font-weight: bold; }
     .gi-footer { margin-top: 15px; text-align: center; font-size: 10px; color: #333; line-height: 1.5; border-top: 1px dashed #999; padding-top: 10px; }
@@ -184,6 +189,14 @@
                 <td style="text-align: center; font-weight: bold; color: #dc3545; border: 1px solid #999; white-space: nowrap;">₹{{ number_format($order->shipping_amount, 0) }}</td>
             </tr>
             @endif
+            @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
+            @if((float)($order->cod_charge ?? 0) > 0)
+            <tr>
+                <td colspan="4" style="text-align: right; font-weight: bold; color: #dc3545; border: 1px solid #999;">COD Charges</td>
+                <td style="text-align: center; font-weight: bold; color: #dc3545; border: 1px solid #999; white-space: nowrap;">₹{{ number_format($order->cod_charge, 0) }}</td>
+            </tr>
+            @endif
+            @endif
             <tr>
                 <td colspan="4" style="text-align: right; font-weight: bold; color: #dc3545; font-size: 12px; border: 1px solid #999;">TOTAL</td>
                 <td style="text-align: center; font-weight: bold; color: #dc3545; font-size: 14px; border: 1px solid #999; white-space: nowrap;">₹{{ number_format(($order->final_amount ?? $order->total_amount) - ($order->tax_amount ?? 0), 2) }}</td>
@@ -333,6 +346,14 @@
                 <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">Shipping Charges</td>
                 <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($order->shipping_amount, 0) }}</td>
             </tr>
+            @endif
+            @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
+            @if((float)($order->cod_charge ?? 0) > 0)
+            <tr>
+                <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">COD Charges</td>
+                <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($order->cod_charge, 0) }}</td>
+            </tr>
+            @endif
             @endif
             @php $totalTax = $totalGst + $totalSgst + $totalIgst; @endphp
             <tr>

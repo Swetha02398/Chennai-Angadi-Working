@@ -1,4 +1,4 @@
-@extends('layouts.app')
+﻿@extends('layouts.app')
 @section('content')
     @include('includes.alert')
     <main class="main pages">
@@ -60,9 +60,9 @@
                                         aria-labelledby="dashboard-tab">
                                         <h4 class="mb-0">Hello {{ $customer->username ?? 'Guest' }}!</h4>
                                         <p>From your account dashboard. you can easily check &amp; view your <a
-                                                        href="#">recent orders</a>,<br />
-                                                    manage your <a href="#">shipping and billing addresses</a> and <a
-                                                        href="#">edit your password and account details.</a>
+                                                        href="{{ url('myAccount') }}?tab=orders">recent orders</a>,<br />
+                                                    manage your <a href="{{ url('myAccount') }}?tab=account-detail">shipping and billing addresses</a> and <a
+                                                        href="{{ url('myAccount') }}?tab=account-detail&edit=1">edit your password and account details.</a>
                                                 </p>                                        
                                     </div>
                                     <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
@@ -96,30 +96,37 @@
                                                                         <td>{{ \Carbon\Carbon::parse($order->created_at)->format('M d, Y') }}
                                                                         </td>
                                                                         <td>
-                                                                            <span
-                                                                                class="badge order-status-badge
-                                                                                    @if($order->status == 'pending') bg-warning
-                                                                                    @elseif($order->status == 'placed') bg-info
-                                                                                    @elseif($order->status == 'processing') bg-primary
-                                                                                    @elseif($order->status == 'shipped') bg-secondary
-                                                                                    @elseif($order->status == 'delivered') bg-success
-                                                                                    @elseif($order->status == 'cancelled') bg-danger
-                                                                                    @else bg-secondary
-                                                                                    @endif">
-                                                                                {{ ucfirst($order->status) }}
+                                                                            @php
+                                                                                $statusIcon = 'fi-rs-label';
+                                                                                $statusLabel = ucfirst($order->status);
+                                                                                $statusBg = 'bg-secondary';
+                                                                                $normalizedStatus = strtolower($order->status);
+                                                                                if($normalizedStatus == 'hold' || $normalizedStatus == 'pending') { $statusIcon = 'fi-rs-time-fast'; $statusLabel = 'Hold'; $statusBg = 'bg-warning text-dark'; }
+                                                                                elseif($normalizedStatus == 'placed' || $normalizedStatus == 'confirmed') { $statusIcon = 'fi-rs-box'; $statusLabel = 'Confirmed'; $statusBg = 'bg-info'; }
+                                                                                elseif($normalizedStatus == 'processing') { $statusIcon = 'fi-rs-settings-sliders'; $statusLabel = 'Processing'; $statusBg = 'bg-primary'; }
+                                                                                elseif($normalizedStatus == 'shipped' || $normalizedStatus == 'shipping') { $statusIcon = 'fi-rs-paper-plane'; $statusLabel = 'Shipped'; $statusBg = 'bg-secondary'; }
+                                                                                elseif($normalizedStatus == 'delivered') { $statusIcon = 'fi-rs-check'; $statusLabel = 'Delivered'; $statusBg = 'bg-success'; }
+                                                                                elseif($normalizedStatus == 'cancelled') { $statusIcon = 'fi-rs-cross-circle'; $statusLabel = 'Cancelled'; $statusBg = 'bg-danger'; }
+                                                                            @endphp
+                                                                            <span class="badge order-status-badge {{ $statusBg }}">
+                                                                                <i class="{{ $statusIcon }} me-1"></i> {{ $statusLabel }}
                                                                             </span>
                                                                         </td>
                                                                         <td>
-                                                                            <span class="badge order-status-badge
-                                                                                    @if($order->payment_status == 'paid') bg-success
-                                                                                    @elseif($order->payment_status == 'cod') bg-warning
-                                                                                    @elseif($order->payment_status == 'pending') bg-warning
-                                                                                    @elseif($order->payment_status == 'not_paid') bg-danger
-                                                                                    @elseif($order->payment_status == 'failed') bg-danger
-                                                                                    @elseif($order->payment_status == 'refunded') bg-info
-                                                                                    @else bg-secondary
-                                                                                    @endif">
-                                                                                {{ $order->payment_status === 'cod' ? 'COD' : ($order->payment_status === 'not_paid' ? 'Not Paid' : ucfirst($order->payment_status ?? 'Pending')) }}
+                                                                            @php
+                                                                                $payIcon = 'fi-rs-credit-card';
+                                                                                $payLabel = ucfirst($order->payment_status ?? 'hold');
+                                                                                $payBg = 'bg-secondary';
+                                                                                $normalizedPay = strtolower($order->payment_status ?? 'hold');
+                                                                                if($normalizedPay == 'paid') { $payIcon = 'fi-rs-check'; $payLabel = 'Paid'; $payBg = 'bg-success'; }
+                                                                                elseif($normalizedPay == 'cod') { $payIcon = 'fi-rs-money'; $payLabel = 'COD'; $payBg = 'bg-warning text-dark'; }
+                                                                                elseif($normalizedPay == 'hold' || $normalizedPay == 'pending') { $payIcon = 'fi-rs-time-fast'; $payLabel = 'Pending'; $payBg = 'bg-warning text-dark'; }
+                                                                                elseif($normalizedPay == 'not_paid') { $payIcon = 'fi-rs-cross-circle'; $payLabel = 'Not Paid'; $payBg = 'bg-danger'; }
+                                                                                elseif($normalizedPay == 'failed') { $payIcon = 'fi-rs-cross'; $payLabel = 'Failed'; $payBg = 'bg-danger'; }
+                                                                                elseif($normalizedPay == 'refunded') { $payIcon = 'fi-rs-undo'; $payLabel = 'Refunded'; $payBg = 'bg-info'; }
+                                                                            @endphp
+                                                                            <span class="badge order-status-badge {{ $payBg }}">
+                                                                                <i class="{{ $payIcon }} me-1"></i> {{ $payLabel }}
                                                                             </span>
                                                                         </td>
                                                                         <td>₹{{ number_format($order->final_amount, 2) }} for
@@ -127,7 +134,9 @@
                                                                         </td>
                                                                         <td>
                                                                             <button class="btn me-1 order-action-btn"
-                                                                                onclick="viewOrder({{ $order->id }})">View</button>
+                                                                                onclick="viewOrder({{ $order->id }})">
+                                                                                <i class="fi-rs-eye me-1"></i>View
+                                                                            </button>
                                                                             <button class="btn order-action-btn"
                                                                                 onclick="downloadInvoice({{ $order->id }})">
                                                                                 <i class="fi-rs-download me-1"></i>Invoice
@@ -159,7 +168,7 @@
                                                             onsubmit="return trackOrder(event)">
                                                             @csrf
                                                             <div class="input-style mb-20">
-                                                                <label>Order Id</label>
+                                                                <h4 class="mb-10">Order Id</h4>
                                                                 <input name="order_number" id="track_order_number"
                                                                     placeholder="e.g., ORD-XXXXXXXX-XXXXXXXX" type="text"
                                                                     required />
@@ -180,29 +189,28 @@
                                                         <div class="order-info-track">
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-15">
-                                                                    <p class="mb-5"><strong>Order Id:</strong></p>
-                                                                    <p id="result_order_number" class="text-brand">-</p>
+                                                                    <h4 class="mb-10">Order Id:</h4>
+                                                                    <h4 id="result_order_number" class="text-brand">-</h4>
                                                                 </div>
                                                                 <div class="col-md-6 mb-15">
-                                                                    <p class="mb-5"><strong>Order Status:</strong></p>
-                                                                    <p><span id="result_order_status"
-                                                                            class="badge bg-primary">-</span></p>
+                                                                    <h4 class="mb-10">Order Status:</h4>
+                                                                    <h4><span id="result_order_status"
+                                                                            class="badge bg-primary">-</span></h4>
                                                                 </div>
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-15">
-                                                                    <p class="mb-5"><strong>Order Date:</strong></p>
-                                                                    <p id="result_order_date">-</p>
+                                                                    <h4 class="mb-10">Order Date:</h4>
+                                                                    <h4 id="result_order_date">-</h4>
                                                                 </div>
                                                                 <div class="col-md-6 mb-15">
-                                                                    <p class="mb-5"><strong>Total Amount:</strong></p>
-                                                                    <p id="result_order_total" class="text-brand fw-bold">-
-                                                                    </p>
+                                                                    <h4 class="mb-10">Total Amount:</h4>
+                                                                    <h4 id="result_order_total" class="text-brand fw-bold">-</h4>
                                                                 </div>
                                                             </div>
                                                             <div class="row">
                                                                 <div class="col-12">
-                                                                    <p class="mb-10"><strong>Tracking Notes:</strong></p>
+                                                                    <h4 class="mb-10">Tracking Notes:</h4>
                                                                     <div id="result_order_notes" class="tracking-notes-box">
                                                                         -</div>
                                                                 </div>
@@ -345,70 +353,69 @@
                                                             enctype="multipart/form-data">
                                                             @csrf
                                                             
+                                                            <div class="mb-4">
+                                                                @if(!empty($customer->profile_image) && file_exists(public_path('uploads/profile/' . $customer->profile_image)))
+                                                                    <img src="{{ asset('uploads/profile/' . $customer->profile_image) }}" class="profile-avatar" alt="Profile">
+                                                                @else
+                                                                    <div class="profile-avatar-default">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                            
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label font-weight-bold">Username</label>
                                                                     <input type="text" class="form-control" placeholder="Username" name="username" value="{{ $customer->username }}">                                                            
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label font-weight-bold">Email</label>
                                                                     <input type="email" class="form-control" placeholder="Email" name="email" value="{{ $customer->email }}">                                                            
                                                                 </div>
                                                             </div>
 
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label font-weight-bold">Mobile Number</label>
                                                                     <input type="text" class="form-control" placeholder="Mobile Number" name="mobilenumber" value="{{ $customer->mobilenumber }}">
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label font-weight-bold">Address</label>
                                                                     <input type="text" class="form-control" placeholder="Address" name="address" value="{{ $customer->address }}">
                                                                 </div>
                                                             </div>
 
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label font-weight-bold">City</label>
                                                                     <input type="text" class="form-control" placeholder="City" name="city" value="{{ $customer->city }}">
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">                                                                    
-                                                                    <label class="form-label font-weight-bold">State</label>
                                                                     <input type="text" class="form-control" placeholder="State" name="state" value="{{ $customer->state }}">
                                                                 </div>
                                                             </div>
 
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label font-weight-bold">Country</label>
                                                                     <input type="text" class="form-control" placeholder="Country" name="country" value="{{ $customer->country }}">
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label font-weight-bold">Pincode</label>
                                                                     <input type="text" class="form-control" placeholder="Pincode" name="pin" value="{{ $customer->pin }}">
                                                                 </div>
                                                             </div>
 
                                                             <div class="row">
                                                                 <div class="col-md-6 mb-3">
-                                                                    <label class="form-label font-weight-bold">Gender</label>
                                                                     <select class="form-control" name="gender">
-                                                                        <option value="">Select Gender</option>
+                                                                        <option value="" disabled {{ empty($customer->gender) ? 'selected' : '' }}>Gender</option>
                                                                         <option value="Male" {{ $customer->gender == 'Male' ? 'selected' : '' }}>Male</option>
                                                                         <option value="Female" {{ $customer->gender == 'Female' ? 'selected' : '' }}>Female</option>
                                                                         <option value="Other" {{ $customer->gender == 'Other' ? 'selected' : '' }}>Other</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="col-md-6 mb-3">
-                                                                     <label class="form-label font-weight-bold">Date of Birth</label>
-                                                                     <input type="date" class="form-control" name="dob" value="{{ $customer->dob }}">
+                                                                     <input type="text" onfocus="(this.type='date')" onblur="(this.type='text')" class="form-control" name="dob" value="{{ $customer->dob }}" placeholder="Date of Birth">
                                                                 </div>
                                                             </div>
 
                                                             <div class="row">
                                                                 <div class="col-12 mb-3">
-                                                                    <label class="form-label font-weight-bold">Profile Image</label>
-                                                                    <input type="file" class="form-control pt-2" name="profile_image">                                                                    
+                                                                    <input type="file" class="form-control pt-2" name="profile_image" title="Profile Image">                                                                    
                                                                 </div>
                                                             </div>
 
@@ -463,12 +470,14 @@
     <div class="modal fade" id="viewOrderModal" tabindex="-1" aria-labelledby="viewOrderModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header" style="background: #3BB77E; color: white;">
-                    <h5 class="modal-title" id="viewOrderModalLabel">Order Details</h5>
+                <div class="modal-header custom-modal-header text-white" style="background-color: #00B5B8 !important;">
+                    <h5 class="modal-title" id="viewOrderModalLabel">
+                        <i class="fi-rs-receipt me-2"></i>Invoice
+                    </h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="viewOrderContent">
+                <div class="modal-body p-0" id="viewOrderContent">
                     <div class="text-center py-4">
                         <div class="spinner-border text-success" role="status">
                             <span class="visually-hidden">Loading...</span>
@@ -476,7 +485,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal"><i class="fi-rs-cross me-1"></i> Close</button>
                 </div>
             </div>
         </div>
@@ -498,9 +507,9 @@
     <style>
         /* Standardized Button and Badge Sizes for Orders */
         .order-action-btn {
-            width: 100px !important;
-            height: 35px !important;
-            border-radius: 6px !important;
+            width: 90px !important;
+            height: 30px !important;
+            border-radius: 4px !important;
             padding: 0 !important;
             display: inline-flex !important;
             align-items: center !important;
@@ -509,9 +518,9 @@
         }
         
         .order-status-badge {
-            width: 100px !important;
-            height: 28px !important;
-            border-radius: 15px !important;
+            width: 90px !important;
+            height: 30px !important;
+            border-radius: 4px !important;
             display: inline-flex !important;
             align-items: center !important;
             justify-content: center !important;
@@ -827,107 +836,214 @@
                     if (data.success) {
                         const order = data.order;
                         const shippingAddress = parseAddress(order.shipping_address);
+                        
+                        document.getElementById('viewOrderModalLabel').innerHTML = '<i class="fi-rs-receipt me-2"></i>Invoice - ' + (order.order_number || '');
+
+                        const orderSubtotal = parseFloat(order.subtotal || 0);
+                        const orderTaxAmount = parseFloat(order.tax_amount || 0);
+                        const taxPercent = (orderSubtotal > 0) ? ((orderTaxAmount / orderSubtotal) * 100).toFixed(2) : '0.00';
+                        const cgstPercent = (parseFloat(taxPercent) / 2).toFixed(2);
+                        const sgstPercent = (parseFloat(taxPercent) / 2).toFixed(2);
+                        
+                        let totalGst = 0;
+                        let totalSgst = 0;
+                        let totalIgst = 0;
+                        let giSubtotal = 0;
 
                         let itemsHtml = '';
+                        let serialNo = 1;
                         if (order.items && order.items.length > 0) {
-                            order.items.forEach((item, index) => {
-                                const productImage = item.product_image || '{{ asset("assets/imgs/shop/product-1-1.jpg") }}';
+                            order.items.forEach((item) => {
+                                const price = parseFloat(item.price || 0);
+                                const qty = parseInt(item.qty || item.quantity || 1);
+                                const lineTotal = parseFloat(item.total || (price * qty));
+                                giSubtotal += lineTotal;
+
+                                // Fallback logic (since frontend API might not give product GST, we'll try to estimate or show 0)
+                                let productGst = 0; let productSgst = 0; let productIgst = 0;
+                                // In admin API, product object might be available. The frontend order API returned just items:
+                                // Let's check item.product or item.variant, if not present we just use 0%
+                                if (item.product) {
+                                    productGst = item.product.gst || 0;
+                                    productSgst = item.product.sgst || 0;
+                                    productIgst = item.product.igst || 0;
+                                }
+
+                                const gstAmount = (lineTotal * productGst) / 100;
+                                const sgstAmount = (lineTotal * productSgst) / 100;
+                                const igstAmount = (lineTotal * productIgst) / 100;
+                                
+                                totalGst += gstAmount;
+                                totalSgst += sgstAmount;
+                                totalIgst += igstAmount;
+
+                                const productName = (item.product_productname || 'Product') + (item.variant_name ? ' - ' + item.variant_name : '');
                                 itemsHtml += `
-                                                                                                                                    <tr>
-                                                                                                                                        <td style="width: 80px;">
-                                                                                                                                            <img src="${productImage}" alt="${item.product_productname}" 
-                                                                                                                                                 style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
-                                                                                                                                        </td>
-                                                                                                                                        <td>
-                                                                                                                                            <strong>${item.product_productname || 'Product'}</strong>
-                                                                                                                                            ${item.variant_name ? '<br><small class="text-muted">' + item.variant_name + '</small>' : ''}
-                                                                                                                                        </td>
-                                                                                                                                        <td>₹${parseFloat(item.price || 0).toFixed(2)}</td>
-                                                                                                                                        <td>${item.qty || 1}</td>
-                                                                                                                                        <td>₹${parseFloat(item.total || 0).toFixed(2)}</td>
-                                                                                                                                    </tr>
-                                                                                                                                `;
+                                    <tr>
+                                        <td>${serialNo}</td>
+                                        <td class="product-name">${productName}</td>
+                                        <td>${item.product && item.product.hsn ? item.product.hsn : 'N/A'}</td>
+                                        <td>₹${price.toFixed(0)}</td>
+                                        <td class="gst-highlight">${productGst}% (₹${gstAmount.toFixed(2)})</td>
+                                        <td class="gst-highlight">${productSgst}% (₹${sgstAmount.toFixed(2)})</td>
+                                        <td class="gst-highlight">${productIgst}% (₹${igstAmount.toFixed(2)})</td>
+                                        <td>${qty}</td>
+                                        <td>₹ ${lineTotal.toFixed(0)}</td>
+                                    </tr>
+                                `;
+                                serialNo++;
                             });
                         }
 
-                        contentDiv.innerHTML = `
-                                                                                                                            <div class="row mb-4">
-                                                                                                                                <div class="col-md-6">
-                                                                                                                                    <h6 class="text-muted">Order Id</h6>
-                                                                                                                                    <p class="fw-bold">#${order.order_number || 'N/A'}</p>
-                                                                                                                                </div>
-                                                                                                                                <div class="col-md-6 text-end">
-                                                                                                                                    <h6 class="text-muted">Order Date</h6>
-                                                                                                                                    <p class="fw-bold">${order.created_at ? new Date(order.created_at).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : 'N/A'}</p>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                            <div class="row mb-4">
-                                                                                                                                <div class="col-md-6">
-                                                                                                                                    <h6 class="text-muted">Status</h6>
-                                                                                                                                    <span class="badge bg-${getStatusColor(order.status)}">${order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'N/A'}</span>
-                                                                                                                                </div>
-                                                                                                                                <div class="col-md-6 text-end">
-                                                                                                                                    <h6 class="text-muted">Payment Method</h6>
-                                                                                                                                    <p class="fw-bold">${formatPaymentMethod(order.payment_method)}</p>
-                                                                                                                                </div>
+                        const orderDate = new Date(order.created_at).toLocaleString('en-IN', {
+                            day: '2-digit', month: '2-digit', year: 'numeric',
+                            hour: '2-digit', minute: '2-digit', hour12: true
+                        });
 
-                                                                                                                            </div>
-                                                                                                                            <div class="mb-4">
-                                                                                                                                <h6 class="text-muted">Delivery Address</h6>
-                                                                                                                                <p class="mb-0">${shippingAddress.name || 'N/A'}</p>
-                                                                                                                                <p class="mb-0">${shippingAddress.address || ''}</p>
-                                                                                                                                <p class="mb-0">${shippingAddress.city || ''}, ${shippingAddress.state || ''} - ${shippingAddress.pincode || ''}</p>
-                                                                                                                                <p class="mb-0">Phone: ${shippingAddress.phone || 'N/A'}</p>
-                                                                                                                            </div>
-                                                                                                                            <h6 class="text-muted mb-3">Order Items</h6>
-                                                                                                                            <div class="table-responsive">
-                                                                                                                                <table class="table table-bordered">
-                                                                                                                                    <thead class="table-light">
-                                                                                                                                        <tr>
-                                                                                                                                            <th>Image</th>
-                                                                                                                                            <th>Product</th>
-                                                                                                                                            <th>Price</th>
-                                                                                                                                            <th>Qty</th>
-                                                                                                                                            <th>Total</th>
-                                                                                                                                        </tr>
-                                                                                                                                    </thead>
-                                                                                                                                    <tbody>
-                                                                                                                                        ${itemsHtml}
-                                                                                                                                    </tbody>
-                                                                                                                                </table>
-                                                                                                                            </div>
-                                                                                                                            <div class="row mt-3">
-                                                                                                                                <div class="col-md-6"></div>
-                                                                                                                                <div class="col-md-6">
-                                                                                                                                    <table class="table table-sm">
-                                                                                                                                        <tr>
-                                                                                                                                            <td class="text-end">Subtotal:</td>
-                                                                                                                                            <td class="text-end fw-bold">₹${parseFloat(order.subtotal || 0).toFixed(2)}</td>
-                                                                                                                                        </tr>
-                                                                                                                                        <tr>
-                                                                                                                                            <td class="text-end">Shipping Charges:</td>
-                                                                                                                                            <td class="text-end fw-bold">${parseFloat(order.shipping_amount || 0) > 0 ? '₹' + parseFloat(order.shipping_amount).toFixed(2) : 'Free'}</td>
-                                                                                                                                        </tr>
-                                                                                                                                        ${parseFloat(order.cod_charge || 0) > 0 ? `
-                                                                                                                                        <tr>
-                                                                                                                                            <td class="text-end">COD Charge:</td>
-                                                                                                                                            <td class="text-end fw-bold">₹${parseFloat(order.cod_charge).toFixed(2)}</td>
-                                                                                                                                        </tr>
-                                                                                                                                        ` : ''}
-                                                                                                                                        ${parseFloat(order.discount_amount || 0) > 0 ? `
-                                                                                                                                        <tr>
-                                                                                                                                            <td class="text-end">Discount:</td>
-                                                                                                                                            <td class="text-end fw-bold text-danger">-₹${parseFloat(order.discount_amount).toFixed(2)}</td>
-                                                                                                                                        </tr>
-                                                                                                                                        ` : ''}
-                                                                                                                                        <tr class="table-success">
-                                                                                                                                            <td class="text-end"><strong>Total:</strong></td>
-                                                                                                                                            <td class="text-end"><strong style="color: #3BB77E; font-size: 18px;">₹${parseFloat(order.final_amount || 0).toFixed(2)}</strong></td>
-                                                                                                                                        </tr>
-                                                                                                                                    </table>
-                                                                                                                                </div>
-                                                                                                                            </div>
-                                                                                                                        `;
+                        const customerName = shippingAddress.name || 'Customer';
+                        const addressParts = [];
+                        if (shippingAddress.address) addressParts.push(shippingAddress.address);
+                        if (shippingAddress.city) addressParts.push(shippingAddress.city);
+                        if (shippingAddress.state) addressParts.push(shippingAddress.state);
+                        if (shippingAddress.pincode) addressParts.push(shippingAddress.pincode);
+                        const addressLine = addressParts.join(', ') || 'N/A';
+                        const mobile = shippingAddress.phone || 'N/A';
+                        const state = shippingAddress.state || 'Tamil Nadu';
+
+                        contentDiv.innerHTML = `
+                            <div class="invoice-print-content" style="font-family: inherit; background: #fff; color: #000; padding: 5px;">
+                                <style>
+                                    .invoice-print-content * { margin: 0; padding: 0; box-sizing: border-box; }
+                                    .gi-top-section { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; }
+                                    .gi-to-section { flex: 1; }
+                                    .gi-to-label { color: #333; font-weight: bold; margin-bottom: 4px; font-size: 14px; }
+                                    .gi-customer-name { font-weight: 600; font-size: 15px; margin-bottom: 2px; }
+                                    .gi-address-line { color: #333; line-height: 1.5; font-size: 13px; }
+                                    .gi-order-box { border-left: 1px dashed #999; padding-left: 15px; text-align: left; }
+                                    .gi-order-id-label { font-size: 12px; color: #666; margin-bottom: 2px; }
+                                    .gi-order-id { font-weight: bold; font-size: 16px; color: #000; margin-bottom: 4px; }
+                                    .gi-state { font-size: 12px; color: #333; margin-top: 4px; }
+                                    .gi-from-section { font-size: 13px; padding-bottom: 8px; border-bottom: 1px dashed #999; margin-bottom: 15px; line-height: 1.5; }
+                                    .gi-from-label { font-weight: bold; font-size: 14px; }
+                                    .gi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+                                    .gi-logo img { height: 50px; width: auto; }
+                                    .gi-title { text-align: center; flex: 1; }
+                                    .gi-title h3 { font-size: 20px; font-weight: bold; margin: 0; text-transform: uppercase; letter-spacing: 1px; }
+                                    .gi-company { text-align: right; font-size: 12px; line-height: 1.4; }
+                                    .gi-company-name { font-weight: bold; font-size: 14px; }
+                                    .gi-table { width: 100%; border-collapse: collapse; margin-bottom: 0; font-size: 12px; table-layout: fixed; }
+                                    .gi-table th { background: #f0f0f0; border: 1px solid #999; padding: 8px 6px; font-size: 11px; font-weight: bold; text-align: center; text-transform: uppercase; }
+                                    .gi-table td { border: 1px solid #999; padding: 8px 6px; font-size: 12px; text-align: center; }
+                                    .gi-table td.product-name { text-align: left; white-space: normal; line-height: 1.4; }
+                                    .gst-highlight { color: #0066cc; font-weight: bold; }
+                                    .gi-footer { margin-top: 20px; text-align: center; font-size: 12px; color: #333; line-height: 1.6; border-top: 1px dashed #999; padding-top: 15px; }
+                                    .gi-footer a { color: #dc3545; text-decoration: none; font-weight: bold; }
+                                </style>
+                                
+                                <div class="gi-top-section">
+                                    <div class="gi-to-section">
+                                        <div class="gi-to-label">To,</div>
+                                        <div class="gi-customer-name">${customerName}</div>
+                                        <div class="gi-address-line">
+                                            ${addressLine}<br>
+                                            Mobile: ${mobile}
+                                        </div>
+                                    </div>
+                                    <div class="gi-order-box">
+                                        <div class="gi-order-id-label">Order ID</div>
+                                        <div class="gi-order-id">${order.order_number || ''}</div>
+                                        <div class="gi-state">${state}</div>
+                                        <div class="gi-state">Order Date: ${orderDate}</div>
+                                        <div class="gi-state">Status: <span class="badge bg-${getStatusColor(order.status)}">${order.status ? order.status.charAt(0).toUpperCase() + order.status.slice(1) : 'N/A'}</span></div>
+                                        <div class="gi-state mt-1">Payment: <strong>${formatPaymentMethod(order.payment_method)}</strong></div>
+                                    </div>
+                                </div>
+
+                                <div class="gi-from-section">
+                                    <span class="gi-from-label">From,</span><br>
+                                    Chennai Angadi, New #15/Old #8, Muthu Street, Mylapore, Chennai - 4, Mobile: +91 90946 76665
+                                </div>
+
+                                <div class="gi-header">
+                                    <div class="gi-logo">
+                                        <img src="{{ asset('assets/imgs/images/ChennaiAngadiLogo.png') }}" alt="Chennai Angadi" style="height: 50px; width: auto;">
+                                    </div>
+                                    <div class="gi-title">
+                                        <h3 style="font-size: 20px; font-weight: bold; margin: 0; text-transform: uppercase; letter-spacing: 1px;">ESTIMATE INVOICE</h3>
+                                    </div>
+                                    <div class="gi-company">
+                                        <div class="gi-company-name">Chennai Angadi</div>
+                                        <div>15/8, Muthu St, Mylapore, Chennai 4</div>
+                                        <div>Mobile: +91 90946 76665 | Email: care@chennaiangadi.com</div>
+                                    </div>
+                                </div>
+
+                                <table class="gi-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 6%;">S.NO.</th>
+                                            <th style="width: 22%;">PRODUCTS</th>
+                                            <th style="width: 8%;">Hsn Code</th>
+                                            <th style="width: 8%;">PRICE</th>
+                                            <th style="width: 12%;">GST%</th>
+                                            <th style="width: 12%;">SGST%</th>
+                                            <th style="width: 12%;">IGST%</th>
+                                            <th style="width: 6%;">QTY</th>
+                                            <th style="width: 14%;">SUB TOTAL</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${itemsHtml}
+                                    </tbody>
+                                    <tfoot>
+                                        ${totalGst > 0 ? `
+                                        <tr>
+                                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">GST</td>
+                                            <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ ${totalGst.toFixed(2)}</td>
+                                        </tr>
+                                        ` : ''}
+                                        ${totalSgst > 0 ? `
+                                        <tr>
+                                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">SGST</td>
+                                            <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ ${totalSgst.toFixed(2)}</td>
+                                        </tr>
+                                        ` : ''}
+                                        ${totalIgst > 0 ? `
+                                        <tr>
+                                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">IGST</td>
+                                            <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ ${totalIgst.toFixed(2)}</td>
+                                        </tr>
+                                        ` : ''}
+                                        ${parseFloat(order.discount_amount || 0) > 0 ? `
+                                        <tr>
+                                            <td colspan="8" style="text-align: right; font-weight: 600; color: #28a745; border: 1px solid #999;">Coupon Applied ${order.coupon_code ? '('+order.coupon_code+')' : ''}</td>
+                                            <td style="text-align: center; color: #28a745; border: 1px solid #999;">- ₹ ${parseFloat(order.discount_amount).toFixed(2)}</td>
+                                        </tr>
+                                        ` : ''}
+                                        ${parseFloat(order.shipping_amount || 0) > 0 ? `
+                                        <tr>
+                                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">Shipping Charges</td>
+                                            <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ ${parseFloat(order.shipping_amount).toFixed(0)}</td>
+                                        </tr>
+                                        ` : ''}
+                                        ${(order.payment_method === 'cash_on_delivery' || order.payment_method === 'cod') && parseFloat(order.cod_charge || 0) > 0 ? `
+                                        <tr>
+                                            <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">COD Charges</td>
+                                            <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ ${parseFloat(order.cod_charge).toFixed(0)}</td>
+                                        </tr>
+                                        ` : ''}
+                                        <tr>
+                                            <td colspan="8" style="text-align: right; font-weight: bold; font-size: 14px; color: #dc3545; border: 1px solid #999; background: #fff8f8;">TOTAL (Incl. GST)</td>
+                                            <td style="text-align: center; font-weight: bold; font-size: 14px; color: #dc3545; border: 1px solid #999; background: #fff8f8;">₹ ${parseFloat(order.final_amount || order.total_amount || 0).toFixed(2)}</td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+
+                                <div class="gi-footer">
+                                    <p>Thank you for shopping with us and we hope to serve you again in the future. Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
+                                </div>
+                            </div>
+                        `;
                     } else {
                         contentDiv.innerHTML = `<div class="alert alert-danger">Failed to load order details: ${data.message || 'Unknown error'}</div>`;
                     }
@@ -1146,7 +1262,7 @@
         // Helper: Get status color
         function getStatusColor(status) {
             const colors = {
-                'pending': 'warning',
+                'hold': 'warning',
                 'placed': 'info',
                 'processing': 'primary',
                 'shipped': 'secondary',
@@ -1172,7 +1288,7 @@
             const orderNumber = $('#track_order_number').val().trim();
 
             if (!orderNumber) {
-                $('#track_order_message').html('<span class="text-danger">Please enter an order number</span>');
+                $('#track_order_message').html('<h4 class="text-danger mt-10" style="font-size: 18px !important;">Please enter an order number</h4>');
                 return false;
             }
 
@@ -1201,7 +1317,7 @@
                         // Set status badge color based on status
                         const status = response.order.status.toLowerCase();
                         let badgeClass = 'bg-primary';
-                        if (status === 'pending') badgeClass = 'bg-warning';
+                        if (status === 'hold') badgeClass = 'bg-warning';
                         else if (status === 'confirmed') badgeClass = 'bg-info';
                         else if (status === 'packed') badgeClass = 'bg-secondary';
                         else if (status === 'shipped') badgeClass = 'bg-primary';
@@ -1212,19 +1328,19 @@
 
                         // Show result box
                         $('#track_order_result').slideDown();
-                        $('#track_order_message').html('<span class="text-success">Order found!</span>');
+                        $('#track_order_message').html('<h4 class="text-brand mt-10">Order found!</h4>');
                         if (typeof toastr !== 'undefined') {
                             toastr.success('Order found!', 'Success');
                         }
                     } else {
-                        $('#track_order_message').html('<span class="text-danger">' + response.message + '</span>');
+                        $('#track_order_message').html('<h4 class="text-danger mt-10" style="font-size: 18px !important;">' + response.message + '</h4>');
                         $('#track_order_result').hide();
                     }
                     $('#track_order_btn').prop('disabled', false).text('Track');
                 },
                 error: function (xhr) {
                     const errorMsg = xhr.responseJSON ? xhr.responseJSON.message : 'Failed to track order';
-                    $('#track_order_message').html('<span class="text-danger">' + errorMsg + '</span>');
+                    $('#track_order_message').html('<h4 class="text-danger mt-10" style="font-size: 18px !important;">' + errorMsg + '</h4>');
                     $('#track_order_result').hide();
                     $('#track_order_btn').prop('disabled', false).text('Track');
                 }

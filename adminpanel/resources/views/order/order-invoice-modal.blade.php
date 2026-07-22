@@ -2,6 +2,11 @@
 <style>
     .invoice-print-content { font-family: 'Arial', sans-serif; background: #fff; color: #000; padding: 15px; }
     .invoice-print-content * { margin: 0; padding: 0; box-sizing: border-box; }
+    @media print {
+        @page { margin: 5mm; }
+        html, body { background: #fff; margin: 0 !important; padding: 0 !important; width: 100%; height: auto !important; }
+        .invoice-print-content { padding: 0 !important; margin: 0 !important; width: 100% !important; max-width: none !important; border: none !important; }
+    }
     .gi-top-section { display: flex; justify-content: space-between; margin-bottom: 5px; font-size: 13px; }
     .gi-to-section { flex: 1; }
     .gi-to-label { color: #333; font-weight: bold; margin-bottom: 4px; font-size: 14px; }

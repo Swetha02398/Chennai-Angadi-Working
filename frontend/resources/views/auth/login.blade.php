@@ -20,10 +20,10 @@
                             </div>
                             <div class="col-lg-6 col-md-8">
                                 <div class="login_wrap widget-taber-content background-white">
-                                    <div class="padding_eight_all bg-white">
+                                    <div class="p-4 bg-white">
                                         <div class="heading_s1">
-                                            <h1 class="mb-5">Login</h1>
-                                            <p class="mb-30">Don't have an account? <a href="{{ route('register') }}">Create
+                                            <h1 class="mb-2">Login</h1>
+                                            <p class="mb-10">Don't have an account? <a href="{{ route('register') }}">Create
                                                     here</a></p>
                                         </div>
                                         <form method="post" action="{{ route('insert') }}" id="login-form" novalidate>
@@ -31,7 +31,7 @@
                                             @if(request('redirect'))
                                                 <input type="hidden" name="redirect" value="{{ request('redirect') }}">
                                             @endif
-                                            <div class="form-group mb-3">
+                                            <div class="form-group mb-2">
                                                 <!-- Email / Username -->
                                                 <input type="text" name="login_id" id="login_id" value="{{ old('login_id') }}"
                                                     placeholder="Username / Email" required class="form-control">
@@ -40,7 +40,7 @@
                                                     <small class="text-danger">{{ $message }}</small>
                                                 @enderror
                                             </div>
-                                            <div class="form-group mb-3">
+                                            <div class="form-group mb-2">
                                                 <input required="" type="password" name="password" id="password"
                                                     placeholder="Your password *" class="form-control" />
                                                 <small class="text-danger d-none" id="passwordError">Password is required</small>
@@ -56,7 +56,7 @@
                                                     </a>
                                                 </div>
                                             </div>
-                                            <div class="form-group">
+                                            <div class="form-group mb-0">
                                                 <button type="submit" class="btn btn-heading btn-block hover-up"
                                                     name="login">Log in</button>
                                             </div>
@@ -96,11 +96,11 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0" style="border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                <div class="modal-header border-0 pb-0">
+                <div class="modal-header border-0 pb-0" style="padding: 15px 15px 0;">
                     <h5 class="modal-title fw-bold" id="forgotPasswordModalLabel">Forgot Password</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4 pt-2">
+                <div class="modal-body p-3 pt-2">
 
                     <!-- Feedback Messages inside Modal -->
                     @if(session('message'))
@@ -117,18 +117,17 @@
 
                     <!-- Step 1: Send OTP -->
                     @if(!session('otp_send') && !session('otp_verified'))
-                        <p class="text-muted mb-3 font-sm">Enter your email to receive an OTP.</p>
+                        <p class="text-muted mb-2 font-sm">Enter your email to receive a verification code.</p>
                         <form method="POST" action="{{ route('sendotp') }}" id="fp-form" novalidate>
                             @csrf
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Email</label>
-                                <input type="text" name="login_id" id="fp_login_id" class="form-control" placeholder="Enter details..." required
+                            <div class="form-group mb-2">
+                                <input type="text" name="login_id" id="fp_login_id" class="form-control" placeholder="Enter email details" required
                                     style="height: 45px; border-radius: 8px;">
                                 <small class="text-danger d-none" id="fp_login_idError">Email is required</small>
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-heading btn-block hover-up"
-                                    style="border-radius: 8px;">Send OTP</button>
+                                    style="border-radius: 8px;">Send Verification Code</button>
                             </div>
                         </form>
                         <script>
@@ -149,40 +148,37 @@
 
                     <!-- Step 2: Verify OTP -->
                     @if(session('otp_send') && !session('otp_verified'))
-                        <p class="text-muted mb-3 font-sm">We've sent an OTP to <strong>{{ session('login_id') }}</strong>.</p>
+                        <p class="text-muted mb-2 font-sm">We've sent a Code to <strong>{{ session('login_id') }}</strong>.</p>
                         <form method="POST" action="{{ route('verifyotp') }}">
                             @csrf
                             <input type="hidden" name="login_id" value="{{ session('login_id') }}">
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Enter OTP</label>
+                            <div class="form-group mb-2">
                                 <input type="text" name="otp" class="form-control" placeholder="6-digit code" required
                                     style="height: 45px; border-radius: 8px; letter-spacing: 2px; text-align: center; font-size: 1.2rem;">
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-heading btn-block hover-up"
-                                    style="border-radius: 8px;">Verify OTP</button>
+                                    style="border-radius: 8px;">Verify Code</button>
                             </div>
                             <!-- <div class="text-center mt-3">
-                                <a href="{{ route('login') }}" class="text-muted font-xs">Resend OTP? (Reload)</a>
+                                <a href="{{ route('login') }}" class="text-muted font-xs">Resend Code? (Reload)</a>
                             </div> -->
                         </form>
                     @endif
 
                     <!-- Step 3: Reset Password -->
                     @if(session('otp_verified'))
-                        <p class="text-muted mb-3 font-sm">Set a new password for your account.</p>
+                        <p class="text-muted mb-2 font-sm">Set a new password for your account.</p>
                         <form method="POST" action="{{ route('resetpassword') }}" onsubmit="return validateResetForm()">
                             @csrf
                             <input type="hidden" name="login_id" value="{{ session('login_id') }}">
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">New Password</label>
-                                <input type="password" name="password" id="new_password" class="form-control" placeholder="New password" required
+                            <div class="form-group mb-2">
+                                <input type="password" name="password" id="new_password" class="form-control" placeholder="New Password" required
                                     style="height: 45px; border-radius: 8px;">
                             </div>
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Confirm Password</label>
+                            <div class="form-group mb-2">
                                 <input type="password" name="password_confirmation" id="confirm_password" class="form-control"
-                                    placeholder="Confirm password" required style="height: 45px; border-radius: 8px;">
+                                    placeholder="Confirm Password" required style="height: 45px; border-radius: 8px;">
                                 <span id="password_error" class="text-danger small mt-1 d-block"></span>
                             </div>
                             <div class="d-grid">

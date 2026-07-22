@@ -10,9 +10,32 @@
                 </div>
             </div>
         </div>
+        <style>
+            .about-page-content p, .about-page-content li {
+                font-size: 16px;
+                line-height: 1.6;
+                color: #253D4E;
+            }
+            .about-page-content li {
+                margin-bottom: 8px;
+            }
+            .about-page-content h5 {
+                font-size: 22px;
+                margin-bottom: 15px;
+                margin-top: 20px;
+                color: #253D4E;
+            }
+            .about-page-content h5:first-child {
+                margin-top: 0;
+            }
+            .about-page-content ol {
+                padding-left: 20px;
+                margin-bottom: 20px;
+            }
+        </style>
         <div class="page-content py-3">
             <div class="container">
-                <div class="col-12">
+                <div class="col-12 about-page-content">
                 <h5>About Us - Chennai Angadi</h5>
             
                         <p>Welcome to Chennai Angadi, your one-stop shop for a delightful mix of nostalgic treats, quality essentials, and everything in between. Established in 2018, our journey began with a simple yet heartfelt mission: to bring together a diverse range of products that bring joy to every age group and satisfy every craving.</p>

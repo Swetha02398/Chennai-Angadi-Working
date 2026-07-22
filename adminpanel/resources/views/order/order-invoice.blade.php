@@ -238,7 +238,7 @@
         }
 
         .summary-row .label {
-            text-align: left;
+            text-align: right;
             font-weight: bold;
             color: #dc3545;
             font-size: 20px;
@@ -307,7 +307,7 @@
         @media print {
             @page {
                 size: A4 portrait;
-                margin: 8mm;
+                margin: 5mm;
             }
 
             html,
@@ -326,7 +326,7 @@
 
             .invoice-container {
                 margin: 0 !important;
-                padding: 0mm 10mm 10mm 10mm !important;
+                padding: 0 !important;
                 width: 100% !important;
                 max-width: none !important;
                 border: none !important;

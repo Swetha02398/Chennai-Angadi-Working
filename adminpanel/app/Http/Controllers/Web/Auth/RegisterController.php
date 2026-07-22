@@ -204,6 +204,46 @@ class RegisterController extends Controller
        return view('product.customerView', compact('customer'));
    
     }
+
+    public function customerEdit($id)
+    {
+       $customer = Customer::findOrFail($id);
+       return view('product.customerEdit', compact('customer'));
+    }
+
+    public function customerUpdate(Request $request, $id)
+    {
+       $customer = Customer::findOrFail($id);
+
+       $request->validate([
+           'username' => 'required|string',
+           'email' => 'required|email|unique:customers,email,' . $id,
+           'mobilenumber' => 'required|digits:10|unique:customers,mobilenumber,' . $id,
+           'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+           'pin' => 'nullable|digits:6',
+       ]);
+
+       if ($request->hasFile('profile_image')) {
+           $imageName = time() . '.' . $request->profile_image->extension();
+           $request->profile_image->move(public_path('uploads/profile'), $imageName);
+           $customer->profile_image = $imageName;
+       }
+
+       $customer->username = $request->username;
+       $customer->email = $request->email;
+       $customer->mobilenumber = $request->mobilenumber;
+       $customer->gender = $request->gender;
+       $customer->dob = $request->dob;
+       $customer->address = $request->address;
+       $customer->city = $request->city;
+       $customer->state = $request->state;
+       $customer->country = $request->country;
+       $customer->pin = $request->pin;
+       
+       $customer->save();
+
+       return redirect()->back()->with('success', 'Customer profile updated successfully!');
+    }
    public function export()
     {
         $customers = Customer::all();

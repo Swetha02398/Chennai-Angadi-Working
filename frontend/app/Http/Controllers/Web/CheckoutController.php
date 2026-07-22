@@ -258,7 +258,7 @@ class CheckoutController extends Controller
             $request->validate([
                 'billing_name' => 'required|string',
                 'email' => 'required|email',
-                'phone' => 'required|string',
+                'phone' => 'required|digits:10',
                 'billing_address' => 'required|string',
                 'city' => 'required|string',
                 'state' => 'required|string',
@@ -523,7 +523,7 @@ class CheckoutController extends Controller
                 $request->validate([
                     'billing_name' => 'required|string',
                     'email' => 'required|email',
-                    'phone' => 'required|string',
+                    'phone' => 'required|digits:10',
                     'billing_address' => 'required|string',
                     'city' => 'required|string',
                     'state' => 'required|string',
@@ -701,7 +701,7 @@ class CheckoutController extends Controller
                 'cod_charge' => $codCharge,
                 'total_amount' => $totalAmount,
                 'final_amount' => $finalAmount,
-                'status' => 'processing',
+                'status' => 'hold',
                 'placed_at' => now(),
                 'notes' => $request->input('notes', null),
                 'created_by_type' => 'customer',
@@ -794,66 +794,71 @@ class CheckoutController extends Controller
 
             // Send order confirmation email
             $emailSubject = 'Order Confirmation - #' . $order->order_number;
-            try {
-                \Mail::to($request->email)
-                    ->send(new \App\Mail\OrderPlaced($order));
-                    
-                // Send explicitly to care@chennaiangadi.com as the 3rd email
-                \Mail::to('care@chennaiangadi.com')
-                    ->send(new \App\Mail\OrderPlaced($order));
-                \Log::info('Order confirmation email sent successfully', [
-                    'order_number' => $order->order_number,
-                    'email' => $request->email
-                ]);
+            
+            $recipientEmail = $request->email;
+            $recipientName = $request->billing_name;
+            $adminEmail = config('app.admin_email') 
+                ?? User::where('role', 'superadmin')->value('email') 
+                ?? User::where('role', 'admin')->value('email')
+                ?? 'care@chennaiangadi.com';
 
-                // Log to EmailHistory table
-                EmailHistory::create([
-                    'order_id' => $order->id,
-                    'email_type' => 'order_confirmation',
-                    'recipient_email' => $request->email,
-                    'recipient_name' => $request->billing_name,
-                    'subject' => $emailSubject,
-                    'order_number' => $order->order_number,
-                    'status' => 'sent',
-                    'sent_at' => now(),
-                ]);
-            } catch (\Exception $emailError) {
-                \Log::error('Order email failed: ' . $emailError->getMessage(), [
-                    'order_number' => $order->order_number,
-                    'email' => $request->email,
-                    'trace' => $emailError->getTraceAsString()
-                ]);
+            dispatch(function () use ($order, $emailSubject, $recipientEmail, $recipientName, $adminEmail) {
+                try {
+                    \Mail::to($recipientEmail)
+                        ->send(new \App\Mail\OrderPlaced($order));
+                        
+                    // Send explicitly to care@chennaiangadi.com as the 3rd email
+                    \Mail::to('care@chennaiangadi.com')
+                        ->send(new \App\Mail\OrderPlaced($order));
+                    \Log::info('Order confirmation email sent successfully', [
+                        'order_number' => $order->order_number,
+                        'email' => $recipientEmail
+                    ]);
 
-                // Log failed email to history
-                EmailHistory::create([
-                    'order_id' => $order->id,
-                    'email_type' => 'order_confirmation',
-                    'recipient_email' => $request->email,
-                    'recipient_name' => $request->billing_name,
-                    'subject' => $emailSubject,
-                    'order_number' => $order->order_number,
-                    'status' => 'failed',
-                    'error_message' => $emailError->getMessage(),
-                    'sent_at' => now(),
-                ]);
-                // Don't fail the order if email fails
-            }
+                    // Log to EmailHistory table
+                    EmailHistory::create([
+                        'order_id' => $order->id,
+                        'email_type' => 'order_confirmation',
+                        'recipient_email' => $recipientEmail,
+                        'recipient_name' => $recipientName,
+                        'subject' => $emailSubject,
+                        'order_number' => $order->order_number,
+                        'status' => 'sent',
+                        'sent_at' => now(),
+                    ]);
+                } catch (\Exception $emailError) {
+                    \Log::error('Order email failed: ' . $emailError->getMessage(), [
+                        'order_number' => $order->order_number,
+                        'email' => $recipientEmail,
+                        'trace' => $emailError->getTraceAsString()
+                    ]);
 
-            // Send admin notification email
-            try {
-                $adminEmail = config('app.admin_email') 
-                    ?? User::where('role', 'superadmin')->value('email') 
-                    ?? User::where('role', 'admin')->value('email')
-                    ?? 'care@chennaiangadi.com';
-                    
-                \Mail::to($adminEmail)->send(new AdminOrderNotification($order));
-                \Log::info('Admin order notification email sent successfully', [
-                    'order_number' => $order->order_number,
-                    'admin_email' => $adminEmail
-                ]);
-            } catch (\Exception $adminEmailError) {
-                \Log::error('Admin order notification email failed: ' . $adminEmailError->getMessage());
-            }
+                    // Log failed email to history
+                    EmailHistory::create([
+                        'order_id' => $order->id,
+                        'email_type' => 'order_confirmation',
+                        'recipient_email' => $recipientEmail,
+                        'recipient_name' => $recipientName,
+                        'subject' => $emailSubject,
+                        'order_number' => $order->order_number,
+                        'status' => 'failed',
+                        'error_message' => $emailError->getMessage(),
+                        'sent_at' => now(),
+                    ]);
+                    // Don't fail the order if email fails
+                }
+
+                // Send admin notification email
+                try {
+                    \Mail::to($adminEmail)->send(new AdminOrderNotification($order));
+                    \Log::info('Admin order notification email sent successfully', [
+                        'order_number' => $order->order_number,
+                        'admin_email' => $adminEmail
+                    ]);
+                } catch (\Exception $adminEmailError) {
+                    \Log::error('Admin order notification email failed: ' . $adminEmailError->getMessage());
+                }
+            })->afterResponse();
 
             return response()->json([
                 'success' => true,
@@ -1317,7 +1322,7 @@ class CheckoutController extends Controller
             if ($coupon->min_amount && $subtotal < $coupon->min_amount) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Minimum order amount of â‚¹' . number_format($coupon->min_amount, 2) . ' required'
+                    'message' => 'Minimum order amount of ₹' . number_format($coupon->min_amount, 2) . ' required'
                 ], 400);
             }
 
@@ -1407,7 +1412,7 @@ class CheckoutController extends Controller
                     'fname' => 'required|string',
                     'lname' => 'required|string',
                     'email' => 'required|email',
-                    'phone' => 'required|string',
+                    'phone' => 'required|digits:10',
                     'billing_address' => 'required|string',
                     'city' => 'required|string',
                     'state' => 'required|string',
@@ -1562,7 +1567,7 @@ class CheckoutController extends Controller
                 'shipping_amount' => $shippingCharge,
                 'total_amount' => $totalAmount,
                 'final_amount' => $finalAmount,
-                'status' => 'pending',
+                'status' => 'hold',
                 'placed_at' => now(),
                 'notes' => $request->input('notes', null),
                 'created_by_type' => 'customer',
@@ -1689,7 +1694,7 @@ class CheckoutController extends Controller
                 'razorpay_payment_id' => $request->razorpay_payment_id,
                 'razorpay_signature' => $request->razorpay_signature,
                 'payment_status' => 'paid',
-                'status' => 'processing',
+                'status' => 'hold',
                 'placed_at' => now(),
             ]);
 
@@ -1732,26 +1737,28 @@ class CheckoutController extends Controller
             }
 
             // Send order confirmation email
-            try {
-                $recipientEmail = $order->customer_type === 'guest' ? ($order->guest_details['email'] ?? null) : ($order->customer?->email);
-                if ($recipientEmail) {
-                    \Mail::to($recipientEmail)
-                        ->bcc('care@chennaiangadi.com')
-                        ->send(new \App\Mail\OrderPlaced($order));
-                } else {
-                    \Mail::to('care@chennaiangadi.com')
-                        ->send(new \App\Mail\OrderPlaced($order));
-                }
+            dispatch(function () use ($order) {
+                try {
+                    $recipientEmail = $order->customer_type === 'guest' ? ($order->guest_details['email'] ?? null) : ($order->customer?->email);
+                    if ($recipientEmail) {
+                        \Mail::to($recipientEmail)
+                            ->bcc('care@chennaiangadi.com')
+                            ->send(new \App\Mail\OrderPlaced($order));
+                    } else {
+                        \Mail::to('care@chennaiangadi.com')
+                            ->send(new \App\Mail\OrderPlaced($order));
+                    }
 
-                // Send Admin Notification Email for Online Payment Success
-                if (config('app.admin_email')) {
-                    $order->load('items');
-                    \Mail::to(config('app.admin_email'))->send(new AdminOrderNotification($order));
-                    \Log::info('Admin order notification sent for successful online payment', ['order' => $order->order_number]);
+                    // Send Admin Notification Email for Online Payment Success
+                    if (config('app.admin_email')) {
+                        $order->load('items');
+                        \Mail::to(config('app.admin_email'))->send(new AdminOrderNotification($order));
+                        \Log::info('Admin order notification sent for successful online payment', ['order' => $order->order_number]);
+                    }
+                } catch (\Exception $emailError) {
+                    \Log::error('Order email failed: ' . $emailError->getMessage());
                 }
-            } catch (\Exception $emailError) {
-                \Log::error('Order email failed: ' . $emailError->getMessage());
-            }
+            })->afterResponse();
 
             return response()->json([
                 'success' => true,
@@ -1916,7 +1923,7 @@ class CheckoutController extends Controller
             if ($orderId) {
                 $order = Order::find($orderId);
                 // If order was already processed (e.g. status not pending), start a new draft
-                if ($order && !in_array($order->status, ['pending', 'failed'])) {
+                if ($order && !in_array($order->status, ['hold', 'failed'])) {
                     $order = null;
                     session()->forget('active_checkout_order_id');
                 }
@@ -1943,7 +1950,7 @@ class CheckoutController extends Controller
                     'customer_type' => $customerType,
                     'customer_id' => $customerId,
                     'payment_status' => ($paymentOption === 'cash_on_delivery') ? 'cod' : 'not_paid',
-                    'status' => 'pending',
+                    'status' => 'hold',
                     'payment_method' => $paymentOption,
                     'shipping_address' => [],
                     'billing_address' => [],

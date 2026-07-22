@@ -193,6 +193,8 @@ Route::middleware('auth')->group(function () {
         Route::get('/customer/delete/{id}', [RegisterController::class, 'deleteCustomer'])->name('customer.delete');
         Route::patch('/customer/{id}/toggle', [RegisterController::class, 'toggleStatus'])->name('customer.toggleStatus');
         Route::get('/customer/view/{id}', [RegisterController::class, 'customerView'])->name('customerView');
+        Route::get('/customer/edit/{id}', [RegisterController::class, 'customerEdit'])->name('customer.edit');
+        Route::put('/customer/update/{id}', [RegisterController::class, 'customerUpdate'])->name('customer.update');
         Route::get('/customers/export', [RegisterController::class, 'export'])->name('customers.export');
     });
 
@@ -326,6 +328,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware('permission:billing-view')->group(function () {
         Route::get('billing/create', [BillingController::class, 'create'])->name('admin.billing.create');
         Route::get('billing/table', [BillingController::class, 'index'])->name('billing.table');
+        Route::get('billing/edit/{id}', [BillingController::class, 'edit'])->name('admin.billing.edit');
         Route::get('billing/invoice/{id}', [BillingController::class, 'invoice'])->name('admin.billing.invoice');
         Route::get('billing/invoice-html/{id}', [BillingController::class, 'getInvoiceHtml'])->name('admin.billing.invoice.html');
         Route::delete('billing/delete/{id}', [BillingController::class, 'destroy'])->name('admin.billing.delete');
@@ -578,3 +581,4 @@ Route::get('/test-order-mail', function () {
 });
 
 
+Route::get("preview-email/{id}", function($id) { $order = \App\Models\Order::with("items.product", "billing_address", "shipping_address")->findOrFail($id); return view("emails.invoice-email", compact("order")); });

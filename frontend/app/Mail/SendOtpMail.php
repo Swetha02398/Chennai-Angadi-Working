@@ -19,7 +19,7 @@ class SendOtpMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Your OTP for Password Reset')
+        return $this->subject('Your Code for Password Reset')
             ->view('emails.otp')
             ->with(['otp' => $this->otp]);
     }

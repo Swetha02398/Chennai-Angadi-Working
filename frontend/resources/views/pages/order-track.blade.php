@@ -26,7 +26,7 @@
                                             onsubmit="return trackOrder(event)">
                                             @csrf
                                             <div class="input-style mb-20">
-                                                <label class="font-md">Order Id</label>
+                                                <h4 class="mb-10">Order Id</h4>
                                                 <input name="order_number" id="track_order_number"
                                                     placeholder="e.g., CAXXXXXXXX-XXXXXXXX" type="text"
                                                     required />
@@ -47,13 +47,13 @@
                                         <div class="order-info-track">
                                             <div class="row">
                                                 <div class="col-md-6 mb-15">
-                                                    <p class="mb-5"><strong>Order Number:</strong></p>
-                                                    <p id="result_order_number" class="text-brand">-</p>
+                                                    <h4 class="mb-10">Order Number:</h4>
+                                                    <h4 id="result_order_number" class="text-brand">-</h4>
                                                 </div>
                                                 <div class="col-md-6 mb-15">
-                                                    <p class="mb-5"><strong>Order Status:</strong></p>
-                                                    <p><span id="result_order_status"
-                                                            class="badge bg-primary">-</span></p>
+                                                    <h4 class="mb-10">Order Status:</h4>
+                                                    <h4><span id="result_order_status"
+                                                            class="badge bg-primary">-</span></h4>
                                                 </div>
                                             </div>
 {{-- 
@@ -71,7 +71,7 @@
 --}}
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <p class="mb-10"><strong>Tracking Notes:</strong></p>
+                                                    <h4 class="mb-10">Tracking Notes:</h4>
                                                     <div id="result_order_notes" class="tracking-notes-box">
                                                         -</div>
                                                 </div>
@@ -176,7 +176,7 @@
             const orderNumber = document.getElementById('track_order_number').value.trim();
 
             if (!orderNumber) {
-                document.getElementById('track_order_message').innerHTML = '<span class="text-danger">Please enter an order number</span>';
+                document.getElementById('track_order_message').innerHTML = '<h4 class="text-danger mt-10" style="font-size: 18px !important;">Please enter an order number</h4>';
                 return false;
             }
 
@@ -211,7 +211,7 @@
                     // Set status badge color based on status
                     const status = response.order.status.toLowerCase();
                     let badgeClass = 'bg-primary';
-                    if (status === 'pending') badgeClass = 'bg-warning';
+                    if (status === 'hold') badgeClass = 'bg-warning';
                     else if (status === 'confirmed') badgeClass = 'bg-info';
                     else if (status === 'packed') badgeClass = 'bg-secondary';
                     else if (status === 'shipped') badgeClass = 'bg-primary';
@@ -222,13 +222,13 @@
 
                     // Show result box
                     document.getElementById('track_order_result').style.display = 'block';
-                    document.getElementById('track_order_message').innerHTML = '<span class="text-success">Order found!</span>';
+                    document.getElementById('track_order_message').innerHTML = '<h4 class="text-brand mt-10">Order found!</h4>';
                     
                     if (typeof toastr !== 'undefined') {
                         toastr.success('Order found!', 'Success');
                     }
                 } else {
-                    document.getElementById('track_order_message').innerHTML = '<span class="text-danger">' + response.message + '</span>';
+                    document.getElementById('track_order_message').innerHTML = '<h4 class="text-danger mt-10" style="font-size: 18px !important;">' + response.message + '</h4>';
                     document.getElementById('track_order_result').style.display = 'none';
                 }
                 trackBtn.disabled = false;
@@ -236,7 +236,7 @@
             })
             .catch(error => {
                 console.error('Error:', error);
-                document.getElementById('track_order_message').innerHTML = '<span class="text-danger">Failed to track order. Please try again.</span>';
+                document.getElementById('track_order_message').innerHTML = '<h4 class="text-danger mt-10" style="font-size: 18px !important;">Failed to track order. Please try again.</h4>';
                 document.getElementById('track_order_result').style.display = 'none';
                 trackBtn.disabled = false;
                 trackBtn.textContent = 'Track';

@@ -171,6 +171,24 @@
                 line-height: 28px !important;
             }
         }
+        /* Enforce tight spacing (3-5mm approx 10-15px) globally around Shop breadcrumb */
+        @media (max-width: 768px) {
+            .page-header {
+                margin-top: 10px !important;
+                margin-bottom: 10px !important;
+                padding: 0 !important;
+            }
+            main.main > .container.mb-30 {
+                margin-bottom: 10px !important;
+            }
+            .archive-header {
+                padding: 10px !important;
+            }
+            .shop-product-fillter {
+                padding-bottom: 0 !important;
+                margin-bottom: 10px !important;
+            }
+        }
     </style>
     <main class="main">
         <div class="page-header my-3 mb-1">

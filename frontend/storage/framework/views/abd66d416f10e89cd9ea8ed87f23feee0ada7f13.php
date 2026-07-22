@@ -317,12 +317,12 @@
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
-                                                    <div class="d-flex align-items-center justify-content-center">
+                                                    <div class="qty-wrapper-box m-auto">
                                                         <button type="button" class="btn-qty-decrease"
                                                             onclick="updateCartQty('<?php echo e(auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id)); ?>', 'decrease')">
                                                             <i class="fi-rs-minus-small"></i>
                                                         </button>
-                                                        <span class="qty-display mx-2"
+                                                        <span class="qty-display"
                                                             id="qty-<?php echo e(auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id)); ?>"><?php echo e($item->quantity); ?></span>
                                                         <button type="button" class="btn-qty-increase"
                                                             onclick="updateCartQty('<?php echo e(auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id)); ?>', 'increase')">
@@ -377,7 +377,7 @@
                                         </h6>
                                     </td>
                                     <td class="cart_total_amount">
-                                        <h4 class="text-success text-end" id="coupon_discount_display">
+                                        <h4 class="text-brand text-end" id="coupon_discount_display">
                                             -₹ <?php echo e(number_format($sessionCouponDiscount, 0)); ?></h4>
                                     </td>
                                 </tr>
@@ -670,14 +670,25 @@
             text-align: center;
         }
 
-        /* Quantity control buttons */
+        /* Quantity control buttons - Unified Box Design */
+        .qty-wrapper-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: space-between;
+            border: 1px solid #ececec;
+            border-radius: 4px;
+            height: 32px;
+            background: #fff;
+            overflow: hidden;
+            width: 80px;
+        }
+
         .btn-qty-decrease,
         .btn-qty-increase {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            width: 28px;
-            height: 28px;
+            background: transparent;
+            border: none;
+            width: 25px;
+            height: 100%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -689,9 +700,8 @@
 
         .btn-qty-decrease:hover,
         .btn-qty-increase:hover {
-            background: #3BB77E;
-            border-color: #3BB77E;
-            color: #fff;
+            background: #f5f5f5;
+            color: #3BB77E;
         }
 
         .btn-qty-decrease i,
@@ -702,11 +712,16 @@
 
         .qty-display {
             font-weight: 600;
-            font-size: 15px;
-            min-width: 25px;
+            font-size: 14px;
+            min-width: 20px;
             text-align: center;
-            display: inline-block;
-            overflow: hidden;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            border-left: 1px solid #ececec;
+            border-right: 1px solid #ececec;
+            flex-grow: 1;
         }
 
         /* Delete button */
@@ -1669,15 +1684,15 @@
                         currentCouponDiscount = response.coupon.discount;
                         appliedCouponCode = response.coupon.code;
                         $('#coupon_discount_row').show();
-                        $('#coupon_discount_display').text('-₹' + Math.round(currentCouponDiscount));
-                        $('#coupon_message').html('<span class="text-success">' + response.message + '</span>');
+                        $('#coupon_discount_display').text('-₹ ' + Math.round(currentCouponDiscount)).removeClass('text-success').addClass('text-brand');
+                        $('#coupon_message').html('<h4 class="text-brand mt-2" style="font-size: 18px; font-weight: bold;">' + response.message + '</h4>');
                         $('#coupon_code').prop('readonly', true);
                         $('#apply_coupon_btn').text('Applied').addClass('btn-success');
                         calculateShipping(); // Recalculate shipping based on new discount
                         updateTotalsDisplay();
                         toastr.success(response.message, 'Success');
                     } else {
-                        $('#coupon_message').html('<span class="text-danger">' + response.message + '</span>');
+                        $('#coupon_message').html('<h4 class="text-danger mt-2" style="font-size: 18px; font-weight: bold;">' + response.message + '</h4>');
                         $('#apply_coupon_btn').prop('disabled', false).text('Apply Coupon');
                         toastr.error(response.message, 'Error');
                     }
@@ -1688,7 +1703,7 @@
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMsg = xhr.responseJSON.message;
                     }
-                    $('#coupon_message').html('<span class="text-danger">' + errorMsg + '</span>');
+                    $('#coupon_message').html('<h4 class="text-danger mt-2" style="font-size: 18px; font-weight: bold;">' + errorMsg + '</h4>');
                     $('#apply_coupon_btn').prop('disabled', false).text('Apply Coupon');
                     toastr.error(errorMsg, 'Error');
                 }
@@ -1698,7 +1713,7 @@
         function removeCoupon() {
             currentCouponDiscount = 0;
             appliedCouponCode = null;
-            $('#coupon_discount_row').hide();
+            $('#coupon_discount_row').css('display', 'none');
             $('#coupon_code').val('').prop('readonly', false);
             $('#apply_coupon_btn').prop('disabled', false).text('Apply Coupon').removeClass('btn-success');
             $('#coupon_message').html('');
@@ -2002,7 +2017,7 @@
                 success: function (response) {
                     if (response.success) {
                         toastr.success('Payment successful!', 'Success');
-                        showOrderSuccessModal(response.order_id);
+                        showOrderSuccessModal(response.order_number || response.order_id);
                     } else {
                         toastr.error(response.message || 'Payment verification failed', 'Error');
                     }
@@ -2023,7 +2038,7 @@
                 data: orderData,
                 success: function (response) {
                     if (response.success) {
-                        showOrderSuccessModal(response.order_id);
+                        showOrderSuccessModal(response.order_number || response.order_id);
                     } else {
                         toastr.error(response.message, 'Error');
                     }

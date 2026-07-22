@@ -507,7 +507,7 @@
                     {{-- Action Buttons --}}
                     <div class="actions">
                         <button class="btn-cancel" onclick="clearCart()"><i class="bi bi-x-circle me-1"></i> Cancel</button>
-                        <button class="btn-checkout" onclick="checkout()">Checkout</button>
+                        <button class="btn-checkout" onclick="checkout()"><i class="bi bi-cart-check me-1"></i> Checkout</button>
                     </div>
                 </div>
             </div>
@@ -803,7 +803,7 @@
                 </div>
                 <div class="modal-footer" style="padding: 5px 10px; justify-content: flex-start; gap: 5px; border-top: 1px solid #ddd;">
                     <button class="btn-secondary" onclick="closeCheckoutModal()" style="width: 140px; height: 32px; border-radius: 4px !important; white-space: nowrap; font-size:13px; padding:0"><i class="bi bi-x-circle me-1"></i> Cancel</button>
-                    <button class="btn-primary" onclick="processPayment()" style="width: 140px; height: 32px; border-radius: 4px !important; background:#28a745; white-space: nowrap; font-size:13px; padding:0">Process Payment</button>
+                    <button class="btn-primary" onclick="processPayment()" style="width: 140px; height: 32px; border-radius: 4px !important; background:#28a745; white-space: nowrap; font-size:13px; padding:0"><i class="bi bi-check2-circle me-1"></i> Process Payment</button>
                 </div>
             </div>
         </div>
@@ -840,8 +840,8 @@
                         🖨️ Print Invoice
                     </button>
                     <button onclick="closeSuccessModal()"
-                        style="background:#6c757d;color:#fff;border:none;padding:12px 24px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600">
-                        Close
+                        style="background:#6c757d;color:#fff;border:none;padding:12px 24px;border-radius:6px;cursor:pointer;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px">
+                        <i class="bi bi-x-circle"></i> Close
                     </button>
                 </div>
             </div>

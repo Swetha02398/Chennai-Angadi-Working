@@ -104,6 +104,7 @@
     <link rel="shortcut icon" type="image/x-icon" href=" <?php echo e(asset('assets/imgs/images/favicon.png')); ?>" />
     <!-- Template CSS -->
     <link rel="stylesheet" href=" <?php echo e(asset('assets/css/plugins/animate.min.css')); ?>" />
+    <link rel="stylesheet" href="<?php echo e(asset('assets/css/vendors/uicons-regular-straight.css')); ?>" />
     <link rel="stylesheet" href="<?php echo e(asset('assets/css/main.css')); ?>?v=<?php echo e(file_exists(public_path('assets/css/main.css')) ? filemtime(public_path('assets/css/main.css')) : '6.5'); ?>" />
     <!-- Toastr CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
@@ -114,6 +115,44 @@
 
     <!-- Wishlist Active State CSS - Only when active, NOT on hover -->
     <style>
+        /* Global Qty Label Container Styling */
+        .qty-label {
+            background-color: #f5f5f5 !important;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            height: 37px !important;
+            padding: 0 8px !important;
+            border: 1px solid #ececec !important;
+            border-right: none !important;
+            border-radius: 5px 0 0 5px !important;
+            box-sizing: border-box !important;
+            margin-right: 0 !important; 
+            font-size: 12px !important;
+        }
+
+        /* Qty Input & Add Button Unified Heights */
+        .product-cart-wrap .qty-input {
+            width: 100% !important;
+            height: 37px !important;
+            border: 1px solid #ececec !important;
+            border-radius: 0 5px 5px 0 !important;
+            box-sizing: border-box !important;
+            text-align: center;
+            font-size: 13px !important;
+        }
+        
+        .product-cart-wrap .add-cart .add {
+            height: 37px !important;
+            border-radius: 5px !important;
+            border: 1px solid transparent !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            box-sizing: border-box !important;
+            padding: 0 10px !important;
+        }
+
         /* Center product titles globally */
         .product-content-wrap h2 {
             text-align: center !important;
@@ -377,37 +416,79 @@
                 font-size: 13px !important;
             }
 
-            /* Compact Qty label and input */
+            /* Compact Qty label and input as a unified grey pill */
+            .product-cart-wrap .qty-container {
+                flex: 0 0 75px !important; 
+                width: 75px !important;
+                height: 33px !important;
+                background-color: #f5f5f5 !important;
+                border: 1px solid #ececec !important;
+                border-radius: 5px !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                box-sizing: border-box !important;
+            }
+
             .product-cart-wrap .qty-label {
-                font-size: 10px !important;
-                margin-right: 3px !important;
+                font-size: 12px !important;
+                margin-right: 2px !important;
+                padding: 0 !important;
+                height: 33px !important; /* Force matching height */
+                min-height: 33px !important;
+                flex: 0 0 auto !important;
+                background-color: transparent !important;
+                border: none !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
             }
 
             .product-cart-wrap .qty-input {
-                width: 35px !important;
-                height: 26px !important;
-                font-size: 11px !important;
-                padding: 2px !important;
+                width: auto !important;
+                max-width: none !important; 
+                flex: 1 1 auto !important;
+                height: 33px !important; /* Force matching height */
+                font-size: 13px !important;
+                padding: 0 !important;
+                margin: 0 !important;
                 box-sizing: border-box !important;
+                border: none !important;
+                border-radius: 0 !important;
+                text-align: left !important;
+                background-color: transparent !important;
+                display: flex !important;
+                align-items: center !important;
+            }
+
+            .product-cart-wrap .add-cart {
+                flex: 1 1 auto !important; 
             }
 
             /* Compact ADD button on mobile */
             .product-cart-wrap .add-cart .add {
-                font-size: 11px !important;
-                padding: 5px 8px !important;
+                height: 33px !important;
+                width: 100% !important; /* Stretch to fill half column */
+                font-size: 12px !important;
+                padding: 0 8px !important;
                 white-space: nowrap !important;
                 min-width: 0 !important;
+                border-radius: 5px !important;
             }
 
             .product-cart-wrap .add-cart .add i {
-                font-size: 11px !important;
+                font-size: 12px !important;
                 margin-right: 3px !important;
             }
 
-            /* Variant selector margin */
+            /* Variant selector margin and bigger font for mobile */
             .product-variant-selector {
                 margin-bottom: 5px !important;
                 min-width: 0 !important;
+            }
+            .product-variant-selector select.product_Dropdown {
+                font-size: 13px !important;
+                height: 35px !important;
             }
 
             /* FIX 3: Scroll/Swiper container cards on mobile */
@@ -416,11 +497,36 @@
                 flex: 0 0 calc(45% - 8px) !important;
             }
 
+            /* Set absolute identical margins/paddings for product cards */
+            .row.product-grid {
+                margin-left: -5px !important;
+                margin-right: -5px !important;
+            }
+
+            .product-grid > [class*="col-"],
+            [class*="col-lg-1-5"],
+            .col-md-4, .col-6, .col-sm-6 {
+                padding-left: 5px !important;
+                padding-right: 5px !important;
+                margin-bottom: 10px !important; /* Forces identical bottom offset */
+            }
+
+            /* Disable negative wrapping on Qty/Add bottom row */
+            .product-cart-wrap .product-card-bottom > div:last-child {
+                display: flex !important;
+                align-items: center !important;
+                justify-content: space-between !important;
+                flex-wrap: nowrap !important; /* Crucial: no wrapping */
+                width: 100% !important;
+                margin: 0 !important;
+                gap: 8px !important;
+                padding: 0 !important;
+            }
+
             /* Prevent horizontal page scroll from any overflow */
             body {
                 overflow-x: clip !important;
             }
-
             .main, .main-wrap {
                 overflow-x: clip !important;
             }
@@ -853,7 +959,7 @@
                         <ul class="mobile-cat-list">
                             <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cat): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                 <li class="mobile-cat-item">
-                                    <a href="<?php echo e(route('category.products', $cat->slug)); ?>" class="mobile-cat-link">
+                                    <a href="<?php echo e(url('/' . $cat->slug)); ?>" class="mobile-cat-link">
                                         <?php $catImg = str_replace('uploads/', '', $cat->image); ?>
                                         <img src="<?php echo e(config('app.admin_asset_url')); ?>/<?php echo e($catImg); ?>" alt="<?php echo e($cat->name); ?>"
                                             class="mobile-cat-img" onerror="this.style.display='none'">
@@ -866,7 +972,7 @@
                                         <ul class="mobile-sub-list">
                                             <?php $__currentLoopData = $cat->subcategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $sub): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                 <li class="mobile-sub-item">
-                                                    <a href="<?php echo e(route('subcategory.products', $sub->slug)); ?>" class="mobile-sub-link">
+                                                    <a href="<?php echo e(url('/' . $sub->slug)); ?>" class="mobile-sub-link">
                                                         <?php if($sub->subimage): ?>
                                                             <?php $subImg = str_replace('uploads/', '', $sub->subimage); ?>
                                                             <img src="<?php echo e(config('app.admin_asset_url')); ?>/<?php echo e($subImg); ?>" alt="<?php echo e($sub->name); ?>"
@@ -881,7 +987,7 @@
                                                         <ul class="mobile-child-list">
                                                             <?php $__currentLoopData = $sub->childCategories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $child): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                                                 <li>
-                                                                    <a href="<?php echo e(route('childcategory.products', $child->slug)); ?>">
+                                                                    <a href="<?php echo e(url('/' . $child->slug)); ?>">
                                                                         <?php if($child->childimage): ?>
                                                                             <?php $childImg = str_replace('uploads/', '', $child->childimage); ?>
                                                                             <img src="<?php echo e(config('app.admin_asset_url')); ?>/<?php echo e($childImg); ?>"
@@ -1194,11 +1300,19 @@
                                 Up </a>
                         <?php endif; ?>
                     </div>
+                    <?php if(Auth::guard('customer')->check()): ?>
+                    <div class="single-mobile-header-info">
+                        <a href="<?php echo e(route('customer.myAccount')); ?>"><i class="fi-rs-user"></i> My Dashboard </a>
+                    </div>
+                    <?php endif; ?>
+                    <div class="single-mobile-header-info">
+                        <a href="<?php echo e(route('customer.wishlist')); ?>"><i class="fi-rs-heart"></i> My Wishlist </a>
+                    </div>
                     <div class="single-mobile-header-info">
                         <a href="<?php echo e(route('order.track')); ?>"><i class="fi-rs-marker"></i> Order Tracking </a>
                     </div>
                     <div class="single-mobile-header-info">
-                        <a href="<?php echo e(route('pages.contact')); ?>"><i class="fi-rs-marker"></i> Contact Us </a>
+                        <a href="<?php echo e(route('pages.contact')); ?>"><i class="fi-rs-envelope"></i> Contact Us </a>
                     </div>
                     <div class="single-mobile-header-info">
                         <a href="tel:919094676665"><i class="fi-rs-headphones"></i>91 90946 76665</a>
@@ -1217,8 +1331,7 @@
                             alt="" /></a> -->
                     <a href="https://www.youtube.com/@chennaiangadi" target="_blank"><img
                             src="<?php echo e(asset('assets/imgs/theme/icons/icon-youtube-white.svg')); ?> " alt="" /></a>
-                    <a href="https://wa.me/919094676665" target="_blank"><img
-                            src="<?php echo e(asset('assets/imgs/theme/icons/icon-whatsapp-white.svg')); ?> " alt="WhatsApp" style="width: 22px; max-width: 22px; vertical-align: middle; margin-left:2px; transform: scale(1.1);" /></a>
+
                 </div>
                 <!-- <div class="site-copyright"><a href="<?php echo e(url('/')); ?>">Copyright <?php echo e(now()->year); ?> Chennai Angadi. All
                         rights reserved.</a></div> -->
@@ -1726,7 +1839,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0" style="border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); background-color: #f8f9fa;">
-                <div class="modal-header border-0 pb-0" style="padding: 25px 30px 0;">
+                <div class="modal-header border-0 pb-0" style="padding: 15px 15px 0;">
                     <div>
                         <h4 class="modal-title fw-bold mb-1" id="globalLoginModalLabel">Login</h4>
                         <p class="text-muted font-sm mb-0">Don't have an account? <a href="javascript:void(0);"
@@ -1734,10 +1847,10 @@
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4 pt-3">
+                <div class="modal-body p-3 pt-2">
                     <form id="globalLoginForm" onsubmit="return handleGlobalLogin(event)" novalidate>
                         <?php echo csrf_field(); ?>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-2">
                             <input type="text" name="login_id" id="globalLoginId" class="form-control"
                                 placeholder="Username / Email" required
                                 style="height: 50px; border-radius: 8px; border: 1px solid #ddd; padding: 10px 15px; font-size: 14px;">
@@ -1749,12 +1862,12 @@
                                 style="height: 50px; border-radius: 8px; border: 1px solid #ddd; padding: 10px 15px; font-size: 14px;">
                             <small class="text-danger error-text d-none" id="err-password_login">Password is required</small>
                         </div>
-                        <div class="mb-3 text-end">
+                        <div class="mb-2 text-end">
                             <a href="javascript:void(0);" onclick="openForgotPasswordModal()"
                                 style="font-size: 0.85rem; color: #3BB77E;">Forgot
                                 Password?</a>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <button type="submit" id="globalLoginBtn" class="btn btn-heading btn-block hover-up w-100"
                                 style="height: 48px; border-radius: 8px; font-weight: 600; font-size: 15px;">
                                 Log in
@@ -1771,7 +1884,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0" style="border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); background-color: #f8f9fa;">
-                <div class="modal-header border-0 pb-0" style="padding: 25px 30px 0;">
+                <div class="modal-header border-0 pb-0" style="padding: 15px 15px 0;">
                     <div>
                         <h4 class="modal-title fw-bold mb-1" id="globalRegisterModalLabel">Create an Account</h4>
                         <p class="text-muted font-sm mb-0">Already have an account? <a href="javascript:void(0);"
@@ -1779,20 +1892,20 @@
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4 pt-3">
+                <div class="modal-body p-3 pt-2">
                     <form id="globalRegisterForm" onsubmit="return handleGlobalRegister(event)" novalidate>
                         <?php echo csrf_field(); ?>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-2">
                             <input type="text" id="regUsername" class="form-control" placeholder="Username *" required
                                 style="height: 45px; border-radius: 8px; border: 1px solid #ddd; padding: 10px 15px; font-size: 14px;">
                             <small class="text-danger error-text d-none" id="err-username">Username is required</small>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-2">
                             <input type="email" id="regEmail" class="form-control" placeholder="Email *" required
                                 style="height: 45px; border-radius: 8px; border: 1px solid #ddd; padding: 10px 15px; font-size: 14px;">
                             <small class="text-danger error-text d-none" id="err-email">Email is required</small>
                         </div>
-                        <div class="row mb-3">
+                        <div class="row mb-2">
                             <div class="col-6">
                                 <input type="password" id="regPassword" class="form-control" placeholder="Password *"
                                     required
@@ -1806,12 +1919,13 @@
                                 <small class="text-danger error-text d-none" id="err-password_confirmation">Confirmation is required</small>
                             </div>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-2">
                             <input type="tel" id="regMobile" class="form-control" placeholder="Mobile Number *" required
+                                maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,'')"
                                 style="height: 45px; border-radius: 8px; border: 1px solid #ddd; padding: 10px 15px; font-size: 14px;">
                             <small class="text-danger error-text d-none" id="err-mobilenumber">Mobile number must be 10 digits</small>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-2">
                             <div class="custome-checkbox">
                                 <input class="form-check-input" type="checkbox" id="regAgree" required />
                                 <label class="form-check-label" for="regAgree" style="font-size: 13px;">
@@ -1821,7 +1935,7 @@
                             </div>
                             <small class="text-danger error-text d-none" id="err-agree">You must agree to the terms</small>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mb-0">
                             <button type="submit" id="globalRegisterBtn"
                                 class="btn btn-heading btn-block hover-up w-100"
                                 style="height: 48px; border-radius: 8px; font-weight: 600; font-size: 15px;">
@@ -1839,25 +1953,24 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0" style="border-radius: 15px; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
-                <div class="modal-header border-0 pb-0">
+                <div class="modal-header border-0 pb-0" style="padding: 15px 15px 0;">
                     <h5 class="modal-title fw-bold" id="globalForgotPasswordLabel">Forgot Password</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4 pt-2">
+                <div class="modal-body p-3 pt-2">
 
                     <!-- Step 1: Send OTP -->
                     <div id="fpStep1">
-                        <p class="text-muted mb-3 font-sm">Enter your email to receive an OTP.</p>
+                        <p class="text-muted mb-2 font-sm">Enter your email to receive a verification code.</p>
                         <form onsubmit="return handleSendOtp(event)" novalidate>
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Email</label>
-                                <input type="text" id="fpLoginId" class="form-control" placeholder="Enter details..."
+                            <div class="form-group mb-2">
+                                <input type="text" id="fpLoginId" class="form-control" placeholder="Enter email details"
                                     required style="height: 45px; border-radius: 8px;">
                                 <small class="text-danger error-text d-none" id="err-fp_login_id">Email is required</small>
                             </div>
                             <div class="d-grid">
                                 <button type="submit" id="fpSendOtpBtn" class="btn btn-heading btn-block hover-up"
-                                    style="border-radius: 8px;">Send OTP</button>
+                                    style="border-radius: 8px;">Send Verification Code</button>
                             </div>
                         </form>
                         <div class="text-center mt-3">
@@ -1870,35 +1983,32 @@
 
                     <!-- Step 2: Verify OTP -->
                     <div id="fpStep2" style="display: none;">
-                        <p class="text-muted mb-3 font-sm">We've sent an OTP to <strong id="fpSentTo"></strong>.</p>
+                        <p class="text-muted mb-2 font-sm">We've sent a Code to <strong id="fpSentTo"></strong>.</p>
                         <form onsubmit="return handleVerifyOtp(event)" novalidate>
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Enter OTP</label>
+                            <div class="form-group mb-2">
                                 <input type="text" id="fpOtpInput" class="form-control" placeholder="6-digit code"
                                     required
                                     style="height: 45px; border-radius: 8px; letter-spacing: 2px; text-align: center; font-size: 1.2rem;">
                             </div>
                             <div class="d-grid">
                                 <button type="submit" id="fpVerifyOtpBtn" class="btn btn-heading btn-block hover-up"
-                                    style="border-radius: 8px;">Verify OTP</button>
+                                    style="border-radius: 8px;">Verify Code</button>
                             </div>
                         </form>
                     </div>
 
                     <!-- Step 3: Reset Password -->
                     <div id="fpStep3" style="display: none;">
-                        <p class="text-muted mb-3 font-sm">Set a new password for your account.</p>
+                        <p class="text-muted mb-2 font-sm">Set a new password for your account.</p>
                         <form onsubmit="return handleResetPassword(event)" novalidate>
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">New Password</label>
+                            <div class="form-group mb-2">
                                 <input type="password" id="fpNewPassword" class="form-control"
-                                    placeholder="New password" required style="height: 45px; border-radius: 8px;">
+                                    placeholder="New Password" required style="height: 45px; border-radius: 8px;">
                                 <small class="text-danger error-text d-none" id="err-fp_password">Password is required</small>
                             </div>
-                            <div class="form-group mb-3">
-                                <label class="fw-bold mb-1">Confirm Password</label>
+                            <div class="form-group mb-2">
                                 <input type="password" id="fpConfirmPassword" class="form-control"
-                                    placeholder="Confirm password" required style="height: 45px; border-radius: 8px;">
+                                    placeholder="Confirm Password" required style="height: 45px; border-radius: 8px;">
                                 <small class="text-danger error-text d-none" id="err-fp_password_confirmation"></small>
                                 <span id="fpPasswordError" class="text-danger small mt-1 d-block"></span>
                             </div>
@@ -2354,7 +2464,7 @@
             }
 
             btn.disabled = true;
-            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending OTP...';
+            btn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Sending Verification Code...';
 
             fetch('<?php echo e(route("sendotp")); ?>', {
                 method: 'POST',
@@ -2372,22 +2482,22 @@
                 })
                 .then(function (result) {
                     btn.disabled = false;
-                    btn.innerHTML = 'Send OTP';
+                    btn.innerHTML = 'Send Verification Code';
                     if (result.data.success) {
                         fpStoredLoginId = result.data.login_id || loginId;
                         document.getElementById('fpSentTo').textContent = fpStoredLoginId;
                         document.getElementById('fpStep1').style.display = 'none';
                         document.getElementById('fpStep2').style.display = 'block';
-                        if (typeof toastr !== 'undefined') toastr.success(result.data.message || 'OTP sent!');
+                        if (typeof toastr !== 'undefined') toastr.success(result.data.message || 'Verification Code sent!');
                     } else {
                         if (typeof toastr !== 'undefined') toastr.error(result.data.message || 'User not found');
                     }
                 })
                 .catch(function (error) {
-                    console.error('Send OTP error:', error);
+                    console.error('Send Verification Code error:', error);
                     btn.disabled = false;
-                    btn.innerHTML = 'Send OTP';
-                    if (typeof toastr !== 'undefined') toastr.error('Failed to send OTP. Please try again.');
+                    btn.innerHTML = 'Send Verification Code';
+                    if (typeof toastr !== 'undefined') toastr.error('Failed to send Verification Code. Please try again.');
                 });
             return false;
         }
@@ -2400,7 +2510,7 @@
             var csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 
             if (!otp) {
-                if (typeof toastr !== 'undefined') toastr.warning('Please enter the OTP');
+                if (typeof toastr !== 'undefined') toastr.warning('Please enter the verification code');
                 document.getElementById('fpOtpInput').classList.add('is-invalid');
                 document.getElementById('fpOtpInput').classList.remove('is-valid');
                 return false;
@@ -2425,21 +2535,21 @@
                 })
                 .then(function (result) {
                     btn.disabled = false;
-                    btn.innerHTML = 'Verify OTP';
+                    btn.innerHTML = 'Verify Code';
                     if (result.data.success) {
                         document.getElementById('fpStep2').style.display = 'none';
                         document.getElementById('fpStep3').style.display = 'block';
-                        if (typeof toastr !== 'undefined') toastr.success(result.data.message || 'OTP verified!');
+                        if (typeof toastr !== 'undefined') toastr.success(result.data.message || 'Verification Code verified!');
                     } else {
-                        if (typeof toastr !== 'undefined') toastr.error(result.data.message || 'Incorrect OTP');
+                        if (typeof toastr !== 'undefined') toastr.error(result.data.message || 'Incorrect Verification Code');
                         document.getElementById('fpOtpInput').classList.add('is-invalid');
                         document.getElementById('fpOtpInput').classList.remove('is-valid');
                     }
                 })
                 .catch(function (error) {
-                    console.error('Verify OTP error:', error);
+                    console.error('Verify Code error:', error);
                     btn.disabled = false;
-                    btn.innerHTML = 'Verify OTP';
+                    btn.innerHTML = 'Verify Code';
                     if (typeof toastr !== 'undefined') toastr.error('Verification failed. Please try again.');
                 });
             return false;
@@ -2517,6 +2627,7 @@
     </script>
 
 
+
     <!-- WhatsApp Floating Icon -->
     <a href="https://wa.me/919094676665" class="whatsapp-floating-icon" target="_blank" rel="noopener noreferrer">
         <i class="fab fa-whatsapp"></i>
@@ -2556,6 +2667,13 @@
                 height: 45px;
                 font-size: 26px;
             }
+
+            /* Stack Back-to-Top button directly above WhatsApp button on mobile */
+            /* WhatsApp: bottom 20px + height 45px + 14px gap = 79px */
+            #scrollUp {
+                bottom: 79px !important;
+                right: 20px !important;
+            }
         }
     </style>
 
@@ -2563,4 +2681,5 @@
 
 </body>
 
-</html><?php /**PATH C:\xampp\htdocs\chennais\frontend\resources\views/layouts/app.blade.php ENDPATH**/ ?>
+</html>
+<?php /**PATH C:\xampp\htdocs\chennais\frontend\resources\views/layouts/app.blade.php ENDPATH**/ ?>

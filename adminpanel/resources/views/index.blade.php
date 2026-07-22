@@ -99,7 +99,7 @@
                                         @forelse($recentOrders as $order)
                                         <tr>
                                             <td>{{ ($recentOrders->currentPage() - 1) * $recentOrders->perPage() + $loop->iteration }}</td>
-                                            <td><a href="{{ ($order->order_type === 'billing') ? route('admin.billing.invoice', $order->id) : route('orders.view', $order->id) }}" class="fw-bold">#{{ $order->order_number }}</a></td>
+                                            <td><a href="{{ ($order->order_type === 'billing') ? route('admin.billing.invoice', $order->id) : route('orders.view', $order->id) }}" class="fw-bold" target="_blank">#{{ $order->order_number }}</a></td>
                                             <td>
                                                 @if($order->customer_type === 'registered' && $order->customer)
                                                     {{ $order->customer->username }}

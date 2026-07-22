@@ -22,6 +22,22 @@ use App\Mail\AdminOrderNotification;
 class BillingController extends Controller
 {
     /**
+     * Edit POS Billing Order
+     */
+    public function edit($id)
+    {
+        $editOrder = Order::with(['items.variant.quantity'])->findOrFail($id);
+        
+        $products = Product::with(['variants.quantity', 'maincategory'])->get();
+        $customers = \App\Models\Customer::where('status', 1)
+            ->select('id', 'username', 'email', 'mobilenumber')
+            ->orderBy('username', 'asc')
+            ->get();
+
+        return view('order.billing-edit', compact('editOrder', 'products', 'customers'));
+    }
+
+    /**
      * Show billing table (order list)
      */
     public function index(Request $request)
@@ -337,6 +353,7 @@ class BillingController extends Controller
         $request->validate([
             'customer_type' => 'required|in:registered,guest',
             'customer_id' => 'nullable|exists:customers,id',
+            'guest_details.phone' => 'nullable|digits:10',
             'items' => 'required|array|min:1',
             'items.*.product_id' => 'required|exists:products,id',
             'items.*.variant_id' => 'nullable|exists:product_variants,id',
@@ -375,9 +392,15 @@ class BillingController extends Controller
             $paymentMethod = $request->input('payment_method', 'cash');
             $paymentProvider = $request->input('payment_provider', 'cash');
 
-            // Determine payment status - pending for online payments, paid for cash
-            $paymentStatus = ($paymentMethod === 'cash') ? 'paid' : 'not_paid';
-            $orderStatus = ($paymentMethod === 'cash') ? 'confirmed' : 'pending';
+            // Determine payment status - POS orders paid offline are completed immediately
+            if ($billingType === 'offline' && $paymentProvider !== 'razorpay') {
+                $paymentStatus = 'paid';
+                $orderStatus = 'confirmed';
+            } else {
+                // Online gateways process it pending until webhook success
+                $paymentStatus = 'not_paid';
+                $orderStatus = 'pending';
+            }
 
             // Check for existing draft order
             $orderId = $request->input('order_id');
@@ -385,8 +408,8 @@ class BillingController extends Controller
             if ($orderId) {
                 $order = Order::find($orderId);
                 
-                // Prevent race conditions where a completed order gets overwritten
-                if ($order && $order->payment_status === 'paid') {
+                // Prevent race conditions where a completed order gets overwritten natively, unless requested via explicit Edit Mode.
+                if ($order && $order->payment_status === 'paid' && !$request->input('is_edit_mode')) {
                     $order = null;
                 } elseif ($order) {
                     // Prevent draft overwriting if the customer identity has fundamentally changed
@@ -425,6 +448,7 @@ class BillingController extends Controller
                     'payment_status' => $paymentStatus,
                     'subtotal' => $subtotal,
                     'discount_amount' => $discountAmount,
+                    'coupon_code' => $couponCode,
                     'tax_amount' => $taxAmount,
                     'shipping_amount' => $shippingAmount,
                     'total_amount' => $finalAmount,
@@ -452,6 +476,7 @@ class BillingController extends Controller
                     'payment_status' => $paymentStatus,
                     'subtotal' => $subtotal,
                     'discount_amount' => $discountAmount,
+                    'coupon_code' => $couponCode,
                     'tax_amount' => $taxAmount,
                     'shipping_amount' => $shippingAmount,
                     'total_amount' => $finalAmount,
@@ -557,6 +582,7 @@ class BillingController extends Controller
     {
         $request->validate([
             'customer_type' => 'required|string|in:guest,registered',
+            'guest_details.phone' => 'nullable|digits:10',
             'items' => 'required|array',
             'final_amount' => 'required|numeric',
         ]);
@@ -573,7 +599,7 @@ class BillingController extends Controller
                 $order = Order::find($orderId);
                 
                 // Prevent race conditions where a completed order gets overwritten
-                if ($order && $order->payment_status === 'paid') {
+                if ($order && $order->payment_status === 'paid' && !$request->input('is_edit_mode')) {
                     $order = null;
                 } elseif ($order) {
                     // Prevent draft overwriting if the customer identity has fundamentally changed

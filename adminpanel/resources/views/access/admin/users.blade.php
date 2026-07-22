@@ -74,14 +74,14 @@
                             <td>{{ $user->email }}</td>
                             <td>
                                 @if($user->role_type === 'superadmin')
-                                    <span class="badge bg-danger">Super Admin</span>
+                                    <span class="badge bg-danger"><i class="bi bi-shield-lock me-1"></i> Super Admin</span>
                                 @else
-                                    <span class="badge bg-secondary">Admin</span>
+                                    <span class="badge bg-secondary"><i class="bi bi-shield-check me-1"></i> Admin</span>
                                 @endif
                             </td>
                             <td>
                                 @if($user->role)
-                                    <span class="badge bg-primary">{{ $user->role->name }}</span>
+                                    <span class="badge bg-primary"><i class="bi bi-person-badge me-1"></i> {{ $user->role->name }}</span>
                                 @else
                                     <span class="text-muted">No role assigned</span>
                                 @endif
@@ -113,7 +113,7 @@
                             <td class="text-start">
                                 @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('users-edit'))
                                 <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-warning">
-                                    <i class="bi bi-pencil-square"></i> Edit
+                                    <i class="bi bi-pencil-square me-1"></i> Edit
                                 </a>
                                 @endif
                                 @if($user->id !== auth()->id() && $user->role_type !== 'superadmin')

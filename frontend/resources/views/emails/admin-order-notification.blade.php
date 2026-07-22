@@ -213,7 +213,7 @@
             <table class="product-table">
                 <thead>
                     <tr>
-                        <th style="width: 50px;">S#</th>
+                        <th style="width: 50px;">S.No</th>
                         <th>Product name</th>
                         <th class="text-right">Price</th>
                         <th class="text-right" style="width: 50px;">Qty</th>

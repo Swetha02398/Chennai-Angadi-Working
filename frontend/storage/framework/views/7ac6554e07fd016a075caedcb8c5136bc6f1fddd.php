@@ -245,11 +245,13 @@
                     </td>
                 </tr>
 
+                <?php if(in_array($order->payment_method, ['cash_on_delivery', 'cod'])): ?>
                 <?php if($order->cod_charge > 0): ?>
                     <tr>
                         <td class="text-right">COD Charge :</td>
                         <td class="text-right">Rs. <?php echo e(number_format($order->cod_charge, 2)); ?></td>
                     </tr>
+                <?php endif; ?>
                 <?php endif; ?>
 
                 <tr>

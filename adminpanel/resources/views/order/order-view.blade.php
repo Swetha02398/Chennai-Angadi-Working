@@ -150,7 +150,10 @@
     }
     .items-table th:nth-child(3),
     .items-table th:nth-child(4),
-    .items-table th:nth-child(5) {
+    .items-table th:nth-child(5),
+    .items-table th:nth-child(6),
+    .items-table th:nth-child(7),
+    .items-table th:nth-child(8) {
         text-align: center;
     }
     .items-table td {
@@ -164,7 +167,10 @@
     }
     .items-table td:nth-child(3),
     .items-table td:nth-child(4),
-    .items-table td:nth-child(5) {
+    .items-table td:nth-child(5),
+    .items-table td:nth-child(6),
+    .items-table td:nth-child(7),
+    .items-table td:nth-child(8) {
         text-align: center;
     }
     .items-table tbody tr:hover {
@@ -252,7 +258,7 @@
         /* Add page margins for consistent printing */
         @page {
             size: A4 portrait;
-            margin: 10mm;
+            margin: 5mm;
         }
         
         html, body {
@@ -280,6 +286,17 @@
         section {
             background: #fff !important;
             background-color: #fff !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: auto !important;
+            max-width: 100% !important;
+            border: none !important;
+            box-shadow: none !important;
+            position: static !important;
+            float: none !important;
+            left: 0 !important;
+            right: 0 !important;
+            transform: none !important;
         }
         
         /* Remove all borders */
@@ -293,15 +310,6 @@
             padding: 0 !important;
             max-width: 100% !important;
             width: 100% !important;
-        }
-        
-        .content-main,
-        .container {
-            margin: 0 !important;
-            padding: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            border: none !important;
         }
         
         /* Compact the invoice for one page */
@@ -341,7 +349,7 @@
         }
 
         .invoice-container, #gstNotIncludedInvoice, #gstIncludedInvoice {
-            padding-bottom: 20px !important; 
+            padding-bottom: 0 !important; 
         }
         
         /* Hide GST Not Included and regular invoice when printing GST Included */
@@ -595,8 +603,7 @@
 
                 <!-- Footer -->
                 <div class="invoice-footer">
-                    <p>Thank you for shopping with us and we hope to serve you again in the future</p>
-                    <p>Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
+                    <p>Thank you for shopping with us and we hope to serve you again in the future. Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
                 </div>
             </div>
         </div>
@@ -627,7 +634,7 @@
                 #gstNotIncludedInvoice .ngi-table td { border: 1px solid #999; padding: 8px 10px; font-size: 12px; text-align: center; }
                 #gstNotIncludedInvoice .ngi-table td:nth-child(2) { text-align: left; }
                 #gstNotIncludedInvoice .ngi-summary-row { display: flex; justify-content: space-between; border: 1px solid #999; border-top: none; font-size: 12px; }
-                #gstNotIncludedInvoice .ngi-summary-row .label { padding: 8px 10px; flex: 1; font-weight: 600; color: #dc3545; }
+                #gstNotIncludedInvoice .ngi-summary-row .label { padding: 8px 10px; flex: 1; font-weight: 600; color: #dc3545; text-align: right; }
                 #gstNotIncludedInvoice .ngi-summary-row .amount { padding: 8px 10px; width: 100px; text-align: right; border-left: 1px solid #999; color: #dc3545; }
                 #gstNotIncludedInvoice .ngi-total-row { font-size: 14px; font-weight: bold; }
                 #gstNotIncludedInvoice .ngi-total-row .amount { font-weight: bold; }
@@ -737,7 +744,7 @@
                             </td>
                             <td>₹ {{ number_format($item->price, 0) }}</td>
                             <td>{{ $qty }}</td>
-                            <td style="text-align: right; padding-right: 15px;">₹ {{ number_format($lineTotal, 0) }}</td>
+                            <td style="text-align: center;">₹ {{ number_format($lineTotal, 0) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -771,8 +778,7 @@
             
             <!-- Footer -->
             <div class="ngi-footer">
-                <p>Thank you for shopping with us and we hope to serve you again in the future</p>
-                <p>Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
+                <p>Thank you for shopping with us and we hope to serve you again in the future. Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
             </div>
         </div>
         
@@ -801,7 +807,7 @@
                 #gstIncludedInvoice .gi-table td { border: 1px solid #999; padding: 5px 4px; font-size: 10px; text-align: center; white-space: nowrap; }
                 #gstIncludedInvoice .gi-table td.product-name { text-align: left; white-space: normal; }
                 #gstIncludedInvoice .gi-summary-row { display: flex; justify-content: space-between; border: 1px solid #999; border-top: none; font-size: 11px; }
-                #gstIncludedInvoice .gi-summary-row .label { padding: 6px 8px; flex: 1; font-weight: 600; color: #dc3545; }
+                #gstIncludedInvoice .gi-summary-row .label { padding: 6px 8px; flex: 1; font-weight: 600; color: #dc3545; text-align: right; }
                 #gstIncludedInvoice .gi-summary-row .amount { padding: 6px 8px; width: 80px; text-align: right; border-left: 1px solid #999; color: #dc3545; }
                 #gstIncludedInvoice .gi-total-row { font-size: 12px; font-weight: bold; }
                 #gstIncludedInvoice .gi-footer { margin-top: 15px; text-align: center; font-size: 10px; color: #333; line-height: 1.5; border-top: 1px dashed #999; padding-top: 10px; }
@@ -945,7 +951,7 @@
                             <td class="gst-highlight">{{ $productSgst }}% (₹{{ number_format($sgstAmount, 2) }})</td>
                             <td class="gst-highlight">{{ $productIgst }}% (₹{{ number_format($igstAmount, 2) }})</td>
                             <td>{{ $qty }}</td>
-                            <td style="text-align: right; padding-right: 15px;">₹ {{ number_format($lineTotal, 0) }}</td>
+                            <td style="text-align: center;">₹ {{ number_format($lineTotal, 0) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -999,8 +1005,7 @@
             
             <!-- Footer -->
             <div class="gi-footer">
-                <p>Thank you for shopping with us and we hope to serve you again in the future</p>
-                <p>Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
+                <p>Thank you for shopping with us and we hope to serve you again in the future. Please feel free to write to us at <a href="mailto:care@chennaiangadi.com">care@chennaiangadi.com</a> for any queries, suggestions, complaints or anything else.</p>
             </div>
         </div>
     </div>

@@ -26,7 +26,7 @@ class OtpMail extends Mailable
 
         return $this->from($fromAddress, $fromName)
                     ->replyTo($fromAddress, $fromName)
-                    ->subject('Password Reset OTP - Chennai Angadi')
+                    ->subject('Password Reset Code - Chennai Angadi')
                     ->view('emails.otp')
                     ->with([
                         'otp' => $this->otp,

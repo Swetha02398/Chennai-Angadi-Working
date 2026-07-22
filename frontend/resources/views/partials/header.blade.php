@@ -2,7 +2,7 @@
     <!-- <div class="mobile-promotion">
         <span>Grand opening, <strong>up to 15%</strong> off all items. Only <strong>3 days</strong> left</span>
     </div> -->
-    <div class="header-top header-top-ptb-1 d-none d-lg-block">
+    <div class="header-top header-top-ptb-1">
         <div class="container">
             <div class="row align-items-center justify-content-between">
                 <!-- Left Side: Phone Number -->
@@ -159,6 +159,13 @@
                             .search-style-2 form, #mobile-header-search-form {
                                 overflow: visible !important;
                             }
+                            
+                            /* --- MOBILE HEADER-TOP: HIDDEN --- */
+                            @media (max-width: 991px) {
+                                .header-top { 
+                                    display: none !important; 
+                                }
+                            }
                         </style>
                     </div>
                 </div>
@@ -304,7 +311,7 @@
                                 <ul class="catfly-left">
                                     @foreach($categories as $cat)
                                         <li class="catfly-item" data-cat-id="{{ $cat->id }}">
-                                            <a href="{{ route('category.products', $cat->slug) }}">
+                                            <a href="{{ url('/' . $cat->slug) }}">
                                                 @php
                                                     $mainImage = str_replace('uploads/', '', $cat->image);
                                                 @endphp
@@ -326,7 +333,7 @@
                                                 <ul class="catfly-sub-list">
                                                     @foreach($cat->subcategories as $sub)
                                                         <li class="catfly-sub-item">
-                                                            <a href="{{ route('subcategory.products', $sub->slug) }}">
+                                                            <a href="{{ url('/' . $sub->slug) }}">
                                                                 @if($sub->subimage)
                                                                     @php
                                                                         $subImage = str_replace('uploads/', '', $sub->subimage);
@@ -343,7 +350,7 @@
                                                                 <ul class="catfly-child">
                                                                     @foreach($sub->childCategories as $child)
                                                                         <li>
-                                                                            <a href="{{ route('subcategory.products', $sub->slug) }}">
+                                                                            <a href="{{ url('/' . $sub->slug) }}">
                                                                                 @if($child->childimage)
                                                                                     @php
                                                                                         $childImage = str_replace('uploads/', '', $child->childimage);
@@ -391,14 +398,14 @@
                                     <ul class="mega-menu horizontal-scroll">
                                         @foreach ($categories as $cat)
                                             <li class="sub-mega-menu block-item">
-                                                <a class="menu-title" href="{{ route('category.products', $cat->slug) }}">
+                                                <a class="menu-title" href="{{ url('/' . $cat->slug) }}">
                                                     {{ $cat->name }}
                                                 </a>
 
                                                 <ul class="mega-scroll">
                                                     @foreach ($cat->subcategories as $sub)
                                                         <li><a
-                                                                href="{{ route('subcategory.products', $sub->slug) }}">{{ $sub->name }}</a>
+                                                                href="{{ url('/' . $sub->slug) }}">{{ $sub->name }}</a>
                                                         </li>
                                                     @endforeach
                                                 </ul>
@@ -421,6 +428,17 @@
                     </div>
                 </div>
                 <div class="header-right-group d-none d-lg-flex" style="display: flex; align-items: center; gap: 15px;">
+                    <!-- Sticky Search Bar -->
+                    <div class="sticky-search-wrapper" style="display: none; align-items: center; min-width: 250px; position: relative;">
+                        <form action="{{ route('search') }}" method="GET" id="sticky-header-search-form" style="position: relative; width: 100%; display: flex; align-items: center;">
+                            <input type="text" name="q" id="sticky-header-search-input" placeholder="Search..." value="{{ request('q') }}" autocomplete="off" style="width: 100%; border: 1px solid #e2e9e1; border-radius: 4px; padding: 8px 15px; outline: none; font-size: 13px;" />
+                            <button type="submit" style="position: absolute; right: 0; top: 0; bottom: 0; background: none; border: none; padding: 0 12px; color: #253D4E;">
+                                <i class="fi-rs-search"></i>
+                            </button>
+                            <div id="sticky-header-search-suggestions" class="search-suggestions-dropdown" style="display: none;"></div>
+                        </form>
+                    </div>
+                    
                     <div class="header-action-icon-2 bottom-cart-icon" style="display: flex; align-items: center;">
                         <a class="mini-cart-icon" href="{{ route('checkout-order') }}">
                             <img alt="Cart" src="{{ asset('assets/imgs/theme/icons/icon-cart.svg') }}" />
@@ -446,6 +464,13 @@
                 </div>
                 <div class="header-action-right mobile-header-icons mobile-only-icons">
                     <div class="header-action-2">
+                        <!-- Mobile: Phone/Call Icon -->
+                        <div class="header-action-icon-2 mobile-phone-icon">
+                            <a href="tel:+919094676665" style="display:flex;align-items:center;justify-content:center;">
+                                <i class="fi-rs-phone-call" style="font-size: 20px; color: #253D4E;"></i>
+                            </a>
+                        </div>
+
                         <!-- Mobile Search Icon -->
                         <div class="header-action-icon-2 mobile-search-toggle-icon">
                             <a href="javascript:void(0);" id="mobile-header-search-toggle">
@@ -559,18 +584,29 @@
             flex-wrap: nowrap !important;
             width: 100% !important;
             padding: 10px 0 !important;
+            position: relative !important;
         }
 
         .header-action-icon-2.d-block.d-lg-none {
             order: 1 !important; /* Burger menu on left */
+            flex: 1; /* allow flexible spacing */
         }
         
         .logo.logo-width-1.d-block.d-lg-none {
             order: 2 !important;
-            width: 130px !important; /* Make sure the logo spans nicely */
+            position: absolute !important;
+            left: 46% !important; /* Shifted left visually */
+            top: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: 120px !important; 
             max-width: 45% !important;
-            margin: 0 auto !important;
+            margin: 0 !important;
             text-align: center !important;
+        }
+        
+        .mobile-only-icons {
+            flex: 1;
+            justify-content: flex-end !important;
         }
 
         .logo.logo-width-1.d-block.d-lg-none img {
@@ -696,9 +732,9 @@
     .search-suggestions-dropdown {
         position: absolute !important;
         top: 100% !important;
-        left: 0 !important;
-        right: 0 !important;
-        width: 100% !important;
+        left: 0;
+        right: 0;
+        width: 100%;
         background: #fff !important;
         border: 1px solid #ddd !important;
         border-top: none !important;
@@ -778,6 +814,15 @@
     .search-view-all:hover {
         background: #3BB77E;
         color: #fff;
+    }
+
+    /* Sticky header search bar display logic */
+    .sticky-bar.stick .sticky-search-wrapper {
+        display: flex !important;
+    }
+    
+    .sticky-bar:not(.stick) .sticky-search-wrapper {
+        display: none !important;
     }
 
     /* Bottom header cart icon badge */
@@ -1356,31 +1401,6 @@
             if (!mobileSearchBar.contains(e.target) && !mobileSearchToggle.contains(e.target)) {
                 mobileSearchBar.style.display = 'none';
                 if (mobileSearchSuggestions) mobileSearchSuggestions.style.display = 'none';
-            }
-        });
-
-        // Live search logic
-        let mobileDebounceTimer;
-        let mobileCurrentQuery = '';
-
-        mobileSearchInput.addEventListener('input', function () {
-            const query = this.value.trim();
-            mobileCurrentQuery = query;
-            clearTimeout(mobileDebounceTimer);
-
-            if (query.length < 2) {
-                mobileHideSuggestions();
-                return;
-            }
-
-            mobileDebounceTimer = setTimeout(function () {
-                mobileFetchSuggestions(query);
-            }, 300);
-        });
-
-        mobileSearchInput.addEventListener('focus', function () {
-            if (mobileCurrentQuery.length >= 2) {
-                mobileFetchSuggestions(mobileCurrentQuery);
             }
         });
 

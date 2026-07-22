@@ -10,11 +10,10 @@
     <form method="POST" action="{{ route('sendotp') }}" id="fp-step1-form" novalidate>
         @csrf
         <div class="form-group mb-3">
-            <label class="fw-bold mb-1">Enter Email</label>
-            <input type="text" name="login_id" id="login_id_fp" class="form-control" required placeholder="Enter your email">
+            <input type="text" name="login_id" id="login_id_fp" class="form-control" required placeholder="Enter email details">
             <small class="text-danger d-none" id="login_id_fpError">Email is required</small>
         </div>
-        <button type="submit" class="btn btn-primary mt-3">Send OTP</button>
+        <button type="submit" class="btn btn-primary mt-3">Send Code</button>
     </form>
     @endif
 
@@ -26,12 +25,11 @@
         <input type="hidden" name="login_id" value="{{ session('login_id') }}">
         
         <div class="form-group mb-3">
-            <label class="fw-bold mb-1">Enter OTP</label>
             <input type="text" name="otp" id="otp" class="form-control" required placeholder="6-digit code">
-            <small class="text-danger d-none" id="otpError">OTP is required</small>
+            <small class="text-danger d-none" id="otpError">Code is required</small>
         </div>
 
-        <button type="submit" class="btn btn-success mt-3">Verify OTP</button>
+        <button type="submit" class="btn btn-success mt-3">Verify Code</button>
     </form>
     @endif
 
@@ -43,14 +41,12 @@
         <input type="hidden" name="login_id" value="{{ session('login_id') }}">
 
         <div class="form-group mb-3">
-            <label class="fw-bold mb-1">New Password</label>
-            <input type="password" name="password" id="password_fp" class="form-control" required>
+            <input type="password" name="password" id="password_fp" class="form-control" required placeholder="New Password">
             <small class="text-danger d-none" id="password_fpError">Password is required</small>
         </div>
 
         <div class="form-group mb-3">
-            <label class="fw-bold mb-1">Confirm Password</label>
-            <input type="password" name="password_confirmation" id="password_confirmation_fp" class="form-control" required>
+            <input type="password" name="password_confirmation" id="password_confirmation_fp" class="form-control" required placeholder="Confirm Password">
             <small class="text-danger d-none" id="password_confirmation_fpError"></small>
         </div>
 

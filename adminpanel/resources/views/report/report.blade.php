@@ -335,7 +335,7 @@
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-sm btn-info" onclick="event.stopPropagation(); window.open('${invoiceUrl}', '_blank');" title="View Invoice">
-                                            <i class="bi bi-printer-fill"> Print</i>
+                                            <i class="bi bi-printer-fill me-1"></i> Print
                                         </button>
                                     </td>
                                 </tr>

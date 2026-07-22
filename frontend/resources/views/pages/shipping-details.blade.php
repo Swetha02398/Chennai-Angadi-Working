@@ -28,8 +28,7 @@
 
                                                 <!-- FAQ 1 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">1. Do you have shipping across
-                                                        india?</button>
+                                                    <button class="faq-question">Do you have shipping across india?</button>
                                                     <div class="faq-answer">
                                                         <p>Yes, we have shipping across India.</p>
 
@@ -38,7 +37,7 @@
 
                                                 <!-- FAQ 2 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">2.Processing Time?</button>
+                                                    <button class="faq-question">Processing Time?</button>
                                                     <div class="faq-answer">
                                                         <p>All orders are processed within 1 - 2 business days (excluding
                                                             weekends and holidays). You will receive a tracking number once
@@ -49,7 +48,7 @@
 
                                                 <!-- FAQ 3 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">3. Free Shipping Details</button>
+                                                    <button class="faq-question">Free Shipping Details</button>
                                                     <div class="faq-answer">
                                                         <!-- <p>Email <strong>care@chennaiangadi.com</strong> or call <strong>9094676665</strong> within 2 days.</p> -->
                                                         <ul>
@@ -72,7 +71,7 @@
 
                                                 <!-- FAQ 4 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">4.shipping charges calculation</button>
+                                                    <button class="faq-question">Shipping charges calculation</button>
                                                     <div class="faq-answer">
                                                         <p>Shipping charges are calculated based on the weight of the
                                                             product and the destination.</p>
@@ -89,7 +88,7 @@
 
                                                 <!-- FAQ 5 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">5. Order tracking details?</button>
+                                                    <button class="faq-question">Order tracking details?</button>
                                                     <div class="faq-answer">
                                                         <p>Once your order has shipped, you will receive an email with a
                                                             tracking number so you can monitor its progress. If you have any
@@ -100,7 +99,7 @@
 
                                                 <!-- FAQ 6 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">6. Lost or Damaged packages?</button>
+                                                    <button class="faq-question">Lost or Damaged packages?</button>
                                                     <div class="faq-answer">
                                                         <p>If your package is lost or damaged during shipping, please take
                                                             pictures and a video of the damaged product and send them to our
@@ -114,7 +113,7 @@
 
                                                 <!-- FAQ 7 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">7. Address Change?</button>
+                                                    <button class="faq-question">Address Change?</button>
                                                     <div class="faq-answer">
                                                         <p>Please ensure that your shipping address is correct at the time
                                                             of checkout. If you need to make changes to the address, please
@@ -127,7 +126,7 @@
 
                                                 <!-- FAQ 8 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">8. Non Delivery issue?</button>
+                                                    <button class="faq-question">Non Delivery issue?</button>
                                                     <div class="faq-answer">
                                                         <p>If you experience any issues with your delivery, including
                                                             non-receipt or delayed delivery, please contact us, and we’ll
@@ -136,10 +135,9 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- FAQ 7 -->
+                                                <!-- FAQ 9 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">9. Don't go and collect the
-                                                        parcel?</button>
+                                                    <button class="faq-question">Don't go and collect the parcel?</button>
                                                     <div class="faq-answer">
                                                         <p>All parcels will be delivered to your home. If the courier person
                                                             asks you to come and collect the parcel, please do not go to the
@@ -149,9 +147,9 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- FAQ 7 -->
+                                                <!-- FAQ 10 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">10. Beware of courier scams?</button>
+                                                    <button class="faq-question">Beware of courier scams?</button>
                                                     <div class="faq-answer">
                                                         <p>Beware of courier scams! Some courier agents may call you and
                                                             claim that a parcel is waiting for you, but the sender has not
@@ -164,10 +162,9 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- FAQ 7 -->
+                                                <!-- FAQ 11 -->
                                                 <div class="faq-item">
-                                                    <button class="faq-question">7. Check your parcel upon
-                                                        delivery?</button>
+                                                    <button class="faq-question">Check your parcel upon delivery?</button>
                                                     <div class="faq-answer">
                                                         <p>When you receive your parcel, please check it thoroughly to
                                                             ensure it is not damaged or crushed. If you notice any issues,
@@ -194,6 +191,7 @@
             max-width: 800px;
             margin: 0 auto;
             font-family: Arial, sans-serif;
+            counter-reset: faq-counter;
         }
 
         .faq-item {
@@ -213,6 +211,16 @@
             transition: 0.3s;
             position: relative;
             padding-right: 50px;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .faq-question::before {
+            counter-increment: faq-counter;
+            content: counter(faq-counter) ".";
+            width: 32px;
+            flex-shrink: 0;
+            display: inline-block;
         }
 
         .faq-question::after {
