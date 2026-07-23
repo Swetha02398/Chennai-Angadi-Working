@@ -313,7 +313,7 @@
                                                         <span
                                                             style="color: #3BB77E; font-size: 13px; font-weight: 700;"><?php echo e($weightName); ?>
 
-                                                            - ₹<?php echo e(number_format($item->price_at_add_time, 0)); ?></span>
+                                                            - ₹<?php echo e(number_format($item->price_at_add_time, 2)); ?></span>
                                                     <?php endif; ?>
                                                 </td>
                                                 <td>
@@ -333,7 +333,7 @@
                                                 <td>
                                                     <h4 class="text-brand"
                                                         id="row-total-<?php echo e(auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id)); ?>">
-                                                        ₹ <?php echo e(number_format($item->price_at_add_time * $item->quantity, 0)); ?></h4>
+                                                        ₹ <?php echo e(number_format($item->price_at_add_time * $item->quantity, 2)); ?></h4>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn-delete-item"
@@ -365,7 +365,7 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end" id="subtotal_display">
-                                            ₹<?php echo e(number_format($subtotal, 0)); ?></h4>
+                                            ₹<?php echo e(number_format($subtotal, 2)); ?></h4>
                                     </td>
                                 </tr>
                                 <tr id="coupon_discount_row"
@@ -378,7 +378,7 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end" id="coupon_discount_display">
-                                            -₹ <?php echo e(number_format($sessionCouponDiscount, 0)); ?></h4>
+                                            -₹ <?php echo e(number_format($sessionCouponDiscount, 2)); ?></h4>
                                     </td>
                                 </tr>
                                 <tr>
@@ -388,7 +388,7 @@
                                     <td class="cart_total_amount text-end">
                                         <h4 class="text-brand" id="shipping_display">
                                         <?php if($shipping > 0): ?>
-                                            ₹ <?php echo e(number_format($shipping, 0)); ?>
+                                            ₹ <?php echo e(number_format($shipping, 2)); ?>
 
                                         <?php else: ?>
                                             Free
@@ -415,7 +415,7 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end" id="total_display">
-                                            ₹<?php echo e(number_format($total - $sessionCouponDiscount, 0)); ?></h4>
+                                            ₹<?php echo e(number_format($total - $sessionCouponDiscount, 2)); ?></h4>
                                     </td>
                                 </tr>
                             </tbody>

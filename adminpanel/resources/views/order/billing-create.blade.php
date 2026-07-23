@@ -82,7 +82,10 @@
             font-weight: bold;
             color: #28a745;
             margin-right: 10px;
-            font-size: 16px
+            font-size: 16px;
+            width: 75px;
+            text-align: right;
+            display: inline-block;
         }
 
         .btn-add {
@@ -466,41 +469,42 @@
                 <div class="cart-footer">
                     {{-- Totals --}}
                     <div class="total-box">
-                        <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-                            <span>Subtotal:</span>
-                            <span>₹<span id="subtotal">0</span></span>
+                        <div style="display:flex; align-items:center; margin-bottom:8px;">
+                            <div style="flex:1;">Subtotal:</div>
+                            <div style="width:90px; text-align:right;">₹<span id="subtotal">0.00</span></div>
+                            <div style="width:32px;"></div>
                         </div>
 
-                        {{-- Add Tax Row with + Button --}}
-                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-                            <span>Add Tax</span>
-                            <div style="display:flex;align-items:center;gap:8px">
-                                <span>₹<span id="taxAmount">0</span></span>
+                        {{-- Add Tax Row --}}
+                        <div style="display:flex; align-items:center; margin-bottom:8px;">
+                            <div style="flex:1;">Add Tax</div>
+                            <div style="width:90px; text-align:right;">₹<span id="taxAmount">0.00</span></div>
+                            <div style="width:32px; display:flex; justify-content:flex-end;">
                                 <button type="button" onclick="openTaxModal()"
-                                    style="background:#28a745;color:#fff;border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">
+                                    style="background:#28a745;color:#fff;border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;margin:0;">
                                     +
                                 </button>
                             </div>
                             <input type="hidden" id="tax" value="0">
                         </div>
 
-                        {{-- Add Shipping Row with + Button --}}
-                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-                            <span>Add Shipping</span>
-                            <div style="display:flex;align-items:center;gap:8px">
-                                <span>₹<span id="shippingAmount">0</span></span>
+                        {{-- Add Shipping Row --}}
+                        <div style="display:flex; align-items:center; margin-bottom:12px;">
+                            <div style="flex:1;">Add Shipping</div>
+                            <div style="width:90px; text-align:right;">₹<span id="shippingAmount">0.00</span></div>
+                            <div style="width:32px; display:flex; justify-content:flex-end;">
                                 <button type="button" onclick="openShippingModal()"
-                                    style="background:#28a745;color:#fff;border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center">
+                                    style="background:#28a745;color:#fff;border:none;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0;margin:0;">
                                     +
                                 </button>
                             </div>
                             <input type="hidden" id="shipping" value="0">
                         </div>
 
-                        <div
-                            style="display:flex;justify-content:space-between;font-size:18px;font-weight:bold;border-top:1px solid #ddd;padding-top:8px">
-                            <span>Total:</span>
-                            <span>₹<span id="grandTotal">0</span></span>
+                        <div style="display:flex; align-items:center; font-size:18px; font-weight:bold; border-top:1px solid #ddd; padding-top:8px;">
+                            <div style="flex:1;">Total:</div>
+                            <div style="width:90px; text-align:right;">₹<span id="grandTotal">0.00</span></div>
+                            <div style="width:25px;"></div>
                         </div>
                     </div>
 
@@ -1118,22 +1122,22 @@
                         body += `
                                     <tr>
                                         <td>${c.product_name} <small>(${c.variant_name})</small></td>
-                                        <td>₹${c.price}</td>
+                                        <td>₹${parseFloat(c.price).toFixed(2)}</td>
                                         <td>
                                             <div style="display:flex; align-items:center; gap:5px;">
-                                                <button onclick="decreaseQty(${i})" style="width:24px; height:24px; border:1px solid #ccc; background:#fff; border-radius:3px; cursor:pointer; display:flex; align-items:center; justify-content:center;">-</button>
+                                                <button type="button" onclick="decreaseQty(${i})" style="width:24px; height:24px; border:1px solid #ccc; background:#fff; border-radius:3px; cursor:pointer; display:flex; align-items:center; justify-content:center;">-</button>
                                                 <span>${c.qty}</span>
-                                                <button onclick="increaseQty(${i})" style="width:24px; height:24px; border:1px solid #ccc; background:#fff; border-radius:3px; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
+                                                <button type="button" onclick="increaseQty(${i})" style="width:24px; height:24px; border:1px solid #ccc; background:#fff; border-radius:3px; cursor:pointer; display:flex; align-items:center; justify-content:center;">+</button>
                                             </div>
                                         </td>
-                                        <td>₹${c.total}</td>
-                                        <td><button onclick="removeItem(${i})" style="background:#dc3545;color:#fff;border:none;padding:4px 8px;border-radius:3px;cursor:pointer">×</button></td>
+                                        <td>₹${parseFloat(c.total).toFixed(2)}</td>
+                                        <td><button type="button" onclick="removeItem(${i})" style="background:#dc3545;color:#fff;border:none;padding:4px 8px;border-radius:3px;cursor:pointer">×</button></td>
                                     </tr>`;
                     });
                 }
 
                 document.getElementById('cartBody').innerHTML = body;
-                document.getElementById('subtotal').innerText = subtotal;
+                document.getElementById('subtotal').innerText = subtotal.toFixed(2);
                 calculateTotal();
                 saveDraft(); // Auto-save draft on cart change
             }
@@ -1270,9 +1274,9 @@
                     .then(res => res.json())
                     .then(data => {
                         if (data.success) {
-                            document.getElementById('shipping').value = data.shipping_amount;
-                            document.getElementById('shippingAmount').innerText = data.shipping_amount;
-                            document.getElementById('shippingPreview').innerText = data.shipping_amount;
+                            document.getElementById('shipping').value = parseFloat(data.shipping_amount).toFixed(2);
+                            document.getElementById('shippingAmount').innerText = parseFloat(data.shipping_amount).toFixed(2);
+                            document.getElementById('shippingPreview').innerText = parseFloat(data.shipping_amount).toFixed(2);
 
                             // Show zone info in modal
                             document.getElementById('shippingZoneInfo').style.display = 'block';

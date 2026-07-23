@@ -28,7 +28,7 @@
                                         x {{ $item->quantity }}
                                     </div>
                                     <div class="item-price">
-                                        <strong>₹{{ number_format($item->price_at_add_time * $item->quantity, 0) }}</strong>
+                                        <strong>₹{{ number_format($item->price_at_add_time * $item->quantity, 2) }}</strong>
                                     </div>
                                 </div>
                             @endif
@@ -43,7 +43,7 @@
                             <tbody>
                                 <tr>
                                     <td class="text-muted">Subtotal</td>
-                                    <td class="text-end text-brand" id="subtotal_display">₹{{ number_format($subtotal, 0) }}</td>
+                                    <td class="text-end text-brand" id="subtotal_display">₹{{ number_format($subtotal, 2) }}</td>
                                 </tr>
                                 <tr id="coupon_discount_row" style="{{ ($sessionCouponDiscount > 0) ? '' : 'display: none;' }}">
                                     <td class="text-muted">

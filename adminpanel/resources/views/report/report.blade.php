@@ -28,7 +28,7 @@
                         </li>
                     </ul>
                     <button type="button" id="downloadExcelBtn" class="btn btn-secondary btn-sm">
-                        <i class="bi bi-download me-1" style="font-size: 16px; vertical-align: middle;"></i>Download Excel
+                        <i class="bi bi-download me-1" style="font-size: 16px; vertical-align: middle;"></i> Download 
                     </button>
                 </div>
 
@@ -82,7 +82,7 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label mb-0 small">&nbsp;</label>
-                                <div class="d-flex" style="gap: 15px;">
+                                <div class="d-flex" style="gap: 8px;">
                                     <button type="button" id="reportApplyFilter" class="btn btn-primary btn-sm">
                                         <i class="material-icons md-filter_alt"></i> Filter
                                     </button>
@@ -139,10 +139,9 @@
                                 <th>Order Id</th>
                                 <th>Date</th>
                                 <th>Customer</th>
-                                <th>Order source</th>
-                                <th>Items</th>
                                 <th>Amount</th>
                                 <th>Payment</th>
+                                <th>Order source</th>
                                 <th>Payment Status</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -297,14 +296,13 @@
                                     <td><strong>${order.order_number}</strong></td>
                                     <td>${order.date}</td>
                                     <td>${order.customer}</td>
+                                    <td class="text-end"><strong>₹${order.amount}</strong></td>
+                                    <td>${(order.payment_method || '').toLowerCase().includes('cash') || (order.payment_method || '').toLowerCase().includes('cod') ? 'COD' : 'Online'}</td>
                                     <td>
                                         <span class="badge ${order.order_source === 'app' ? 'bg-success' : (order.order_source === 'web' ? 'bg-primary' : 'bg-warning')}">
                                             ${order.order_source === 'app' ? '<i class="bi bi-phone me-1"></i>' : (order.order_source === 'web' ? '<i class="bi bi-globe me-1"></i>' : '<i class="bi bi-display me-1"></i>')} ${order.order_source ? order.order_source.replace('_', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'N/A'}
                                         </span>
                                     </td>
-                                    <td>${order.items_count}</td>
-                                    <td><strong>₹${order.amount}</strong></td>
-                                    <td>${order.payment_method}</td>
                                     <td>
                                         <span class="badge ${
                                             (order.payment_status === 'Paid') 
@@ -318,7 +316,7 @@
                                         <span class="badge ${
                                             {'confirmed':'bg-success text-white',
                                              'hold':'bg-warning text-dark', 'pending':'bg-warning text-dark',
-                                             'processing':'bg-info text-dark',
+                                             'processing':'bg-info text-white',
                                              'shipped':'bg-primary text-white',
                                              'delivered':'bg-success text-white',
                                              'cancelled':'bg-danger text-white'}[(order.status || '').toLowerCase()] || 'bg-info text-dark' 
@@ -334,7 +332,7 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-sm btn-info" onclick="event.stopPropagation(); window.open('${invoiceUrl}', '_blank');" title="View Invoice">
+                                        <button type="button" class="btn btn-sm btn-info text-white" onclick="event.stopPropagation(); window.open('${invoiceUrl}', '_blank');" title="View Invoice">
                                             <i class="bi bi-printer-fill me-1"></i> Print
                                         </button>
                                     </td>

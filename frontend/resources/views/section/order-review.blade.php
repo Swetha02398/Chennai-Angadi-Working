@@ -90,7 +90,7 @@
                                                 <td>{{ $item->product->productname ?? 'Product Unavailable' }} x
                                                     {{ $item->quantity }}
                                                 </td>
-                                                <td class="text-center">₹{{ number_format($item->price_at_add_time, 0) }}</td>
+                                                <td class="text-center">₹{{ number_format($item->price_at_add_time, 2) }}</td>
                                                 <td class="text-end text-brand">
                                                     ₹{{ number_format($item->price_at_add_time * $item->quantity, 2) }}</td>
                                             </tr>

@@ -47,7 +47,6 @@
                                 <tr>
                                     <th>No.</th>
                                     <th>Title</th>
-                                    <th>Message</th>
                                     <th>From Role</th>
                                     <th>To Role</th>
                                     <th>Status</th>
@@ -64,9 +63,8 @@
                                                 {{ $item->title ?? 'N/A' }}
                                             </a>
                                         </td>
-                                        <td>{{ Str::limit($item->message ?? '', 40) }}</td>
                                         <td>
-                                            <span class="badge bg-primary">{{ ucfirst($item->from_role ?? 'N/A') }}</span>
+                                            <span class="badge bg-primary"><i class="bi bi-person-fill me-1"></i> {{ ucfirst($item->from_role ?? 'N/A') }}</span>
                                         </td>
                                         <td>
                                             @php
@@ -84,16 +82,16 @@
                                                  @method('PATCH')
 
                                               @if($item->status === 'read')
-                                                <button type="submit" class="badge rounded-pill bg-success">Read</button>
+                                                <button type="submit" class="badge rounded-pill bg-success"><i class="bi bi-envelope-open-fill me-1"></i> Read</button>
                                                @else
-                                                <button type="submit" class="badge rounded-pill bg-warning">Unread</button>
+                                                <button type="submit" class="badge rounded-pill bg-warning text-dark"><i class="bi bi-envelope-fill me-1"></i> Unread</button>
                                                @endif
                                              </form>
                                             @else
                                                 @if($item->status === 'read')
-                                                    <span class="badge rounded-pill bg-success">Read</span>
+                                                    <span class="badge rounded-pill bg-success"><i class="bi bi-envelope-open-fill me-1"></i> Read</span>
                                                 @else
-                                                    <span class="badge rounded-pill bg-warning">Unread</span>
+                                                    <span class="badge rounded-pill bg-warning text-dark"><i class="bi bi-envelope-fill me-1"></i> Unread</span>
                                                 @endif
                                             @endif
                                         </td>

@@ -62,6 +62,11 @@ table.table form button.btn {
 }
 
 /* Enforce mathematically absolute identical radius and size for ALL badges AND Action Buttons across the entire layout */
+main.main-wrap .nav-link,
+main.main-wrap .page-link {
+    font-weight: 600 !important;
+}
+
 main.main-wrap .badge,
 main.main-wrap .btn {
     border-radius: 4px !important;
@@ -73,7 +78,7 @@ main.main-wrap .btn {
     justify-content: center !important;
     gap: 4px !important;
     font-size: 11.5px !important;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
     padding: 0 4px !important;
     line-height: normal !important;
     white-space: normal !important;
@@ -217,11 +222,17 @@ body:not(.aside-mini) .main-header {
 }
 
 /* Table Row Compression (Reduces the 2-line gap in products/categories lists) */
+table.table {
+    width: max-content !important; /* Forces table not to stretch unnecessarily and create empty space */
+}
 table.table td, 
 table.table th {
     padding-top: 6px !important;
     padding-bottom: 6px !important;
+    padding-left: 3mm !important;
+    padding-right: 3mm !important;
     vertical-align: middle !important;
+    white-space: nowrap !important; /* Prevents text from breaking and shrinking, strictly taking only its size + 3mm */
 }
 
 /* Global Constant Scrollbar (Prevents zooming/thickening on hover/click) */
@@ -265,6 +276,7 @@ body.aside-mini .navbar-aside {
 body.aside-mini .navbar-aside .ps__rail-y,
 body.aside-mini .navbar-aside .ps__thumb-y,
 .ps__rail-x {
+    
     display: none !important;
 }
 

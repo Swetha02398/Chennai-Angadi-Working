@@ -48,9 +48,9 @@
                     $strikePrice = ($mrpPrice && $mrpPrice > $sellPrice) ? $mrpPrice : null;
                 }
             @endphp
-            <span>₹{{ number_format($displayPrice, 0) }}</span>
+            <span>₹{{ number_format($displayPrice, 2) }}</span>
             @if($strikePrice && $strikePrice > $displayPrice)
-                <span class="old-price" style="text-decoration: line-through;">₹{{ number_format($strikePrice, 0) }}</span>
+                <span class="old-price" style="text-decoration: line-through;">₹{{ number_format($strikePrice, 2) }}</span>
             @endif
         </div>
     </div>

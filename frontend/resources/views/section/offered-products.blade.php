@@ -124,7 +124,7 @@
                                                                 data-stock="{{ $variant->stock ?? 0 }}"
                                                                 data-label="{{ $quantityLabel }}"
                                                                 {{ $vIndex === 0 ? 'selected' : '' }}>
-                                                                {{ $quantityLabel }} - ₹{{ number_format($variantOfferPrice, 0) }}
+                                                                {{ $quantityLabel }} - ₹{{ number_format($variantOfferPrice, 2) }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -136,7 +136,7 @@
                                                         @if($firstMrp > $firstOfferPrice)
                                                             <span class="offer-mrp-display-{{ $product->id }}"
                                                                 style="text-decoration: line-through; color: #ADADAD; margin-right: 6px;">
-                                                                ₹{{ number_format($firstMrp, 0) }}
+                                                                ₹{{ number_format($firstMrp, 2) }}
                                                             </span>
                                                         @else
                                                             <span class="offer-mrp-display-{{ $product->id }}"
@@ -144,7 +144,7 @@
                                                             </span>
                                                         @endif
                                                         <span class="offer-sell-price-{{ $product->id }}"
-                                                            style="color: #3BB77E;">₹{{ number_format($firstOfferPrice, 0) }}</span>
+                                                            style="color: #3BB77E;">₹{{ number_format($firstOfferPrice, 2) }}</span>
                                                     </div>
                                                 </div>
                                             @else
@@ -153,10 +153,10 @@
                                                     <div style="font-size: 15px; font-weight: 600;">
                                                         @if($product->original_price && $product->original_price > $product->final_price)
                                                             <span style="text-decoration: line-through; color: #ADADAD; margin-right: 6px;">
-                                                                ₹{{ number_format($product->original_price, 0) }}
+                                                                ₹{{ number_format($product->original_price, 2) }}
                                                             </span>
                                                         @endif
-                                                        <span style="color: #3BB77E;">₹{{ number_format($product->final_price, 0) }}</span>
+                                                        <span style="color: #3BB77E;">₹{{ number_format($product->final_price, 2) }}</span>
                                                     </div>
                                                 </div>
                                             @endif

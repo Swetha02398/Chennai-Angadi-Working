@@ -40,8 +40,8 @@
                                 <th>No.</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Status</th>
                                 <th>Date</th>
+                                <th>Status</th>
                                 <th class="text-start">Actions</th>
                             </tr>
                         </thead>
@@ -51,6 +51,7 @@
                                 <td>{{ ($enquiries->currentPage() - 1) * $enquiries->perPage() + $loop->iteration }}</td>
                                 <td><b>{{ $enquiry->name }}</b></td>
                                 <td>{{ $enquiry->email }}</td>
+                                <td>{{ $enquiry->created_at->format('d-m-Y') }}</td>
                                 <td>
                                     @php
                                         $statusClass = match ($enquiry->status) {
@@ -67,7 +68,6 @@
                                         {!! $icon !!} {{ $statusLabel }}
                                     </span>
                                 </td>
-                                <td>{{ $enquiry->created_at->format('d-m-Y') }}</td>
                                 <td class="text-start">
                                     <a href="{{ route('admin.contact.show', $enquiry->id) }}" class="btn btn-sm"
                                         style="background-color: #0099ffff; color: #000; padding: 3px 7px; font-size: 11px;"

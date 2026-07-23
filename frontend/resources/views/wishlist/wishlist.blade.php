@@ -96,10 +96,10 @@
                                                     }
                                                     $hasDiscount = $mrpPrice && $displayPrice && $mrpPrice > $displayPrice;
                                                 @endphp
-                                                <h3 class="text-brand">₹{{ number_format($displayPrice, 0) }} 
+                                                <h3 class="text-brand">₹{{ number_format($displayPrice, 2) }} 
 
                                                  <span class="old-price"
-                                                        style="text-decoration: line-through;">₹{{ number_format($mrpPrice, 0) }}</span>
+                                                        style="text-decoration: line-through;">₹{{ number_format($mrpPrice, 2) }}</span>
                                                 </h3>
                                                 @if($hasDiscount)
                                                    
@@ -111,13 +111,13 @@
                                                     <button type="button"
                                                         class="btn btn-sm wishlist-add-to-cart-btn"
                                                         data-product-id="{{ $p->id }}"
-                                                        style="width:110px;height:38px;border-radius:5px;font-size:12px;font-weight:600;padding:0;white-space:nowrap;">
-                                                        <i class="fi-rs-shopping-cart mr-5"></i> Add to cart
+                                                        style="width:110px;height:38px;border-radius:5px;font-size:12px;font-weight:600;padding:0;white-space:nowrap;display:flex;align-items:center;justify-content:center;">
+                                                        <i class="fi-rs-shopping-cart mr-5"></i> Add Cart
                                                     </button>
                                                     <button type="button"
                                                         class="btn btn-sm wishlist-remove-btn"
                                                         data-product-id="{{ $p->id }}"
-                                                        style="width:110px;height:38px;border-radius:5px;font-size:12px;font-weight:600;padding:0;background:#dc3545;color:#fff;border-color:#dc3545;white-space:nowrap;">
+                                                        style="width:110px;height:38px;border-radius:5px;font-size:12px;font-weight:600;padding:0;background:#dc3545;color:#fff;border-color:#dc3545;white-space:nowrap;display:flex;align-items:center;justify-content:center;">
                                                         <i class="fi-rs-trash mr-5"></i> Remove
                                                     </button>
                                                 </div>

@@ -89,9 +89,9 @@
                                             <th class="align-middle" scope="col">Order ID</th>
                                             <th class="align-middle" scope="col">Billing Name</th>
                                             <th class="align-middle" scope="col">Date</th>
-                                            <th class="align-middle" scope="col">Total</th>
+                                            <th class="align-middle text-start" scope="col">Total</th>
+                                            <th class="align-middle" scope="col">Payment</th>
                                             <th class="align-middle text-center" scope="col">Payment Status</th>
-                                            <th class="align-middle" scope="col">Payment Method</th>
                                             <th class="align-middle" scope="col">View Details</th>
                                         </tr>
                                     </thead>
@@ -110,7 +110,21 @@
                                                 @endif
                                             </td>
                                             <td>{{ $order->created_at->format('d M, Y') }}</td>
-                                            <td>₹{{ number_format($order->final_amount, 2) }}</td>
+                                            <td class="text-end">₹{{ number_format($order->final_amount, 2) }}</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <i class="material-icons md-payment font-xxl text-muted me-1"></i>
+                                                    @php
+                                                        $method = $order->payment_method ?? 'cash';
+                                                        $methodLabel = match(strtolower($method)) {
+                                                            'online_gateway', 'online', 'razorpay', 'stripe', 'paytm' => 'Online',
+                                                            'cash_on_delivery', 'cod', 'cash' => 'COD',
+                                                            default => ucwords(str_replace('_', ' ', $method))
+                                                        };
+                                                    @endphp
+                                                    <span>{{ $methodLabel }}</span>
+                                                </div>
+                                            </td>
                                             <td class="text-center">
                                                 @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
                                                     <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center px-2" style="background-color:#ffc107;color:#000;border-radius:50px;height:24px;font-size:12px;border:none;padding:0;"><i class="bi bi-cash me-1"></i> COD</button>
@@ -119,21 +133,6 @@
                                                 @else
                                                     <button type="button" class="btn btn-sm d-inline-flex justify-content-center align-items-center px-2" style="background-color:#dc3545;color:#fff;border-radius:50px;height:24px;font-size:12px;border:none;padding:0;"><i class="bi bi-x-circle me-1"></i> Not Paid</button>
                                                 @endif
-                                            </td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <i class="material-icons md-payment font-xxl text-muted "></i>
-                                                    @php
-                                                        $method = $order->payment_method ?? 'cash';
-                                                        $methodLabel = match(strtolower($method)) {
-                                                            'online_gateway', 'online', 'razorpay', 'stripe', 'paytm' => 'Online',
-                                                            'cash_on_delivery', 'cod' => 'Cash',
-                                                            'cash' => 'Cash',
-                                                            default => ucwords(str_replace('_', ' ', $method))
-                                                        };
-                                                    @endphp
-                                                    <span>{{ $methodLabel }}</span>
-                                                </div>
                                             </td>
                                             <td>
                                                 <button type="button" class="btn btn-xs btn-primary view-invoice-btn d-inline-flex align-items-center justify-content-center" style="padding: 3px 7px; font-size: 11px;" data-order-id="{{ $order->id }}"><i class="bi bi-eye-fill me-1"></i> View </button>

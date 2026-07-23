@@ -650,10 +650,10 @@
                                             <div class="clearfix product-price-cover">
                                                 <div class="product-price primary-color float-left my-3">
                                                     <span class="current-price text-brand"
-                                                        id="main-product-price">₹{{ number_format($displayPrice, 0) }}</span>
+                                                        id="main-product-price">₹{{ number_format($displayPrice, 2) }}</span>
                                                     @if(isset($displayMrpPrice) && $displayMrpPrice && $displayMrpPrice > $displayPrice)
                                                         <span class="old-price" id="main-product-mrp"
-                                                            style="text-decoration: line-through;">₹{{ number_format($displayMrpPrice, 0) }}</span>
+                                                            style="text-decoration: line-through;">₹{{ number_format($displayMrpPrice, 2) }}</span>
                                                     @endif
                                                 </div>
                                             </div>
@@ -705,7 +705,7 @@
                                                                 data-has-offer="{{ $hasOffer ? '1' : '0' }}"
                                                                 data-stock="{{ $variant->stock ?? 0 }}"
                                                                 data-label="{{ $quantityLabel }}" {{ $index === 0 ? 'selected' : '' }}>
-                                                                {{ $quantityLabel }} - ₹{{ number_format($displayPrice, 0) }}
+                                                                {{ $quantityLabel }} - ₹{{ number_format($displayPrice, 2) }}
                                                             </option>
                                                         @endforeach
                                                     </select>
@@ -1035,7 +1035,7 @@
                                                                                         data-offer-price="{{ $hasProductOffer ? $variantOfferPrice : '' }}"
                                                                                         data-has-offer="{{ $hasProductOffer ? '1' : '0' }}" data-stock="{{ $variant->stock ?? 0 }}"
                                                                                         data-label="{{ $quantityLabel }}" {{ $index === 0 ? 'selected' : '' }}>
-                                                                                        {{ $quantityLabel }} - ₹{{ number_format($displayPrice, 0) }}
+                                                                                        {{ $quantityLabel }} - ₹{{ number_format($displayPrice, 2) }}
                                                                                     </option>
                                                                                 @endforeach
                                                                             </select>
@@ -1048,7 +1048,7 @@
                                                                             @if($relatedOriginalPrice && $relatedOriginalPrice > $relatedCurrentPrice)
                                                                                 <span class="product-mrp-display-{{ $related->id }}"
                                                                                     style="text-decoration: line-through; color: #ADADAD; font-size: 15px; font-weight: 600; margin-right: 10px;">
-                                                                                    ₹{{ number_format($relatedOriginalPrice, 0) }}
+                                                                                    ₹{{ number_format($relatedOriginalPrice, 2) }}
                                                                                 </span>
                                                                             @else
                                                                                 <span class="product-mrp-display-{{ $related->id }}"
@@ -1056,7 +1056,7 @@
                                                                                 </span>
                                                                             @endif
                                                                             <span class="product-sell-price-{{ $related->id }}"
-                                                                                style="color: #3BB77E;">₹{{ number_format($relatedCurrentPrice, 0) }}</span>
+                                                                                style="color: #3BB77E;">₹{{ number_format($relatedCurrentPrice, 2) }}</span>
                                                                         </div>
                                                                     </div>
 

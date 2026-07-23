@@ -10,7 +10,7 @@
              @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-edit'))
              <button id="saveStock" class="btn btn-primary btn-sm rounded"><i class="bi bi-save me-1"></i> Save</button>
              @endif
-            <a href="{{ route('product.inventory.table') }}" class="btn btn-secondary btn-sm rounded"><i class="bi bi-arrow-left me-1"></i> Back to Products</a>
+            <a href="{{ route('product.inventory.table') }}" class="btn btn-secondary btn-sm rounded"><i class="bi bi-arrow-left me-1"></i> Back</a>
         </div>
     </div>
 
@@ -71,10 +71,10 @@
     <td>{{ $variant->quantity->label ?? '-' }}</td>
 
     {{-- MRP Price --}}
-    <td>₹{{ number_format($variant->price, 2) }}</td>
+    <td class="text-end">₹{{ number_format($variant->price, 2) }}</td>
 
     {{-- Selling Price --}}
-    <td>₹{{ number_format($variant->sell_price, 2) }}</td>
+    <td class="text-end">₹{{ number_format($variant->sell_price, 2) }}</td>
 
     {{-- STOCK - EDITABLE INPUT --}}
     <td>

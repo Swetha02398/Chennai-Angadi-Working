@@ -325,7 +325,7 @@
                                             data-offer-price="<?php echo e($hasProductOffer ? $variantOfferPrice : ''); ?>"
                                             data-has-offer="<?php echo e($hasProductOffer ? '1' : '0'); ?>" data-stock="<?php echo e($variant->stock ?? 0); ?>"
                                             data-label="<?php echo e($quantityLabel); ?>" <?php echo e($index === 0 ? 'selected' : ''); ?>>
-                                            <?php echo e($quantityLabel); ?> - ₹<?php echo e(number_format($displayPrice, 0)); ?>
+                                            <?php echo e($quantityLabel); ?> - ₹<?php echo e(number_format($displayPrice, 2)); ?>
 
                                         </option>
                                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -339,7 +339,7 @@
                                 <?php if($originalPrice && $originalPrice > $currentPrice): ?>
                                     <span class="product-mrp-display-<?php echo e($product->id); ?>"
                                         style="text-decoration: line-through; color: #ADADAD; margin-right: 10px;">
-                                        ₹<?php echo e(number_format($originalPrice, 0)); ?>
+                                        ₹<?php echo e(number_format($originalPrice, 2)); ?>
 
                                     </span>
                                 <?php else: ?>
@@ -348,7 +348,7 @@
                                     </span>
                                 <?php endif; ?>
                                 <span class="product-sell-price-<?php echo e($product->id); ?>"
-                                    style="color: #3BB77E;">₹<?php echo e(number_format($currentPrice, 0)); ?></span>
+                                    style="color: #3BB77E;">₹<?php echo e(number_format($currentPrice, 2)); ?></span>
                             </div>
                         </div>
 

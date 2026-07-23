@@ -228,13 +228,14 @@
                                         <span id="shipping_city_error" class="error_msg" style="color: red; font-size: 13px; display: none;">City is required</span>
                                     </div>
                                         <div class="form-group col-lg-6">                                            
-                                            <select name="shipping_state" id="shipping_state" onchange="calculateShipping()"
+                                            <select name="shipping_state" id="shipping_state" onchange="calculateShipping(); (this.value ? $('#shipping_state_error').hide() : null);"
                                                 style="width:100%; height:45px; border:1px solid #ececec; border-radius:5px; padding-left:10px; padding-right:25px; font-size:16px; color:#7E7E7E; appearance:auto;">
                                                 <option value="">Select State</option>
                                                 @foreach($shippingStates as $state)
                                                     <option value="{{ $state }}">{{ $state }}</option>
                                                 @endforeach
                                             </select>
+                                            <span id="shipping_state_error" class="error_msg" style="color: red; font-size: 13px; display: none;">Please select your state</span>
                                         </div>
                                         
                                     </div>
@@ -312,7 +313,7 @@
                                                     @if($weightName)
                                                         <span
                                                             style="color: #3BB77E; font-size: 13px; font-weight: 700;">{{ $weightName }}
-                                                            - ₹{{ number_format($item->price_at_add_time, 0) }}</span>
+                                                            - ₹{{ number_format($item->price_at_add_time, 2) }}</span>
                                                     @endif
                                                 </td>
                                                 <td>
@@ -332,7 +333,7 @@
                                                 <td>
                                                     <h4 class="text-brand"
                                                         id="row-total-{{ auth('customer')->check() ? $item->id : 'guest_' . ($item->variant_id ? $item->product_id . '_' . $item->variant_id : $item->product_id) }}">
-                                                        ₹ {{ number_format($item->price_at_add_time * $item->quantity, 0) }}</h4>
+                                                        ₹ {{ number_format($item->price_at_add_time * $item->quantity, 2) }}</h4>
                                                 </td>
                                                 <td>
                                                     <button type="button" class="btn-delete-item"
@@ -364,7 +365,7 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end" id="subtotal_display">
-                                            ₹{{ number_format($subtotal, 0) }}</h4>
+                                            ₹{{ number_format($subtotal, 2) }}</h4>
                                     </td>
                                 </tr>
                                 <tr id="coupon_discount_row"
@@ -377,7 +378,7 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end" id="coupon_discount_display">
-                                            -₹ {{ number_format($sessionCouponDiscount, 0) }}</h4>
+                                            -₹ {{ number_format($sessionCouponDiscount, 2) }}</h4>
                                     </td>
                                 </tr>
                                 <tr>
@@ -387,7 +388,7 @@
                                     <td class="cart_total_amount text-end">
                                         <h4 class="text-brand" id="shipping_display">
                                         @if($shipping > 0)
-                                            ₹ {{ number_format($shipping, 0) }}
+                                            ₹ {{ number_format($shipping, 2) }}
                                         @else
                                             Free
                                         @endif
@@ -413,7 +414,7 @@
                                     </td>
                                     <td class="cart_total_amount">
                                         <h4 class="text-brand text-end" id="total_display">
-                                            ₹{{ number_format($total - $sessionCouponDiscount, 0) }}</h4>
+                                            ₹{{ number_format($total - $sessionCouponDiscount, 2) }}</h4>
                                     </td>
                                 </tr>
                             </tbody>
@@ -1789,53 +1790,11 @@
             checkBilling('billing_state', 'billing_state_error');
             checkBilling('billing_zipcode', 'billing_zipcode_error');
 
-            if (!billingValid) {
-                toastr.warning('Please fill all required billing fields', 'Warning');
-                return;
-            }
-
-            // Ensure email is present for guest
-            if (!customerEmail) {
-                var guestEmailInput = $('#guest_email').val();
-                if (guestEmailInput) {
-                    customerEmail = guestEmailInput.trim();
-                } else {
-                    toastr.warning('Please enter your email address', 'Warning');
-                    $('#guest_email').focus();
-                    return;
-                }
-            }
-
-            // Validate email format
-            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(customerEmail)) {
-                toastr.error('Please enter a valid email address', 'Error');
-                $('#guest_email').focus();
-                return;
-            }
-
-            // Validate phone
-            var phoneRegex = /^[0-9]{10}$/;
-            if (!phoneRegex.test(phone)) {
-                $('#billing_phone_error').show();
-                toastr.error('Billing mobile number must be exactly 10 digits', 'Error');
-                return;
-            }
-
-            // Validate postcode
-            var postcodeRegex = /^[0-9]{6}$/;
-            if (!postcodeRegex.test(zipcode)) {
-                $('#billing_zipcode_error').show();
-                toastr.error('Billing postcode must be exactly 6 digits', 'Error');
-                return;
-            }
-
-            // Determine shipping address based on "Ship to different address?" checkbox
             var shipToDifferent = $('#ship_to_different').is(':checked');
+            let shippingValid = true;
             var shipping_name, shipping_address, shipping_address2, shipping_city, shipping_state, shipping_pincode, shipping_phone;
 
             if (shipToDifferent) {
-                // Customer wants to ship to a DIFFERENT address — use delivery fields
                 var shipping_fname = $('#shipping_fname').val();
                 var shipping_lname = $('#shipping_lname').val();
                 shipping_name = (shipping_fname + ' ' + shipping_lname).trim();
@@ -1846,7 +1805,6 @@
                 shipping_pincode = $('#shipping_pincode').val();
                 shipping_phone = $('#shipping_phone').val();
 
-                let shippingValid = true;
                 function checkShipping(id, errorId) {
                     let input = $('#' + id);
                     let error = $('#' + errorId);
@@ -1864,15 +1822,28 @@
                 checkShipping('shipping_lname', 'shipping_lname_error');
                 checkShipping('shipping_address', 'shipping_address_error');
                 checkShipping('shipping_city', 'shipping_city_error');
-                checkShipping('shipping_state', '');
+                checkShipping('shipping_state', 'shipping_state_error');
                 checkShipping('shipping_pincode', 'shipping_pincode_error');
                 checkShipping('shipping_phone', 'shipping_phone_error');
+            }
 
-                if (!shippingValid) {
-                    toastr.warning('Please fill all required delivery fields', 'Warning');
-                    return;
-                }
+            // Define validation regexes
+            var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            var phoneRegex = /^[0-9]{10}$/;
+            var postcodeRegex = /^[0-9]{6}$/;
 
+            if (!billingValid && shipToDifferent && !shippingValid) {
+                toastr.warning('Please fill all required billing and delivery fields', 'Warning');
+                return;
+            } else if (!billingValid) {
+                toastr.warning('Please fill all required billing fields', 'Warning');
+                return;
+            } else if (shipToDifferent && !shippingValid) {
+                toastr.warning('Please fill all required delivery fields', 'Warning');
+                return;
+            }
+
+            if (shipToDifferent) {
                 if (!phoneRegex.test(shipping_phone)) {
                     $('#shipping_phone').addClass('is-invalid');
                     $('#shipping_phone_error').show();
@@ -1888,6 +1859,37 @@
                 }
             } else {
                 // No different address — deliver to billing address
+
+                // Ensure email is present for guest
+                if (!customerEmail) {
+                    var guestEmailInput = $('#guest_email').val();
+                    if (guestEmailInput) {
+                        customerEmail = guestEmailInput.trim();
+                    } else {
+                        toastr.warning('Please enter your email address', 'Warning');
+                        $('#guest_email').focus();
+                        return;
+                    }
+                }
+
+                if (!emailRegex.test(customerEmail)) {
+                    toastr.error('Please enter a valid email address', 'Error');
+                    $('#guest_email').focus();
+                    return;
+                }
+
+                if (!phoneRegex.test(phone)) {
+                    $('#billing_phone_error').show();
+                    toastr.error('Billing mobile number must be exactly 10 digits', 'Error');
+                    return;
+                }
+
+                if (!postcodeRegex.test(zipcode)) {
+                    $('#billing_zipcode_error').show();
+                    toastr.error('Billing postcode must be exactly 6 digits', 'Error');
+                    return;
+                }
+
                 shipping_name = billing_name;
                 shipping_address = billing_address;
                 shipping_address2 = billing_address2;

@@ -84,8 +84,8 @@
                                     <th>Order Id</th>
                                     <th>Order Date</th>
                                     <th>Billing Name/Address</th>
-                                    <th>Order Source</th>
                                     <th>Amount</th>
+                                    <th>Order Source</th>
                                     <th>Payment Status</th>
                                     <th>Delivery Status</th>
                                     <th class="text-start">Actions</th>
@@ -154,6 +154,8 @@
                                                 <br><small><strong>Mobile:</strong> {{ $billingPhone }}</small>
                                             @endif
                                         </td>
+                                        <td class="text-end"><strong>₹{{ number_format($order->final_amount ?? $order->total_amount, 2) }}</strong>
+                                        </td>
                                         <td>
                                             @php
                                                 $source = $order->order_source ?? 'web';
@@ -173,8 +175,6 @@
                                             <span class="badge {{ $sourceClass }}">
                                                 {!! $sourceIcon !!} {{ ucfirst(str_replace('_', ' ', $source)) }}
                                             </span>
-                                        </td>
-                                        <td><strong>₹{{ number_format($order->final_amount ?? $order->total_amount, 2) }}</strong>
                                         </td>
                                         <td>
                                             @php
@@ -212,7 +212,7 @@
                                                 };
                                                 $statusClass = match ($displayStatus) {
                                                     'pending' => 'bg-warning text-dark',
-                                                    'processing' => 'bg-info',
+                                                    'processing' => 'bg-info text-white',
                                                     'shipped' => 'bg-primary',
                                                     'delivered' => 'bg-success',
                                                     'cancelled' => 'bg-danger',
@@ -238,8 +238,8 @@
                                         </td>
                                         <td class="text-start">
                                             <div class="d-flex gap-1 justify-content-end">
-                                                <a href="{{ route('orders.view', $order->id) }}" class="btn btn-sm"
-                                                    style="background-color: #00ccffff; color: #000; padding: 3px 7px; font-size: 11px;"
+                                                <a href="{{ route('orders.view', $order->id) }}" class="btn btn-sm text-white"
+                                                    style="background-color: #00ccffff; padding: 3px 7px; font-size: 11px;"
                                                     title="View Order">
                                                     <i class="bi bi-eye-fill"></i> View
                                                 </a>
@@ -653,7 +653,7 @@
                                 const statusClass = {
                                     'confirmed': 'bg-success',
                                     'pending': 'bg-warning text-dark',
-                                    'processing': 'bg-info',
+                                    'processing': 'bg-info text-white',
                                     'packed': 'bg-info',
                                     'shipped': 'bg-primary',
                                     'delivered': 'bg-success',

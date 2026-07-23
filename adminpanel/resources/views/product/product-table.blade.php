@@ -50,8 +50,8 @@
               <th>Product Name</th>
               <th>Sell Price</th>
               <th>Order By</th>
-              <th>Product Status</th>
               <th>Last Update</th>
+              <th>Product Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -75,8 +75,26 @@
                     {{ $product->productname }}
                   </a>
                 </td>
-                <td>₹{{ $product->sell_price ?? '0' }}</td>
+                <td class="text-end">₹{{ $product->sell_price ?? '0' }}</td>
                 <td>{{ $product->orderby ?? '—' }}</td>
+                {{-- Last Update Info --}}
+                <td id="last-update-{{ $product->id }}">
+                  @if($product->latestStockUpdate && $product->latestStockUpdate->stock_updated_at)
+                  <div class="text-muted" style="font-size: 0.75rem;">
+                      <div class="d-flex align-items-center mb-1">
+                          <i class="material-icons md-person font-xs me-1"></i>
+                          {{ $product->latestStockUpdate->stockUpdater->username ?? $product->latestStockUpdate->stockUpdater->name ?? 'Admin' }}
+                      </div>
+                      <div class="d-flex align-items-center">
+                          <i class="material-icons md-access_time font-xs me-1"></i>
+                          {{ \Carbon\Carbon::parse($product->latestStockUpdate->stock_updated_at)->format('d M, h:i A') }}
+                      </div>
+                  </div>
+                  @else
+                    <span class="text-muted small">N/A</span>
+                  @endif
+                </td>
+
                 <td>
                   @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-edit'))
                   <form action="{{ route('product.toggle', $product->id) }}" method="POST" style="display:inline-block;"
@@ -103,24 +121,6 @@
                   @endif
                 </td>
 
-                {{-- Last Update Info --}}
-                <td id="last-update-{{ $product->id }}">
-                  @if($product->latestStockUpdate && $product->latestStockUpdate->stock_updated_at)
-                  <div class="text-muted" style="font-size: 0.75rem;">
-                      <div class="d-flex align-items-center mb-1">
-                          <i class="material-icons md-person font-xs me-1"></i>
-                          {{ $product->latestStockUpdate->stockUpdater->username ?? $product->latestStockUpdate->stockUpdater->name ?? 'Admin' }}
-                      </div>
-                      <div class="d-flex align-items-center">
-                          <i class="material-icons md-access_time font-xs me-1"></i>
-                          {{ \Carbon\Carbon::parse($product->latestStockUpdate->stock_updated_at)->format('d M, h:i A') }}
-                      </div>
-                  </div>
-                  @else
-                    <span class="text-muted small">N/A</span>
-                  @endif
-                </td>
-
                 <td>
                   <div class="d-inline-flex gap-1 align-items-center flex-wrap">
                     @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('products-edit'))
@@ -134,7 +134,7 @@
                       <button type="submit" class="btn btn-sm btn-danger btn-action-col d-inline-flex align-items-center justify-content-center "><i class="bi bi-trash me-1"></i> Delete</button>
                     </form>
                     @endif
-                    <button class="btn btn-sm btn-info view-units" data-product-id="{{ $product->id }}">
+                    <button class="btn btn-sm btn-info text-white view-units" data-product-id="{{ $product->id }}">
                       <i class="bi bi-speedometer2 me-1"></i> Units
                     </button>
                   </div>
@@ -358,8 +358,8 @@
               tbody.innerHTML += `
                 <tr data-variant-id="${row.id}">
                   <td>${weight}</td>
-                  <td>₹${mrp}</td>
-                  <td>₹${sellingPrice}</td>
+                  <td class="text-end">₹${mrp}</td>
+                  <td class="text-end">₹${sellingPrice}</td>
                   <td>
                     <div class="stock-input-wrapper" style="position: relative; display: inline-block; width: 90px;">
                       <input type="number" class="form-control form-control-sm variant-stock-input" 

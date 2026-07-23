@@ -10,7 +10,7 @@
             @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('customer-create'))
             <a href="{{ route('customerRegister') }}" class="btn btn-primary mb-3 "><i class="bi bi-plus-circle me-1"></i>Add new</a>
             @endif
-            <a href="{{ route('customers.export') }}" class="btn btn-secondary mb-3"><i class="bi bi-download me-1"></i> Download Excel</a>
+            <a href="{{ route('customers.export') }}" class="btn btn-secondary mb-3"><i class="bi bi-download me-1"></i> Download</a>
         </div>
     </div>
 

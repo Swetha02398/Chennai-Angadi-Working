@@ -86,12 +86,10 @@
                                 <th>Order Id</th>
                                 <th>Order Date</th>
                                 <th>Customer</th>
-                                <th>Customer Type</th>
-                                <th>Items</th>
                                 <th>Amount</th>
-                                <th>Payment Method</th>
+                                <th>Payment</th>
+                                <th>Customer Type</th>
                                 <th>Payment Status</th>
-                                <th>Status</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -132,24 +130,32 @@
                                         @endif
                                     </td>
 
+                                    <td class="text-end"><strong>₹{{ number_format($order->final_amount, 2) }}</strong></td>
+
+                                    <td>
+                                        @php
+                                            $methodName = '';
+                                            if (!empty($order->payment_provider) && in_array(strtolower($order->payment_provider), ['gpay', 'google pay', 'google_pay'])) {
+                                                $methodName = 'GPay';
+                                            } elseif (!empty($order->payment_provider) && strtolower($order->payment_provider) !== 'cash') {
+                                                $methodName = \Illuminate\Support\Str::headline($order->payment_provider);
+                                            } else {
+                                                $methodName = \Illuminate\Support\Str::headline($order->payment_method);
+                                            }
+
+                                            if (stripos($methodName, 'Online') !== false) {
+                                                $methodName = 'Online';
+                                            } elseif (stripos($methodName, 'Cash') !== false || strtolower($order->payment_method) == 'cod') {
+                                                $methodName = 'COD';
+                                            }
+                                        @endphp
+                                        {{ $methodName }}
+                                    </td>
+
                                     <td>
                                         <span class="badge {{ $order->customer_type === 'registered' ? 'bg-info' : 'bg-secondary' }}">
                                             <i class="bi bi-{{ $order->customer_type === 'registered' ? 'person-check' : 'person' }} me-1"></i> {{ ucfirst($order->customer_type) }}
                                         </span>
-                                    </td>
-
-                                    <td>{{ $order->items->count() }}</td>
-
-                                    <td><strong>₹{{ number_format($order->final_amount, 2) }}</strong></td>
-
-                                    <td>
-                                        @if(!empty($order->payment_provider) && in_array(strtolower($order->payment_provider), ['gpay', 'google pay', 'google_pay']))
-                                            GPay
-                                        @elseif(!empty($order->payment_provider) && strtolower($order->payment_provider) !== 'cash')
-                                            {{ \Illuminate\Support\Str::headline($order->payment_provider) }}
-                                        @else
-                                            {{ \Illuminate\Support\Str::headline($order->payment_method) }}
-                                        @endif
                                     </td>
 
                                     <td>
@@ -180,22 +186,7 @@
                                         </button>
                                     </td>
 
-                                    <td>
-                                        @php
-                                            $statusColors = [
-                                                'confirmed' => 'success',
-                                                'pending' => 'warning text-dark',
-                                            ];
-                                            $statusIcons = [
-                                                'confirmed' => '<i class="bi bi-check2-circle me-1"></i>',
-                                                'pending' => '<i class="bi bi-clock me-1"></i>',
-                                            ];
-                                        @endphp
 
-                                        <span class="badge bg-{{ $statusColors[$order->status] ?? 'secondary' }}">
-                                            {!! $statusIcons[$order->status] ?? '' !!} {{ ucfirst($order->status) }}
-                                        </span>
-                                    </td>
 
                                     <td>
                                         <div class="d-flex gap-2">
@@ -206,7 +197,7 @@
                                             @endif
                                             
                                             <button type="button" 
-                                                class="btn btn-sm btn-info view-billing-invoice-btn"
+                                                class="btn btn-sm btn-info text-white view-billing-invoice-btn"
                                                 data-order-id="{{ $order->id }}"
                                                 data-order-number="{{ $order->order_number }}"
                                                 title="View Invoice">

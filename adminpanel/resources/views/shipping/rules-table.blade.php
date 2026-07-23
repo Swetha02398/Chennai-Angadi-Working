@@ -63,7 +63,7 @@
                                 <td>{{ $rule->zone->name ?? '-' }}</td>
                                 <td><div style="max-width: 250px; white-space: normal; line-height: 1.4;">{{ implode(', ', $rule->states ?? []) }}</div></td>
                                 <td>{{ $rule->condition_type }}</td>
-                                <td>₹ {{ $rule->slabs->first()?->shipping_amount ?? '-' }}</td>
+                                <td>₹ {{ $rule->slabs->first()?->shipping_amount ? number_format($rule->slabs->first()->shipping_amount, 2) : '-' }}</td>
                                 <td>
                                     @if(auth()->user()->isSuperAdmin() || auth()->user()->hasPermission('shipping-edit'))
                                     <form action="{{ route('shipping.rules.toggle', $rule->id) }}" method="POST"

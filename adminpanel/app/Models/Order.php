@@ -52,7 +52,7 @@ class Order extends Model
 
     // Default attribute values
     protected $attributes = [
-        'status' => 'processing',
+        'status' => 'hold',
     ];
 
     // Order belongs to a registered customer (from customers table)

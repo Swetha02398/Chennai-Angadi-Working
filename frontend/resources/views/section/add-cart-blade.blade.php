@@ -569,7 +569,7 @@
                                         </td>
                                         <td class="cart_total_amount">
                                             <h4 class="text-body text-end" id="cart-subtotal">
-                                                ₹{{ number_format($subtotal, 0) }}</h4>
+                                                ₹{{ number_format($subtotal, 2) }}</h4>
                                         </td>
                                     </tr>
                                     <tr id="cart_coupon_discount_row" style="display: none;">
@@ -590,7 +590,7 @@
                                             <h6 class="text-muted"><strong>Total</strong></h6>
                                         </td>
                                         <td class="cart_total_amount">
-                                            <h4 class="text-brand text-end" id="cart-total">₹{{ number_format($total, 0) }}
+                                            <h4 class="text-brand text-end" id="cart-total">₹{{ number_format($total, 2) }}
                                             </h4>
                                         </td>
                                     </tr>

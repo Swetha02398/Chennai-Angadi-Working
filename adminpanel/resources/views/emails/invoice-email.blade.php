@@ -271,12 +271,12 @@
                                 @if($displayVariant) - {{ $displayVariant }} @endif
                             </td>
                             <td>{{ $productHsn }}</td>
-                            <td>₹{{ number_format($item->price, 0) }}</td>
+                            <td>₹{{ number_format($item->price, 2) }}</td>
                             <td class="gst-highlight">{{ $productGst }}% (₹{{ number_format($gstAmount, 2) }})</td>
                             <td class="gst-highlight">{{ $productSgst }}% (₹{{ number_format($sgstAmount, 2) }})</td>
                             <td class="gst-highlight">{{ $productIgst }}% (₹{{ number_format($igstAmount, 2) }})</td>
                             <td>{{ $qty }}</td>
-                            <td style="text-align: center;">₹ {{ number_format($lineTotal, 0) }}</td>
+                            <td style="text-align: center;">₹ {{ number_format($lineTotal, 2) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -308,7 +308,7 @@
                     @if((float)($order->shipping_amount ?? 0) > 0)
                     <tr>
                         <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545;">Shipping Charges</td>
-                        <td style="text-align: center; color: #dc3545;">₹ {{ number_format($order->shipping_amount, 0) }}</td>
+                        <td style="text-align: center; color: #dc3545;">₹ {{ number_format($order->shipping_amount, 2) }}</td>
                     </tr>
                     @endif
                     <tr>
@@ -345,9 +345,9 @@
                                 @endphp
                                 @if($displayVariant) - {{ $displayVariant }}@endif
                             </td>
-                            <td>₹{{ number_format($item->price, 0) }}</td>
+                            <td>₹{{ number_format($item->price, 2) }}</td>
                             <td>{{ $item->quantity ?? $item->qty ?? 1 }}</td>
-                            <td style="text-align: center;">₹{{ number_format($lineTotal, 0) }}</td>
+                            <td style="text-align: center;">₹{{ number_format($lineTotal, 2) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -361,7 +361,7 @@
                     @if((float)($order->shipping_amount ?? 0) > 0)
                     <tr>
                         <td colspan="4" style="text-align: right; font-weight: bold; color: #dc3545;">Shipping Charges</td>
-                        <td style="text-align: center; font-weight: bold; color: #dc3545;">₹{{ number_format($order->shipping_amount, 0) }}</td>
+                        <td style="text-align: center; font-weight: bold; color: #dc3545;">₹{{ number_format($order->shipping_amount, 2) }}</td>
                     </tr>
                     @endif
                     <tr>

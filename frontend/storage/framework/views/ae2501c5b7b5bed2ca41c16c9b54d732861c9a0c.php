@@ -1,11 +1,11 @@
-@extends('layouts.app')
-@section('content')
+
+<?php $__env->startSection('content'); ?>
     <!--End header-->
     <main class="main pages">
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="{{ route('index') }}" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
+                    <a href="<?php echo e(route('index')); ?>" rel="nofollow"><i class="fi-rs-home mr-5"></i>Home</a>
                     <span></span> Order Track
                 </div>
             </div>
@@ -24,7 +24,7 @@
                                     <div class="col-lg-8">
                                         <form class="contact-form-style my-3" id="track_order_form"
                                             onsubmit="return trackOrder(event)">
-                                            @csrf
+                                            <?php echo csrf_field(); ?>
                                             <div class="input-style mb-20">
                                                 <h4 class="mb-10">Order Id</h4>
                                                 <input name="order_number" id="track_order_number"
@@ -39,7 +39,7 @@
                                     </div>
                                 </div>
 
-                                {{-- Track Order Result --}}
+                                
                                 <div id="track_order_result" style="display: none;">
                                     <div class="track-order-card">
                                         <div class="order-header-track">
@@ -57,19 +57,7 @@
                                                             class="badge bg-primary">-</span></h4>
                                                 </div>
                                             </div>
-{{-- 
-                                            <div class="row">
-                                                <div class="col-md-6 mb-15">
-                                                    <p class="mb-5"><strong>Order Date:</strong></p>
-                                                    <p id="result_order_date">-</p>
-                                                </div>
-                                                <div class="col-md-6 mb-15">
-                                                    <p class="mb-5"><strong>Total Amount:</strong></p>
-                                                    <p id="result_order_total" class="text-brand fw-bold">-
-                                                    </p>
-                                                </div>
-                                            </div>
---}}
+
                                             <div class="row">
                                                 <div class="col-12">
                                                     <h4 class="mb-10">Tracking Notes:</h4>
@@ -193,11 +181,11 @@
             trackBtn.textContent = 'Tracking...';
             document.getElementById('track_order_result').style.display = 'none';
 
-            fetch('{{ route("checkout.track-order") }}', {
+            fetch('<?php echo e(route("checkout.track-order")); ?>', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    'X-CSRF-TOKEN': '<?php echo e(csrf_token()); ?>'
                 },
                 body: JSON.stringify({
                     order_number: orderNumber
@@ -253,4 +241,6 @@
             return false;
         }
     </script>
-@endsection
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\chennais\frontend\resources\views/pages/order-track.blade.php ENDPATH**/ ?>

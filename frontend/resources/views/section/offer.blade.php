@@ -31,9 +31,9 @@
                                                     <td>
                                                         Use code <strong>{{ $coupon->code }}</strong>
                                                         @if($coupon->type == 'percentage')
-                                                            you will get {{ number_format($coupon->value, 0) }}% off
+                                                            you will get {{ number_format($coupon->value, 2) }}% off
                                                         @else
-                                                            you will get ₹{{ number_format($coupon->value, 0) }} off
+                                                            you will get ₹{{ number_format($coupon->value, 2) }} off
                                                         @endif
                                                         on all products
                                                         @if($coupon->description)
@@ -45,15 +45,15 @@
                                                     <td style="font-weight: 600; background-color: #f8f9fa;">Discount (%):</td>
                                                     <td>
                                                         @if($coupon->type == 'percentage')
-                                                            {{ number_format($coupon->value, 0) }} %
+                                                            {{ number_format($coupon->value, 2) }} %
                                                         @else
-                                                            ₹ {{ number_format($coupon->value, 0) }} (Fixed)
+                                                            ₹ {{ number_format($coupon->value, 2) }} (Fixed)
                                                         @endif
                                                     </td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: 600; background-color: #f8f9fa;">Minimum Amount:</td>
-                                                    <td>₹ {{ number_format($coupon->min_amount, 0) }}</td>
+                                                    <td>₹ {{ number_format($coupon->min_amount, 2) }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td style="font-weight: 600; background-color: #f8f9fa;">Expiry On:</td>

@@ -57,8 +57,8 @@
                             <th>No.</th>
                             <th>Image</th>
                             <th>Text</th>
-                            <th>Position</th>
                             <th>Order</th>
+                            <th>Position</th>
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
@@ -74,13 +74,21 @@
 
                                 <td>{{ $slider->title_text ?? '-' }}</td>
 
+                                <td>{{ $slider->sort_order }}</td>
+
                                 <td>
+                                    @php
+                                        $positionIcon = match(strtolower($slider->slider_position)) {
+                                            'top' => '<i class="bi bi-arrow-up-circle me-1"></i>',
+                                            'middle' => '<i class="bi bi-arrows-collapse me-1"></i>',
+                                            'bottom' => '<i class="bi bi-arrow-down-circle me-1"></i>',
+                                            default => '<i class="bi bi-geo-alt me-1"></i>'
+                                        };
+                                    @endphp
                                     <span class="badge bg-info">
-                                        {{ ucfirst($slider->slider_position) }}
+                                        {!! $positionIcon !!} {{ ucfirst($slider->slider_position) }}
                                     </span>
                                 </td>
-
-                                <td>{{ $slider->sort_order }}</td>
 
                                 <td>
                         {{-- ✅ Toggle status form --}}

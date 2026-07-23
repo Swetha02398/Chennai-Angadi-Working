@@ -324,7 +324,7 @@
                                             data-offer-price="{{ $hasProductOffer ? $variantOfferPrice : '' }}"
                                             data-has-offer="{{ $hasProductOffer ? '1' : '0' }}" data-stock="{{ $variant->stock ?? 0 }}"
                                             data-label="{{ $quantityLabel }}" {{ $index === 0 ? 'selected' : '' }}>
-                                            {{ $quantityLabel }} - ₹{{ number_format($displayPrice, 0) }}
+                                            {{ $quantityLabel }} - ₹{{ number_format($displayPrice, 2) }}
                                         </option>
                                     @endforeach
                                 </select>
@@ -337,7 +337,7 @@
                                 @if($originalPrice && $originalPrice > $currentPrice)
                                     <span class="product-mrp-display-{{ $product->id }}"
                                         style="text-decoration: line-through; color: #ADADAD; margin-right: 10px;">
-                                        ₹{{ number_format($originalPrice, 0) }}
+                                        ₹{{ number_format($originalPrice, 2) }}
                                     </span>
                                 @else
                                     <span class="product-mrp-display-{{ $product->id }}"
@@ -345,7 +345,7 @@
                                     </span>
                                 @endif
                                 <span class="product-sell-price-{{ $product->id }}"
-                                    style="color: #3BB77E;">₹{{ number_format($currentPrice, 0) }}</span>
+                                    style="color: #3BB77E;">₹{{ number_format($currentPrice, 2) }}</span>
                             </div>
                         </div>
 

@@ -265,7 +265,7 @@
                                                         x {{ $item->quantity }}
                                                     </td>
                                                     <td class="product-des product-name text-muted text-end">
-                                                        ₹{{ number_format($item->price_at_add_time * $item->quantity, 0) }}
+                                                        ₹{{ number_format($item->price_at_add_time * $item->quantity, 2) }}
                                                     </td>
                                                 </tr>
                                             @endif
@@ -285,7 +285,7 @@
                                             <h6 class="text-muted">Subtotal</h6>
                                         </td>
                                         <td class="cart_total_amount">
-                                            <h4 class="text-brand text-end">₹{{ number_format($subtotal, 0) }}</h4>
+                                            <h4 class="text-brand text-end">₹{{ number_format($subtotal, 2) }}</h4>
                                         </td>
                                     </tr>
                                     <tr id="coupon_discount_row" style="display: none;">
@@ -304,7 +304,7 @@
                                         </td>
                                         <td class="cart_total_amount">
                                             <h4 class="text-brand text-end" id="shipping_display">
-                                                ₹{{ number_format($shipping, 0) }}</h4>
+                                                ₹{{ number_format($shipping, 2) }}</h4>
                                         </td>
                                     </tr>
                                     <tr id="cod_charge_row" style="display: none;">
@@ -321,7 +321,7 @@
                                         </td>
                                         <td class="cart_total_amount">
                                             <h4 class="text-brand text-end" id="total_display">
-                                                ₹{{ number_format($total, 0) }}</h4>
+                                                ₹{{ number_format($total, 2) }}</h4>
                                         </td>
                                     </tr>
                                 </tbody>

@@ -167,12 +167,12 @@
                     @if($displayVariant) - {{ $displayVariant }} @endif
                 </td>
                 <td>{{ $productHsn }}</td>
-                <td>&#8377;{{ number_format($item->price, 0) }}</td>
-                <td class="gst-highlight">{{ $productGst }}% (&#8377;{{ number_format($gstAmount, 2) }})</td>
-                <td class="gst-highlight">{{ $productSgst }}% (&#8377;{{ number_format($sgstAmount, 2) }})</td>
-                <td class="gst-highlight">{{ $productIgst }}% (&#8377;{{ number_format($igstAmount, 2) }})</td>
+                <td class="text-end" style="text-align: right; white-space: nowrap;">&#8377;{{ number_format($item->price, 2) }}</td>
+                <td class="gst-highlight text-end" style="text-align: right;">{{ $productGst }}% (&#8377;{{ number_format($gstAmount, 2) }})</td>
+                <td class="gst-highlight text-end" style="text-align: right;">{{ $productSgst }}% (&#8377;{{ number_format($sgstAmount, 2) }})</td>
+                <td class="gst-highlight text-end" style="text-align: right;">{{ $productIgst }}% (&#8377;{{ number_format($igstAmount, 2) }})</td>
                 <td>{{ $qty }}</td>
-                <td style="text-align: center;">&#8377; {{ number_format($lineTotal, 0) }}</td>
+                <td class="text-end" style="text-align: right; white-space: nowrap;">&#8377; {{ number_format($lineTotal, 2) }}</td>
             </tr>
         @endforeach
     </tbody>
@@ -181,45 +181,45 @@
         @if((float)$totalGst > 0)
         <tr>
             <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">GST</td>
-            <td style="text-align: center; color: #dc3545; border: 1px solid #999;">&#8377; {{ number_format($totalGst, 2) }}</td>
+            <td style="text-align: right; color: #dc3545; border: 1px solid #999;">&#8377; {{ number_format($totalGst, 2) }}</td>
         </tr>
         @endif
         @if((float)$totalSgst > 0)
         <tr>
             <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">SGST</td>
-            <td style="text-align: center; color: #dc3545; border: 1px solid #999;">&#8377; {{ number_format($totalSgst, 2) }}</td>
+            <td style="text-align: right; color: #dc3545; border: 1px solid #999;">&#8377; {{ number_format($totalSgst, 2) }}</td>
         </tr>
         @endif
         @if((float)$totalIgst > 0)
         <tr>
             <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">IGST</td>
-            <td style="text-align: center; color: #dc3545; border: 1px solid #999;">&#8377; {{ number_format($totalIgst, 2) }}</td>
+            <td style="text-align: right; color: #dc3545; border: 1px solid #999;">&#8377; {{ number_format($totalIgst, 2) }}</td>
         </tr>
         @endif
         @if((float)($order->discount_amount ?? 0) > 0)
         <tr>
             <td colspan="8" style="text-align: right; font-weight: 600; color: #28a745; border: 1px solid #999;">Coupon Applied @if($order->coupon_code)({{ $order->coupon_code }})@endif</td>
-            <td style="text-align: center; color: #28a745; border: 1px solid #999;">- &#8377; {{ number_format($order->discount_amount, 2) }}</td>
+            <td style="text-align: right; color: #28a745; border: 1px solid #999;">- &#8377; {{ number_format($order->discount_amount, 2) }}</td>
         </tr>
         @endif
         @if((float)($order->shipping_amount ?? 0) > 0)
         <tr>
             <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">Shipping Charges</td>
-            <td style="text-align: center; color: #dc3545; border: 1px solid #999;">&#8377; {{ number_format($order->shipping_amount, 0) }}</td>
+            <td style="text-align: right; color: #dc3545; border: 1px solid #999;">&#8377; {{ number_format($order->shipping_amount, 2) }}</td>
         </tr>
         @endif
         @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
         @if((float)($order->cod_charge ?? 0) > 0)
         <tr>
             <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">COD Charges</td>
-            <td style="text-align: center; color: #dc3545; border: 1px solid #999;">&#8377; {{ number_format($order->cod_charge, 0) }}</td>
+            <td style="text-align: right; color: #dc3545; border: 1px solid #999;">&#8377; {{ number_format($order->cod_charge, 2) }}</td>
         </tr>
         @endif
         @endif
         @php $totalTax = $totalGst + $totalSgst + $totalIgst; @endphp
         <tr>
             <td colspan="8" style="text-align: right; font-weight: bold; font-size: 14px; color: #dc3545; border: 1px solid #999; background: #fff8f8;">TOTAL (Incl. GST)</td>
-            <td style="text-align: center; font-weight: bold; font-size: 14px; color: #dc3545; border: 1px solid #999; background: #fff8f8;">&#8377; {{ number_format($order->final_amount ?? $order->total_amount, 2) }}</td>
+            <td style="text-align: right; font-weight: bold; font-size: 14px; color: #dc3545; border: 1px solid #999; background: #fff8f8;">&#8377; {{ number_format($order->final_amount ?? $order->total_amount, 2) }}</td>
         </tr>
     </tfoot>
 </table>

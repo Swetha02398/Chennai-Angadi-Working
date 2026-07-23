@@ -48,9 +48,9 @@
                     $strikePrice = ($mrpPrice && $mrpPrice > $sellPrice) ? $mrpPrice : null;
                 }
             ?>
-            <span>₹<?php echo e(number_format($displayPrice, 0)); ?></span>
+            <span>₹<?php echo e(number_format($displayPrice, 2)); ?></span>
             <?php if($strikePrice && $strikePrice > $displayPrice): ?>
-                <span class="old-price" style="text-decoration: line-through;">₹<?php echo e(number_format($strikePrice, 0)); ?></span>
+                <span class="old-price" style="text-decoration: line-through;">₹<?php echo e(number_format($strikePrice, 2)); ?></span>
             <?php endif; ?>
         </div>
     </div>

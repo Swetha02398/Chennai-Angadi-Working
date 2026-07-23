@@ -300,35 +300,35 @@
                                 @endphp
                                 @if($displayVariant) - {{ $displayVariant }}@endif
                             </td>
-                            <td style="white-space: nowrap;">₹{{ number_format($item->price, 0) }}</td>
+                            <td style="white-space: nowrap; text-align: right;">₹{{ number_format($item->price, 2) }}</td>
                             <td>{{ $item->quantity ?? $item->qty ?? 1 }}</td>
-                            <td class="subtotal-col" style="white-space: nowrap;">₹{{ number_format($lineTotal, 0) }}</td>
+                            <td class="subtotal-col" style="white-space: nowrap; text-align: right;">₹{{ number_format($lineTotal, 2) }}</td>
                         </tr>
                     @endforeach
                     {{-- Summary rows --}}
                     @if(($order->discount_amount ?? 0) > 0)
                     <tr>
                         <td colspan="4" style="text-align: right; font-weight: bold; color: #28a745; border: 1px solid #999;">Coupon Applied @if($order->coupon_code)({{ $order->coupon_code }})@endif</td>
-                        <td style="text-align: center; font-weight: bold; color: #28a745; border: 1px solid #999; white-space: nowrap;">- ₹{{ number_format($order->discount_amount, 2) }}</td>
+                        <td style="text-align: right; font-weight: bold; color: #28a745; border: 1px solid #999; white-space: nowrap;">- ₹{{ number_format($order->discount_amount, 2) }}</td>
                     </tr>
                     @endif
                     @if(($order->shipping_amount ?? 0) > 0)
                     <tr>
                         <td colspan="4" style="text-align: right; font-weight: bold; color: #dc3545; border: 1px solid #999;">Shipping Charges</td>
-                        <td style="text-align: center; font-weight: bold; color: #dc3545; border: 1px solid #999; white-space: nowrap;">₹{{ number_format($order->shipping_amount, 0) }}</td>
+                        <td style="text-align: right; font-weight: bold; color: #dc3545; border: 1px solid #999; white-space: nowrap;">₹{{ number_format($order->shipping_amount, 2) }}</td>
                     </tr>
                     @endif
                     @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
                     @if((float)($order->cod_charge ?? 0) > 0)
                     <tr>
                         <td colspan="4" style="text-align: right; font-weight: bold; color: #dc3545; border: 1px solid #999;">COD Charges</td>
-                        <td style="text-align: center; font-weight: bold; color: #dc3545; border: 1px solid #999; white-space: nowrap;">₹{{ number_format($order->cod_charge, 0) }}</td>
+                        <td style="text-align: right; font-weight: bold; color: #dc3545; border: 1px solid #999; white-space: nowrap;">₹{{ number_format($order->cod_charge, 2) }}</td>
                     </tr>
                     @endif
                     @endif
                     <tr>
                         <td colspan="4" style="text-align: right; font-weight: bold; color: #dc3545; font-size: 12px; border: 1px solid #999;">TOTAL</td>
-                        <td style="text-align: center; font-weight: bold; color: #dc3545; font-size: 14px; border: 1px solid #999; white-space: nowrap;">₹{{ number_format(($order->final_amount ?? $order->total_amount) - ($order->tax_amount ?? 0), 2) }}</td>
+                        <td style="text-align: right; font-weight: bold; color: #dc3545; font-size: 14px; border: 1px solid #999; white-space: nowrap;">₹{{ number_format(($order->final_amount ?? $order->total_amount) - ($order->tax_amount ?? 0), 2) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -435,12 +435,12 @@
                                 @if($displayVariant) - {{ $displayVariant }} @endif
                             </td>
                             <td>{{ $productHsn }}</td>
-                            <td>₹{{ number_format($item->price, 0) }}</td>
-                            <td class="gst-highlight">{{ $productGst }}% (₹{{ number_format($gstAmount, 2) }})</td>
-                            <td class="gst-highlight">{{ $productSgst }}% (₹{{ number_format($sgstAmount, 2) }})</td>
-                            <td class="gst-highlight">{{ $productIgst }}% (₹{{ number_format($igstAmount, 2) }})</td>
+                            <td style="text-align: right;">₹{{ number_format($item->price, 2) }}</td>
+                            <td class="gst-highlight" style="text-align: right;">{{ $productGst }}% (₹{{ number_format($gstAmount, 2) }})</td>
+                            <td class="gst-highlight" style="text-align: right;">{{ $productSgst }}% (₹{{ number_format($sgstAmount, 2) }})</td>
+                            <td class="gst-highlight" style="text-align: right;">{{ $productIgst }}% (₹{{ number_format($igstAmount, 2) }})</td>
                             <td>{{ $qty }}</td>
-                            <td>₹ {{ number_format($lineTotal, 0) }}</td>
+                            <td style="text-align: right;">₹ {{ number_format($lineTotal, 2) }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -473,14 +473,14 @@
                     @if(($order->shipping_amount ?? 0) > 0)
                     <tr>
                         <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">Shipping Charges</td>
-                        <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($order->shipping_amount, 0) }}</td>
+                        <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($order->shipping_amount, 2) }}</td>
                     </tr>
                     @endif
                     @if(in_array($order->payment_method, ['cash_on_delivery', 'cod']))
                     @if((float)($order->cod_charge ?? 0) > 0)
                     <tr>
                         <td colspan="8" style="text-align: right; font-weight: 600; color: #dc3545; border: 1px solid #999;">COD Charges</td>
-                        <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($order->cod_charge, 0) }}</td>
+                        <td style="text-align: center; color: #dc3545; border: 1px solid #999;">₹ {{ number_format($order->cod_charge, 2) }}</td>
                     </tr>
                     @endif
                     @endif

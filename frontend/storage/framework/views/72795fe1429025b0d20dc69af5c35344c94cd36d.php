@@ -124,7 +124,7 @@
                                                                 data-stock="<?php echo e($variant->stock ?? 0); ?>"
                                                                 data-label="<?php echo e($quantityLabel); ?>"
                                                                 <?php echo e($vIndex === 0 ? 'selected' : ''); ?>>
-                                                                <?php echo e($quantityLabel); ?> - ₹<?php echo e(number_format($variantOfferPrice, 0)); ?>
+                                                                <?php echo e($quantityLabel); ?> - ₹<?php echo e(number_format($variantOfferPrice, 2)); ?>
 
                                                             </option>
                                                         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -137,7 +137,7 @@
                                                         <?php if($firstMrp > $firstOfferPrice): ?>
                                                             <span class="offer-mrp-display-<?php echo e($product->id); ?>"
                                                                 style="text-decoration: line-through; color: #ADADAD; margin-right: 6px;">
-                                                                ₹<?php echo e(number_format($firstMrp, 0)); ?>
+                                                                ₹<?php echo e(number_format($firstMrp, 2)); ?>
 
                                                             </span>
                                                         <?php else: ?>
@@ -146,7 +146,7 @@
                                                             </span>
                                                         <?php endif; ?>
                                                         <span class="offer-sell-price-<?php echo e($product->id); ?>"
-                                                            style="color: #3BB77E;">₹<?php echo e(number_format($firstOfferPrice, 0)); ?></span>
+                                                            style="color: #3BB77E;">₹<?php echo e(number_format($firstOfferPrice, 2)); ?></span>
                                                     </div>
                                                 </div>
                                             <?php else: ?>
@@ -155,11 +155,11 @@
                                                     <div style="font-size: 15px; font-weight: 600;">
                                                         <?php if($product->original_price && $product->original_price > $product->final_price): ?>
                                                             <span style="text-decoration: line-through; color: #ADADAD; margin-right: 6px;">
-                                                                ₹<?php echo e(number_format($product->original_price, 0)); ?>
+                                                                ₹<?php echo e(number_format($product->original_price, 2)); ?>
 
                                                             </span>
                                                         <?php endif; ?>
-                                                        <span style="color: #3BB77E;">₹<?php echo e(number_format($product->final_price, 0)); ?></span>
+                                                        <span style="color: #3BB77E;">₹<?php echo e(number_format($product->final_price, 2)); ?></span>
                                                     </div>
                                                 </div>
                                             <?php endif; ?>

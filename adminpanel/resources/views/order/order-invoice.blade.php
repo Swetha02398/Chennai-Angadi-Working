@@ -198,7 +198,7 @@
         }
 
         .items-table td.price-col {
-            text-align: center;
+            text-align: right;
             width: 85px;
         }
 
@@ -208,7 +208,7 @@
         }
 
         .items-table td.subtotal-col {
-            text-align: center;
+            text-align: right;
             width: 100px;
             color: #000;
             font-weight: bold;
@@ -245,7 +245,7 @@
         }
 
         .summary-row .amount {
-            text-align: center;
+            text-align: right;
             font-weight: normal;
             color: #dc3545;
             font-size: 20px;
@@ -465,12 +465,12 @@
                             @endphp
                             @if($displayVariant) - {{ $displayVariant }} @endif
                         </td>
-                        <td class="price-col">₹ {{ number_format($item->price, 0) }}</td>
+                        <td class="price-col" style="text-align: right; white-space: nowrap;">₹ {{ number_format($item->price, 2) }}</td>
                         <td class="hide-on-print" style="text-align: center;">{{ $productGst }}%</td>
                         <td class="hide-on-print" style="text-align: center;">{{ $productSgst }}%</td>
                         <td class="hide-on-print" style="text-align: center;">{{ $productIgst }}%</td>
                         <td class="qty-col">{{ $item->quantity ?? $item->qty ?? 1 }}</td>
-                        <td class="subtotal-col">₹ {{ number_format($lineTotal, 0) }}</td>
+                        <td class="subtotal-col" style="text-align: right; white-space: nowrap;">₹ {{ number_format($lineTotal, 2) }}</td>
                     </tr>
                 @endforeach
             </tbody>
@@ -481,21 +481,21 @@
             @if((float)($order->tax_amount ?? 0) > 0)
             <div class="summary-row">
                 <span class="label">GST</span>
-                <span class="amount">₹ {{ number_format($order->tax_amount, 2) }}</span>
+                <span class="amount" style="text-align: right;">₹ {{ number_format($order->tax_amount, 2) }}</span>
             </div>
             @endif
 
             @if((float)($order->discount_amount ?? 0) > 0)
             <div class="summary-row">
                 <span class="label" style="color: #28a745 !important;">Coupon Applied @if($order->coupon_code)({{ $order->coupon_code }})@endif</span>
-                <span class="amount" style="color: #28a745 !important;">- ₹ {{ number_format($order->discount_amount, 2) }}</span>
+                <span class="amount" style="color: #28a745 !important; text-align: right;">- ₹ {{ number_format($order->discount_amount, 2) }}</span>
             </div>
             @endif
 
             @if((float)($order->shipping_amount ?? 0) > 0)
             <div class="summary-row">
                 <span class="label">Shipping Charges</span>
-                <span class="amount">₹ {{ number_format($order->shipping_amount, 0) }}</span>
+                <span class="amount" style="text-align: right;">₹ {{ number_format($order->shipping_amount, 2) }}</span>
             </div>
             @endif
 
@@ -503,14 +503,14 @@
             @if((float)($order->cod_charge ?? 0) > 0)
             <div class="summary-row">
                 <span class="label">COD Charges</span>
-                <span class="amount">₹ {{ number_format($order->cod_charge, 0) }}</span>
+                <span class="amount" style="text-align: right;">₹ {{ number_format($order->cod_charge, 2) }}</span>
             </div>
             @endif
             @endif
 
             <div class="summary-row total">
                 <span class="label">Total (Incl. GST)</span>
-                <span class="amount">₹ {{ number_format($order->final_amount ?? $order->total_amount, 2) }}</span>
+                <span class="amount" style="text-align: right;">₹ {{ number_format($order->final_amount ?? $order->total_amount, 2) }}</span>
             </div>
         </div>
 

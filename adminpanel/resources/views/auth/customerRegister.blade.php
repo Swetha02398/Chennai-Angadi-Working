@@ -24,7 +24,7 @@
                                                <label class="form-label">Email</label>
                                                <input name="email" id="email" class="form-control" type="email" placeholder="example@mail.com" value="{{ old('email') }}">
                                                @error('email') <small class="text-danger">{{ $message }}</small> @enderror
-                                               <small class="text-danger d-none" id="emailError">Enter a valid email</small>
+                                               <small class="text-danger d-none" id="emailError">Enter a valid email (e.g. name@example.com)</small>
                                             </div>
 
                                             <div class="col-lg-6 mb-3">
@@ -48,10 +48,10 @@
 
                                             <div class="col-lg-6 mb-3">
                                                 <label class="form-label">Phone</label>
-                                                <input name="mobilenumber" id="mobilenumber" class="form-control" type="tel" placeholder="+1234567890" value="{{ old('mobilenumber') }}">
+                                                <input name="mobilenumber" id="mobilenumber" class="form-control" type="tel" placeholder="1234567890" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" value="{{ old('mobilenumber') }}">
                                                  @error('mobilenumber') <small class="text-danger">{{ $message }}</small> @enderror
-                                                 <small class="text-danger d-none" id="mobileError">Mobile number must be 10 digits</small>
-                                            </div> 
+                                                 <small class="text-danger d-none" id="mobileError">Mobile number must be exactly 10 digits</small>
+                                            </div>
                                             
                                             <div class="col-lg-6 mb-3">
                                                <label class="form-label">Pin</label>
@@ -138,55 +138,68 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    function validateField(field) {
+        const input = document.getElementById(field.id);
+        const error = document.getElementById(field.errorId);
+        let fieldValid = true;
+
+        if (!input.value.trim()) {
+            fieldValid = false;
+            error.textContent = field.id.charAt(0).toUpperCase() + field.id.slice(1) + " is required.";
+        } else {
+            // Specific checks
+            if (field.id === 'email') {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(input.value.trim())) {
+                    fieldValid = false;
+                    error.textContent = "Enter a valid email (e.g. name@example.com)";
+                }
+            } else if (field.id === 'password' || field.id === 'confirm_password') {
+                const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
+                if (!strongPasswordRegex.test(input.value)) {
+                    fieldValid = false;
+                    error.textContent = "Password must contain uppercase, lowercase, number, and special character";
+                } else if (field.id === 'confirm_password' && input.value !== document.getElementById('password').value) {
+                    fieldValid = false;
+                    error.textContent = "Passwords do not match";
+                }
+            } else if (field.id === 'mobilenumber') {
+                const phoneRegex = /^\d{10}$/;
+                if (!phoneRegex.test(input.value.trim())) {
+                    fieldValid = false;
+                    error.textContent = "Mobile number must be exactly 10 digits";
+                }
+            } else if (field.id === 'pin') {
+                const pinRegex = /^\d{6}$/;
+                if (!pinRegex.test(input.value.trim())) {
+                    fieldValid = false;
+                    error.textContent = "PIN code must be 6 digits";
+                }
+            }
+        }
+
+        if (!fieldValid) {
+            input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
+            error.classList.remove('d-none');
+            return false;
+        } else {
+            input.classList.remove('is-invalid');
+            input.classList.add('is-valid');
+            error.classList.add('d-none');
+            return true;
+        }
+    }
+
     form.addEventListener('submit', async function(e) {
         let valid = true;
         
         for (const field of fields) {
-            const input = document.getElementById(field.id);
-            const error = document.getElementById(field.errorId);
-            let fieldValid = true;
+            let fieldValid = validateField(field);
 
-            if (!input.value.trim()) {
-                fieldValid = false;
-                error.textContent = field.id.charAt(0).toUpperCase() + field.id.slice(1) + " is required.";
-            } else {
-                // Specific checks
-                if (field.id === 'email') {
-                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                    if (!emailRegex.test(input.value.trim())) {
-                        fieldValid = false;
-                        error.textContent = "Enter a valid email";
-                    }
-                } else if (field.id === 'password' || field.id === 'confirm_password') {
-                    const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-                    if (!strongPasswordRegex.test(input.value)) {
-                        fieldValid = false;
-                        error.textContent = "Password must contain a strong password (uppercase, lowercase, number, special character)";
-                    } else if (field.id === 'confirm_password' && input.value !== document.getElementById('password').value) {
-                        fieldValid = false;
-                        error.textContent = "Passwords do not match";
-                    }
-                } else if (field.id === 'mobilenumber') {
-                    const phoneRegex = /^\d{10}$/;
-                    if (!phoneRegex.test(input.value.trim())) {
-                        fieldValid = false;
-                        error.textContent = "Mobile number must be 10 digits";
-                    }
-                } else if (field.id === 'pin') {
-                    const pinRegex = /^\d{6}$/;
-                    if (!pinRegex.test(input.value.trim())) {
-                        fieldValid = false;
-                        error.textContent = "PIN code must be 6 digits";
-                    }
-                }
-            }
-
-            if (!fieldValid) {
-                input.classList.add('is-invalid');
-                input.classList.remove('is-valid');
-                error.classList.remove('d-none');
-                valid = false;
-            } else {
+            if (fieldValid) {
+                const input = document.getElementById(field.id);
+                const error = document.getElementById(field.errorId);
                 // Final check for uniqueness before allowing submit
                 if (uniqueChecks[field.id]) {
                      input.classList.add('is-invalid');
@@ -194,11 +207,9 @@ document.addEventListener('DOMContentLoaded', function() {
                      error.textContent = (field.id === 'email' ? 'Email already exists' : 'Mobile number already registered');
                      error.classList.remove('d-none');
                      valid = false;
-                } else {
-                    input.classList.remove('is-invalid');
-                    input.classList.add('is-valid');
-                    error.classList.add('d-none');
                 }
+            } else {
+                valid = false;
             }
         }
 
@@ -211,17 +222,17 @@ document.addEventListener('DOMContentLoaded', function() {
     fields.forEach(field => {
         const input = document.getElementById(field.id);
         input.addEventListener('input', function() {
-            this.classList.remove('is-invalid');
-            this.classList.remove('is-valid');
-            document.getElementById(field.errorId).classList.add('d-none');
             if (field.id === 'email' || field.id === 'mobilenumber') {
                 uniqueChecks[field.id] = false; // Reset on change
             }
+            validateField(field); // Validate real-time on input
         });
 
         if (field.id === 'email' || field.id === 'mobilenumber') {
             input.addEventListener('blur', function() {
-                checkUniqueness(field.id, this.value, field.errorId, field.id);
+                if (validateField(field)) {
+                    checkUniqueness(field.id, this.value, field.errorId, field.id);
+                }
             });
         }
     });

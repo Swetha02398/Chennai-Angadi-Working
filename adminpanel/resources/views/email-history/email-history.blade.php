@@ -56,10 +56,10 @@
                             <tr>
                                 <th>No.</th>
                                 <th>Order ID</th>
-                                <th>Email Type</th>
                                 <th>Recipient</th>
                                 <th>Subject</th>
                                 <th>Sent At</th>
+                                <th>Email Type</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
@@ -82,17 +82,6 @@
                                         @endif
                                     </td>
                                     <td>
-                                        @php
-                                            $typeClass = match ($email->email_type) {
-                                                'order_confirmation' => 'bg-info',
-                                                'status_update' => 'bg-warning text-dark',
-                                                'billing_invoice' => 'bg-primary',
-                                                default => 'bg-secondary'
-                                            };
-                                        @endphp
-                                        <span class="badge {{ $typeClass }} email-type-badge"><i class="bi bi-{{ $email->email_type == 'order_confirmation' ? 'bag-check' : ($email->email_type == 'status_update' ? 'arrow-repeat' : 'receipt') }} me-1"></i> {{ $email->email_type_label }}</span>
-                                    </td>
-                                    <td>
                                         <div>{{ $email->recipient_name ?? '-' }}</div>
                                         <small class="text-muted">{{ $email->recipient_email }}</small>
                                     </td>
@@ -103,6 +92,17 @@
                                         @else
                                             <span class="text-muted">-</span>
                                         @endif
+                                    </td>
+                                    <td>
+                                        @php
+                                            $typeClass = match ($email->email_type) {
+                                                'order_confirmation' => 'bg-info',
+                                                'status_update' => 'bg-warning text-dark',
+                                                'billing_invoice' => 'bg-primary',
+                                                default => 'bg-secondary'
+                                            };
+                                        @endphp
+                                        <span class="badge {{ $typeClass }} email-type-badge"><i class="bi bi-{{ $email->email_type == 'order_confirmation' ? 'bag-check' : ($email->email_type == 'status_update' ? 'arrow-repeat' : 'receipt') }} me-1"></i> {{ $email->email_type_label }}</span>
                                     </td>
                                     <td>
                                         <span class="badge {{ $email->status_badge_class }}">
